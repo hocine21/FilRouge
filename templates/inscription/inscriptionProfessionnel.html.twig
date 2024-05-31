@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <link rel="stylesheet" href="{{ asset('css/style-particulier.css?v=1.0') }}">
+         <link rel="stylesheet" href="{{ asset('css/style-particulier2.css?v=1.0') }}">
+         <link rel="stylesheet" href="{{ asset('css/footer.css?v=1.0') }}">
+         <link rel="stylesheet" href="{{ asset('css/menu.css?v=1.0') }}">
+         
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Page d'Accueil</title>
+</head>
+
+<body>
+    {% include 'menu.html.twig' %}
+    
+    <div class="container-block">
+        <div class="block-text">
+            <h1>Bienvenue chez COUP'ACIER, vous êtes un client :</h1>
+            <section class="buttons">
+                <a href="#"><button class="button particulier">Professionnel</button></a>
+            </section>
+        </div>
+        <div class="form-container part">
+            <form class="particulier-form" id="inscriptionForm">
+                <h1>Crée Votre compte</h1>
+                <br></br>
+                <label for="nom">Nom:</label>
+                <input type="text" id="nom" name="Nom" required>
+
+                <label for="prenom">Prénom:</label>
+                <input type="text" id="prenom" name="Prenom" required>
+
+                <label for="adresse">Adresse:</label>
+                <input type="text" id="adresse" name="NomRue" required>
+
+                <label for="code-postal">Code postal:</label>
+                <input type="text" id="code-postal" name="CodePostale" required>
+
+                <label for="ville">Ville:</label>
+                <input type="text" id="ville" name="Ville" required>
+
+                <label for="mot-de-passe">Mot de passe:</label>
+                <input type="password" id="mot-de-passe" name="MotDePasse" required>
+                <div class="password-message" id="passwordMessage">
+                    <span class="icon" id="iconLength">&#10005;</span> Au moins 12 caractères
+                    <span class="icon" id="iconUpperCase">&#10005;</span> Une majuscule
+                    <span class="icon" id="iconLowerCase">&#10005;</span> Une minuscule
+                    <span class="icon" id="iconNumber">&#10005;</span> Un chiffre
+                    <span class="icon" id="iconSymbol">&#10005;</span> Un symbole
+                </div>
+
+                <label for="adresse-email">Adresse e-mail:</label>
+                <input type="email" id="adresse-email" name="AdresseEmail" required>
+                
+                <label for="siret">SIRET:</label>
+                <input type="text" id="siret" name="Siret" required>
+                
+                <label for="raison-sociale">Raison Sociale:</label>
+                <input type="text" id="raison-sociale" name="RaisonSociale" required>
+                
+                <label for="numero-telephone">Numero de téléphone:</label>
+                <div class="phone-container">
+                    <div class="flag"></div>
+                    <span class="phone-prefix">+33</span>
+                    <input type="text" id="numero-telephone" name="NumeroTelephone" maxlength="10" required>
+                </div>
+                
+                <input type="hidden" id="roles" name="Roles" value="ROLE_PROFESSIONNEL" required>
+                
+                <div id="error-message" class="error-message">Tous les champs doivent être remplis.</div>
+                
+                <div class="button-container">
+                    <button id="submitBtn" class="button-87">S'incrire</button>
+                </div>
+            </form>
+        </div>
+        
+        <div id="responseContainer"></div>
+    </div>
+    {% include 'footer.html.twig' %}
+
+    
+    <script src="{{ asset('js/inscriptionPro.js') }}"></script>
+</body>
+</html>

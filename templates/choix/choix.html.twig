@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Inclure Font Awesome via CDN -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+    <title>Page d'Accueil</title>
+</head>
+<style>
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    margin: 0; /* Pour supprimer les marges par défaut du corps */
+    overflow-y: auto; /* Activer le défilement vertical lorsque nécessaire */
+}
+
+.container-block {
+    background: linear-gradient(to bottom right, #ff7f00, #eebb23); /* Dégradé orange */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    min-height: 1200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.block-text {
+    background-image: url(Bandeau\ Fil\ rouge.jpg);
+    padding: 20px;
+    width: 100%;
+    margin-bottom: 50px;
+    color: white;
+    height: 290px;
+    background-size: cover;
+    border-bottom-left-radius: 35%;
+    border-bottom-right-radius: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+.buttons .button {
+    cursor: pointer;
+    padding: 20px 40px;
+    margin-right: 10px;
+    font-size: 30px;
+    border: none;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 15px;
+    transition: background-color 0.3s ease;
+    background-image: linear-gradient(to right, #007bff, #0056b3); /* Dégradé bleu pour les boutons */
+    border: 2px solid white;
+}
+
+.buttons .button.pro {
+    background-image: linear-gradient(to right, #28a745, #218838); /* Dégradé vert pour le bouton Pro */
+}
+
+.buttons .button:hover {
+    background-color: #0056b3;
+}
+
+.form-container-gen{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-container {
+    background-color: #f8f9fa; /* Couleur de fond gris */
+    padding: 20px; /* Espace intérieur */
+    display: flex; /* Disposition en ligne des éléments */
+    justify-content: space-around; /* Répartition égale des éléments */
+    align-items: center; /* Centrer verticalement les éléments */
+    border-radius: 15px;
+    width: 48%;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: row; /* Disposition en ligne des éléments */
+    flex-wrap: wrap;
+    align-items: center; /* Alignement vertical au centre */
+    gap: 28px;
+}
+
+.button-container {
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Ajoutez un espace supplémentaire au-dessus du bouton */
+}
+
+
+.form-container.pro{
+    visibility: hidden;
+}
+
+.form-container.part{
+    visibility: hidden;
+}
+
+
+
+.form-container label {
+    margin-right: 10px; /* Espace entre le label et le champ de saisie */
+}
+
+.form-container input[type="text"] {
+    width: 200px; /* Largeur des champs de saisie */
+    padding: 10px; /* Espace intérieur des champs de saisie */
+    border: 1px solid #ccc; /* Bordure grise */
+    border-radius: 5px; /* Coins arrondis */
+}
+
+input[type="submit"] {
+    margin-top: 20px;
+    padding: 20px 40px; /* Espace intérieur des boutons */
+    background-image: linear-gradient(to right, #007bff, #0056b3); /* Dégradé bleu pour le bouton Connexion */
+    color: #fff; /* Couleur du texte blanc */
+    border: none; /* Supprimer la bordure */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer; /* Curseur pointeur au survol */
+    transition: background-color 0.3s ease; /* Transition fluide pour la couleur de fond */
+}
+
+.form-container input[type="submit"]:hover {
+    background-color: #0056b3; /* Couleur de fond bleue plus foncée au survol */
+}
+
+
+
+
+@media screen and (max-width: 768px) {
+    .image-block img {
+        width: 100%;
+        height: 90px; /* Hauteur fixe pour les images */
+        object-fit: cover; /* Redimensionne les images pour qu'elles couvrent le conteneur tout en conservant leur ratio */
+        border-radius: 5px;
+    }
+    .container{
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+
+    .overlay-text{
+        font-size: 18px;
+    }
+
+}
+
+@media screen and (max-width: 540px) {
+
+    .container-block{
+        min-height: 1800px;
+    }
+
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    header h1 {
+        margin-bottom: 20px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+
+    h2{
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .container{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-block img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover; /* Redimensionne les images pour qu'elles couvrent le conteneur tout en conservant leur ratio */
+        border-radius: 5px;
+    }
+
+    .buttons {
+        text-align: center;
+    }
+
+    .buttons .button {
+        margin-bottom: 20px;
+    }
+
+    .overlay-text{
+        font-size: 14px;
+    }
+
+}
+
+@media screen and (max-width: 462px) {
+
+
+    .image-block img {
+        width: 100%;
+        height: 200px; /* Hauteur fixe pour les images */
+        object-fit: cover; /* Redimensionne les images pour qu'elles couvrent le conteneur tout en conservant leur ratio */
+        border-radius: 5px;
+    }
+
+    .overlay-text{
+        font-size: 20px;
+    }
+
+
+}
+
+@media screen and (max-width: 433px) {
+    
+    .block-text h1{
+        font-size: 35px;
+    }
+
+
+    .buttons-responsive .connexion {
+        background-image: linear-gradient(to right, #007bff, #0056b3); /* Dégradé bleu pour le bouton Connexion */
+    }
+    
+    .buttons-responsive .create {
+        background-image: linear-gradient(to right, #28a745, #218838); /* Dégradé vert pour le bouton Créer un compte */
+    }
+    
+    .buttons-responsive .config {
+        background-image: linear-gradient(to right, #e83c69, #f56dcc); /* Dégradé rose foncé pour le bouton Config */
+    }
+    
+
+}
+
+
+</style>
+<body>
+    {% include 'menu.html.twig' %}
+
+<div class="container-block">
+    <div class="block-text">
+        <h1>Quel type de client êtes-vous ?</h1>
+        <section class="buttons">
+       <a href="{{ path('app_inscriptionParticulier') }}"><button class="button particulier">Particulier</button></a>
+        <a href="{{ path('inscription_pro') }}"><button class="button pro">Professionnel</button></a>
+
+
+        </section>
+    </div>
+</div>
+
+{% include 'footer.html.twig' %}
+
+
+</body>
+
+</html>

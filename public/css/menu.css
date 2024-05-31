@@ -1,0 +1,106 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Styles pour le header */
+header {
+    background-color: white; /* Couleur de fond */
+    color: orange; /* Couleur du texte */
+    padding: 20px 0; /* Espacement intérieur */
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Ajoutez un padding sur les côtés */
+
+}
+
+h1 {
+    font-size: 24px; /* Taille de la police */
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li:last-child {
+    margin-right: 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: orange;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #ffd700;
+}
+
+nav ul li a:visited {
+    text-decoration: none;
+    color: orange; /* Couleur des liens visités */
+}
+
+.container a:link,
+.container a:visited {
+    text-decoration: none;
+    color: orange;
+}
+
+.container a:hover,
+.container a:focus {
+    color: #ffd700;
+}
+
+.icon-container .connect-link:link,
+.icon-container .connect-link:visited {
+    color: green;
+}
+
+.icon-container .connect-link:hover,
+.icon-container .connect-link:focus {
+    color: rgb(39, 231, 39);
+}
+
+
+.icon-container {
+    display: flex;
+    gap: 15px;
+}
+
+.cart-link {
+    color: orange;
+    text-decoration: none; /* Supprimer le soulignement du lien */
+    font-size: 20px; /* Ajuster la taille de l'icône */
+}
+
+.connect-link {
+    color: green;
+    text-decoration: none; /* Supprimer le soulignement du lien */
+    font-size: 20px; /* Ajuster la taille de l'icône */
+}
+
+
+
+.cart-link:hover, .connect-link:hover {
+    color: #ffd700;
+}
+/* Cachez l'icône de menu sur les écrans plus larges */
+@media screen and (min-width: 601px) {
+    #icone {
+        display: none;
+    }
+}
+
+

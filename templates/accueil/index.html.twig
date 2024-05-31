@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Inclure Font Awesome via CDN -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Page d'Accueil</title>
+</head>
+<body>
+
+{% include 'menu.html.twig' %}
+    <div class="container-block">
+        <div class="block-text">
+            <h1>Faites découper des pièces de métal sur mesure !</h1>
+            <section class="buttons">
+                <a href="{{ path('app_connexion') }}"><button class="button connexion">CONNEXION</button></a>
+                <a href="{{ path('app_choix') }}"><button class="button create">CRÉER UN COMPTE</button></a>
+                <a href="#"><button class="button config">CONFIGURATEUR</button></a>
+                <a href="#"><button class="button admin">ADMINISTRATEUR</button></a>
+            </section>
+        </div>
+
+        <section class="buttons-responsive">
+            <a href="#"><button class="button connexion">CONNEXION</button></a>
+            <a href="#"><button class="button create">CRÉER UN COMPTE</button></a>
+
+            <a href="#"><button class="button config">CONFIGURATEUR</button></a>
+        </section>
+
+        <div class="content">
+            <h2>Bienvenue chez COUP'ACIER</h2>
+        </div>
+        <div class="block">
+            <div class="image-block">
+                <img src="{{ asset('pictures/Acier.jpg') }}" alt="Image 1">
+                <div class="overlay-text">ACIER</div>
+            </div>
+            <div class="image-block">
+                <img src="{{ asset('pictures/alu.jpg') }}" alt="Image 2">
+                <div class="overlay-text">ALU</div>
+            </div>
+            <div class="image-block">
+                <img src="{{ asset('pictures/corten.webp') }}" alt="Image 3">
+                <div class="overlay-text">CORTEN</div>
+            </div>
+            <div class="image-block">
+                <img src="{{ asset('pictures/fer.jpg') }}" alt="Image 4">
+                <div class="overlay-text">GALVA</div>
+            </div>
+            <div class="image-block">
+                <img src="{{ asset('pictures/inox.jpg') }}" alt="Image 5">
+                <div class="overlay-text">INOX</div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+{% include 'footer.html.twig' %}
+<script src="{{ asset('js/menu.js') }}"></script>
+<script src="{{ asset('js/index.js') }}"></script>
+
+</html>

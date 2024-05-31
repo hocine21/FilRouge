@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/super-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Page d'Accueil</title>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a href="#">
+                <h1>COUP'ACIER</h1>
+            </a>
+            <div>
+                <a href="#"><h1>ADMINISTRATEUR</h1></a>
+            </div>
+        </div>
+    </header>
+    <div class="container-block">
+        <div class="block-text">
+            <h1>Bienvenue sur la page ADMINISTRATEUR, vous pouvez vous connecter et serez redirigé vers votre plateforme :</h1>
+            <div class="button">
+                <button id="createUserButton" class="create">Créer un utilisateur</button>
+                <button id="deleteUserButton" class="delete">Supprimer un utilisateur</button>
+                <button id="modifyUserButton" class="modify">Modifier utilisateur</button>
+            </div>
+        </div>
+        <div id="formContainer" class="form-container" style="visibility: hidden;">
+            <h2>Ajouter un utilisateur</h2>
+            <form id="inscriptionForm"> <!-- Ajout d'un ID au formulaire -->
+                <div class="form-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" name="nom" required>
+                </div>
+                <div class="form-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" required>
+                </div>
+               
+                <div class="form-group">
+                    <label for="service">Service</label>
+                    <select id="service" name="service" class="custom-select" required>
+                        <option value="">Sélectionnez un service</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Approvisionnement">Approvisionnement</option>
+                        <option value="Réception Matériaux">Réception Matériaux</option>
+                        <option value="Réception Commandes">Réception Commandes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="email">Adresse email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="mot-de-passe">Mot de passe provisoire</label>
+                    <input type="password" id="mot-de-passe" name="mot-de-passe" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="S'inscrire">
+                </div>
+                <button type="button" id="back">Retour</button>
+            </form>
+        </div>
+        <div id="deleteContainer" style="visibility: hidden;">
+            <h1>Choisissez le service de l'utilisateur :</h1>
+            <div class="btn-deleteContainer">
+                <button id="commercial">Commercial</button>
+                <button id="appro">Approvisionnement</button>
+                <button id="rCom">Récéption commandes</button>
+                <button id="rMat">Récéption matériaux</button>
+            </div>
+            <div class="btn-back">
+                <button id="back-deleteContainer">Retour</button>
+            </div>
+            <div id="deleteContainerCommercial" style="visibility: hidden;">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Rechercher par nom..." oninput="searchEmployees()">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <div class="table">
+                <table id="employeeTable" style="visibility: hidden;">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Date de naissance</th>
+                            <th>Poste</th>
+                            <th>Service</th>
+                            <th>Adresse email</th>
+                            <th>Mot de passe</th>
+                            <th>Coche</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>Ceci est le pied de page.</p>
+    </footer>
+
+    <script>
+document.getElementById('inscriptionForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Empêcher le comportement par défaut du formulaire
+
+    // Récupérer les données du formulaire
+    const formData = {
+        Nom: document.getElementById('nom').value,
+        Prenom: document.getElementById('prenom').value,
+        AdresseEmail: document.getElementById('email').value,
+        MotDePasse: document.getElementById('mot-de-passe').value,
+        Roles: [document.getElementById('service').value] // Utiliser la valeur du service sélectionné comme rôle
+    };
+
+    // Envoyer les données au serveur
+    fetch('http://localhost:8080/api/inscription/employe', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erreur lors de la requête au serveur');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Traitement de la réponse JSON retournée par l'API
+        console.log(data);
+    })
+    .catch(error => {
+        // Gérer les erreurs
+        console.error('Erreur:', error);
+    });
+});
+
+// Écouteur d'événements pour le changement de sélection du service
+document.getElementById('service').addEventListener('change', function(event) {
+    // Mettre à jour les rôles avec la valeur du service sélectionné
+    const selectedService = event.target.value;
+    const roles = [selectedService];
+    console.log('Rôles mis à jour:', roles);
+});
+
+        document.getElementById('createUserButton').addEventListener('click', function () {
+            document.getElementById('formContainer').style.visibility = 'visible';
+        });
+
+        document.getElementById('deleteUserButton').addEventListener('click', function () {
+            document.getElementById('deleteContainer').style.visibility = 'visible';
+        });
+
+        document.getElementById('modifyUserButton').addEventListener('click', function () {
+            document.getElementById('deleteContainer').style.visibility = 'visible';
+        });
+
+        document.getElementById('back').addEventListener('click', function () {
+            document.getElementById('formContainer').style.visibility = 'hidden';
+        });
+
+        document.getElementById('back-deleteContainer').addEventListener('click', function () {
+            document.getElementById('deleteContainer').style.visibility = 'hidden';
+            document.getElementById('deleteContainerCommercial').style.visibility = 'hidden';
+            document.getElementById('employeeTable').style.visibility = 'hidden';
+            document.getElementById('filterContainer').style.display = 'none';
+            document.getElementById('filterSelect').selectedIndex = -1;
+            document.getElementById('searchInput').value = '';
+            generateTable(employees); // Réinitialiser le tableau avec toutes les données
+        });
+
+        document.getElementById('commercial').addEventListener('click', function () {
+            document.getElementById('deleteContainerCommercial').style.visibility = 'visible';
+            document.getElementById('employeeTable').style.visibility = 'visible';
+            generateTable(employees.filter(emp => emp.service === 'Commercial')); // Afficher uniquement les employés du service Commercial
+        });
+
+        document.getElementById('appro').addEventListener('click', function () {
+            document.getElementById('deleteContainerCommercial').style.visibility = 'visible';
+            document.getElementById('employeeTable').style.visibility = 'visible';
+            generateTable(employees.filter(emp => emp.service === 'Approvisionnement')); // Afficher uniquement les employés du service Commercial
+        });
+
+        document.getElementById('rCom').addEventListener('click', function () {
+            document.getElementById('deleteContainerCommercial').style.visibility = 'visible';
+            document.getElementById('employeeTable').style.visibility = 'visible';
+            generateTable(employees.filter(emp => emp.service === 'Récéption Commandes')); // Afficher uniquement les employés du service Commercial
+        });
+
+        document.getElementById('rMat').addEventListener('click', function () {
+            document.getElementById('deleteContainerCommercial').style.visibility = 'visible';
+            document.getElementById('employeeTable').style.visibility = 'visible';
+            generateTable(employees.filter(emp => emp.service === 'Récéption Matériaux')); // Afficher uniquement les employés du service Commercial
+        });
+
+        const employees = [
+            {
+                "id":"CO345789",
+                "nom": "Dupont",
+                "prenom": "Jean",
+                "date_naissance": "01/01/1980",
+                "poste": "Manager",
+                "service": "Commercial",
+                "email": "jean.dupont@example.com",
+                "mot_de_passe": "motdepasse1",
+                "coche": false
+            },
+            {
+                "id":"RC349759",
+                "nom": "Martin",
+                "prenom": "Sophie",
+                "date_naissance": "15/03/1985",
+                "poste": "Manager",
+                "service": "Récéption Commandes",
+                "email": "sophie.martin@example.com",
+                "mot_de_passe": "motdepasse2",
+                "coche": true
+            },
+            {
+                "id":"RM285689",
+                "nom": "Bernard",
+                "prenom": "Pierre",
+                "date_naissance": "22/07/1990",
+                "poste": "Manager",
+                "service": "Récéption Matériaux",
+                "email": "pierre.bernard@example.com",
+                "mot_de_passe": "motdepasse3",
+                "coche": false
+            },
+            {
+                "id":"AP965709",
+                "nom": "Durand",
+                "prenom": "Camille",
+                "date_naissance": "10/11/1992",
+                "poste": "Manager",
+                "service": "Approvisionnement",
+                "email": "camille.durand@example.com",
+                "mot_de_passe": "motdepasse4",
+                "coche": true
+            },
+            {
+                "id":"CO155129",
+                "nom": "Lefevre",
+                "prenom": "Julien",
+                "date_naissance": "05/06/1975",
+                "poste": "Directeur",
+                "service": "Commercial",
+                "email": "julien.lefevre@example.com",
+                "mot_de_passe": "motdepasse5",
+                "coche": false
+            },
+            {
+                "id":"AD100176",
+                "nom": "Payagalage",
+                "prenom": "Nipuna",
+                "date_naissance": "05/06/1975",
+                "poste": "Directeur",
+                "service": "Administrateur",
+                "email": "nipuna.payagalage@example.com",
+                "mot_de_passe": "motdepasse5",
+                "coche": false
+            }
+        ];
+
+        function generateTable(data) {
+            const tableBody = document.querySelector("#employeeTable tbody");
+            tableBody.innerHTML = ""; 
+            data.forEach(employee => {
+                const row = document.createElement("tr");
+
+                Object.keys(employee).forEach(key => {
+                    if (key !== "coche") {
+                        const cell = document.createElement("td");
+                        cell.textContent = employee[key];
+                        row.appendChild(cell);
+                    }
+                });
+
+                const checkboxCell = document.createElement("td");
+                checkboxCell.classList.add("checkbox");
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.checked = employee.coche;
+                checkboxCell.appendChild(checkbox);
+                row.appendChild(checkboxCell);
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        function applyFilters() {
+            const filterSelect = document.getElementById("filterSelect");
+            const selectedServices = Array.from(filterSelect.selectedOptions).map(option => option.value);
+            const filteredEmployees = employees.filter(employee => selectedServices.includes(employee.service));
+            generateTable(filteredEmployees);
+        }
+
+        function searchEmployees() {
+            const searchValue = document.getElementById("searchInput").value.toLowerCase();
+            const filteredEmployees = employees.filter(employee => employee.id.toLowerCase().includes(searchValue));
+            generateTable(filteredEmployees);
+        }
+
+        generateTable(employees);
+
+        document.getElementById('filterToggleButton').addEventListener('click', function () {
+            const filterContainer = document.getElementById('filterContainer');
+            if (filterContainer.style.display === 'none' || filterContainer.style.display === '') {
+                filterContainer.style.display = 'block';
+            } else {
+                filterContainer.style.display = 'none';
+            }
+        });
+
+        document.getElementById('filterButton').addEventListener('click', function () {
+            applyFilters();
+        });
+
+        document.getElementById('back-deleteContainer').addEventListener('click', function () {
+            document.getElementById('deleteContainer').style.visibility = 'hidden';
+            document.getElementById('deleteContainerCommercial').style.visibility = 'hidden';
+            document.getElementById('employeeTable').style.visibility = 'hidden';
+            document.getElementById('filterContainer').style.display = 'none';
+            document.getElementById('filterSelect').selectedIndex = -1;
+            document.getElementById('searchInput').value = '';
+            document.querySelector("#employeeTable tbody").innerHTML = ''; 
+        });
+
+        document.getElementById('commercial').addEventListener('click', function () {
+            document.getElementById('deleteContainerCommercial').style.visibility = 'visible';
+            document.getElementById('employeeTable').style.visibility = 'visible';
+            generateTable(employees.filter(emp => emp.service === 'Commercial')); 
+        });
+
+    </script>
+</body>
+
+</html>

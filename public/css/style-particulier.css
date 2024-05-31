@@ -1,0 +1,232 @@
+
+
+/* General Styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    margin: 0;
+    overflow-y: auto;
+}
+
+/* Container Styles */
+.container-block {
+    background: linear-gradient(to bottom right, #ff7f00, #eebb23);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    min-height: 1200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.block-text {
+    background-image: url(Bandeau\ Fil\ rouge.jpg);
+    padding: 20px;
+    width: 100%;
+    margin-bottom: 50px;
+    color: white;
+    height: 290px;
+    background-size: cover;
+    border-bottom-left-radius: 35%;
+    border-bottom-right-radius: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+.buttons .button {
+    cursor: pointer;
+    padding: 20px 40px;
+    margin-right: 10px;
+    font-size: 30px;
+    border: none;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 15px;
+    transition: background-color 0.3s ease;
+    background-image: linear-gradient(to right, #007bff, #0056b3);
+    border: 2px solid white;
+}
+
+.buttons .button:hover {
+    background-color: #0056b3;
+}
+
+.form-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    width: 80%;
+    margin-top: 20px;
+    margin-bottom: 40px; /* Ajouté pour créer de l'espace entre le formulaire et le footer */
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    transition: box-shadow 0.3s ease;
+}
+
+
+.particulier-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-container:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+.particulier-form input[type="text"],
+.particulier-form input[type="password"],
+.particulier-form input[type="email"],
+.particulier-form input[type="number"],
+.particulier-form input[type="text"][name="Roles"] {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+    transition: background-color 0.3s ease;
+}
+
+.particulier-form input[type="text"]:focus,
+.particulier-form input[type="password"]:focus,
+.particulier-form input[type="email"]:focus,
+.particulier-form input[type="number"]:focus,
+.particulier-form input[type="text"][name="Roles"]:focus {
+    background-color: #e0e0e0;
+}
+
+
+
+
+
+@media screen and (min-width: 768px) {
+    .form-container {
+        width: 48%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .image-block img {
+        width: 100%;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .container{
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .overlay-text{
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .container-block {
+        min-height: 1800px;
+    }
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+    header h1 {
+        margin-bottom: 20px;
+    }
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    nav ul li {
+        margin: 10px 0;
+    }
+    h2 {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .image-block img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .buttons {
+        text-align: center;
+    }
+    .buttons .button {
+        margin-bottom: 20px;
+    }
+    .overlay-text {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 462px) {
+    .image-block img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .overlay-text {
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 433px) {
+    .block-text h1 {
+        font-size: 35px;
+    }
+    .buttons-responsive .connexion {
+        background-image: linear-gradient(to right, #007bff, #0056b3);
+    }
+    .buttons-responsive .create {
+        background-image: linear-gradient(to right, #28a745, #218838);
+    }
+    .buttons-responsive .config {
+        background-image: linear-gradient(to right, #e83c69, #f56dcc);
+    }
+    #submitBtn {
+        margin: 10px;
+        padding: 15px 30px;
+        text-align: center;
+        text-transform: uppercase;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: white;
+        border-radius: 10px;
+        display: block;
+        border: 0px;
+        font-weight: 700;
+        box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+        background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+      
+      #submitBtn:hover {
+        background-position: right center;
+        color: #fff;
+        text-decoration: none;
+      }
+      
+      #submitBtn:active {
+        transform: scale(0.95);
+      }
+      
+
+
+}
