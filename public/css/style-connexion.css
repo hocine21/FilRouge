@@ -234,52 +234,6 @@ nav ul li a:visited {
 .create-account .button.create:hover {
     background-color: #218838; /* Assombrir légèrement la couleur de fond au survol */
 }
-
-footer {
-    display: flex;
-    bottom: 0; /* Fixer le footer au bas de la fenêtre */
-    width: 100%; /* Pour étendre le footer sur toute la largeur */
-    background-color: #343a40;
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
-}
-
-footer .container{
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.footer-left nav ul{
-    display: flex;
-    flex-direction: column;
-}
-
-.footer-left nav ul li {
-    text-align: left;
-}
-
-
-.footer-center{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.footer-right{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-footer .button{
-    padding: 10px 15px; /* Ajuster la taille des boutons */
-    font-size: 14px;
-    border: 2px solid white;
-    border-radius: 10px;
-}
-
 .send{
     background-image: linear-gradient(to right, #28a745, #218838); /* Dégradé vert pour le bouton Créer un compte */
     color: white;
@@ -416,16 +370,6 @@ input[type="submit"] {
 }
 
 
-
-footer {
-    position: fixed; /* Rendre le footer fixe */
-    bottom: 0; /* Fixer le footer au bas de la fenêtre */
-    width: 100%; /* Pour étendre le footer sur toute la largeur */
-    background-color: #343a40;
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
-}
 
 @media screen and (max-width: 768px) {
     .image-block img {
