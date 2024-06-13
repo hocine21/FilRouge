@@ -2,22 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\EntrepotBarreRepository;
+use App\Repository\EntrepotStockRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EntrepotBarreRepository::class)]
-class EntrepotBarre
+#[ORM\Entity(repositoryClass: EntrepotStockRepository::class)]
+class EntrepotStock
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'entrepotBarres')]
+    #[ORM\ManyToOne(inversedBy: 'entrepotStocks')]
     private ?Entrepot $Entrepot = null;
 
-    #[ORM\ManyToOne(inversedBy: 'entrepotBarres')]
-    private ?Barre $Barre = null;
+    #[ORM\ManyToOne(inversedBy: 'entrepotStocks')]
+    private ?Stock $Stock = null;
 
     public function getId(): ?int
     {
@@ -36,15 +36,14 @@ class EntrepotBarre
         return $this;
     }
 
-    public function getBarre(): ?Barre
+    public function getStock(): ?Stock
     {
-        return $this->Barre;
+        return $this->Stock;
     }
 
-    public function setBarre(?Barre $Barre): static
+    public function setStock(?Stock $Stock): static
     {
-        $this->Barre = $Barre;
+        $this->Stock = $Stock;
 
-        return $this;
     }
 }

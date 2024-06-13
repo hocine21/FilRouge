@@ -17,17 +17,8 @@ class Facture
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $Date = null;
 
-    #[ORM\Column]
-    private ?float $Montant = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $Ville = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $Rue = null;
-
-    #[ORM\Column]
-    private ?int $CodePostlae = null;
+    #[ORM\Column(length: 255, name: "montant_livraison")]
+    private ?string $MontantLivraison = null;
 
     #[ORM\ManyToOne(inversedBy: 'factures')]
     private ?Commande $Commande = null;
@@ -49,50 +40,14 @@ class Facture
         return $this;
     }
 
-    public function getMontant(): ?float
+    public function getMontantLivraison(): ?string
     {
-        return $this->Montant;
+        return $this->MontantLivraison;
     }
 
-    public function setMontant(float $Montant): static
+    public function setMontantLivraison(string $MontantLivraison): static
     {
-        $this->Montant = $Montant;
-
-        return $this;
-    }
-
-    public function getVille(): ?string
-    {
-        return $this->Ville;
-    }
-
-    public function setVille(string $Ville): static
-    {
-        $this->Ville = $Ville;
-
-        return $this;
-    }
-
-    public function getRue(): ?string
-    {
-        return $this->Rue;
-    }
-
-    public function setRue(string $Rue): static
-    {
-        $this->Rue = $Rue;
-
-        return $this;
-    }
-
-    public function getCodePostlae(): ?int
-    {
-        return $this->CodePostlae;
-    }
-
-    public function setCodePostlae(int $CodePostlae): static
-    {
-        $this->CodePostlae = $CodePostlae;
+        $this->MontantLivraison = $MontantLivraison;
 
         return $this;
     }

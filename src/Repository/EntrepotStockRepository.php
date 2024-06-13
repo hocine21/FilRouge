@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\EntrepotBarre;
+use App\Entity\EntrepotStock;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<EntrepotBarre>
+ * @extends ServiceEntityRepository<EntrepotStock>
  *
- * @method EntrepotBarre|null find($id, $lockMode = null, $lockVersion = null)
- * @method EntrepotBarre|null findOneBy(array $criteria, array $orderBy = null)
- * @method EntrepotBarre[]    findAll()
- * @method EntrepotBarre[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method EntrepotStock|null find($id, $lockMode = null, $lockVersion = null)
+ * @method EntrepotStock|null findOneBy(array $criteria, array $orderBy = null)
+ * @method EntrepotStock[]    findAll()
+ * @method EntrepotStock[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EntrepotBarreRepository extends ServiceEntityRepository
+class EntrepotStockRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, EntrepotBarre::class);
+        parent::__construct($registry, EntrepotStock::class);
     }
 
     //    /**
-    //     * @return EntrepotBarre[] Returns an array of EntrepotBarre objects
+    //     * @return EntrepotStock[] Returns an array of EntrepotStock objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -36,7 +36,7 @@ class EntrepotBarreRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?EntrepotBarre
+    //    public function findOneBySomeField($value): ?EntrepotStock
     //    {
     //        return $this->createQueryBuilder('e')
     //            ->andWhere('e.exampleField = :val')

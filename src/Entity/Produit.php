@@ -45,16 +45,15 @@ class Produit
     #[ORM\Column(type: 'float', nullable: false)]
     private ?float $PrixML = null;
 
-    #[ORM\ManyToOne(inversedBy: 'produits')]
-#[ORM\JoinColumn(name: 'categorie_id', referencedColumnName: 'id', nullable: false)]
-private ?Categorie $Categorie = null;
-
+    #[ORM\ManyToOne(targetEntity: Materiau::class)]
+    #[ORM\JoinColumn(name: 'materiau_id', referencedColumnName: 'id', nullable: false)]
+    private ?Materiau $materiau;
 
     #[ORM\OneToMany(targetEntity: Detail::class, mappedBy: 'Produit')]
     private Collection $details;
 
-    #[ORM\OneToMany(targetEntity: Barre::class, mappedBy: 'Produit')]
-    private Collection $barres;
+    #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'Produit')]
+    private Collection $stocks;
 
     #[ORM\OneToMany(targetEntity: ProduitFournisseur::class, mappedBy: 'Produit')]
     private Collection $produitFournisseurs;
@@ -62,7 +61,7 @@ private ?Categorie $Categorie = null;
     public function __construct()
     {
         $this->details = new ArrayCollection();
-        $this->barres = new ArrayCollection();
+        $this->stocks = new ArrayCollection();
         $this->produitFournisseurs = new ArrayCollection();
     }
 
@@ -76,7 +75,7 @@ private ?Categorie $Categorie = null;
         return $this->NomProduit;
     }
 
-    public function setNomProduit(string $NomProduit): static
+    public function setNomProduit(string $NomProduit): self
     {
         $this->NomProduit = $NomProduit;
 
@@ -88,7 +87,7 @@ private ?Categorie $Categorie = null;
         return $this->Image;
     }
 
-    public function setImage(string $Image): static
+    public function setImage(string $Image): self
     {
         $this->Image = $Image;
 
@@ -100,7 +99,7 @@ private ?Categorie $Categorie = null;
         return $this->LargeurProduit;
     }
 
-    public function setLargeurProduit(float $LargeurProduit): static
+    public function setLargeurProduit(float $LargeurProduit): self
     {
         $this->LargeurProduit = $LargeurProduit;
 
@@ -112,7 +111,7 @@ private ?Categorie $Categorie = null;
         return $this->EpaisseurProduit;
     }
 
-    public function setEpaisseurProduit(?string $EpaisseurProduit): static
+    public function setEpaisseurProduit(?string $EpaisseurProduit): self
     {
         $this->EpaisseurProduit = $EpaisseurProduit;
 
@@ -124,7 +123,7 @@ private ?Categorie $Categorie = null;
         return $this->MasseProduit;
     }
 
-    public function setMasseProduit(?float $MasseProduit): static
+    public function setMasseProduit(?float $MasseProduit): self
     {
         $this->MasseProduit = $MasseProduit;
 
@@ -136,7 +135,7 @@ private ?Categorie $Categorie = null;
         return $this->FormeProduit;
     }
 
-    public function setFormeProduit(?string $FormeProduit): static
+    public function setFormeProduit(?string $FormeProduit): self
     {
         $this->FormeProduit = $FormeProduit;
 
@@ -148,7 +147,7 @@ private ?Categorie $Categorie = null;
         return $this->HauteurProduit;
     }
 
-    public function setHauteurProduit(?float $HauteurProduit): static
+    public function setHauteurProduit(?float $HauteurProduit): self
     {
         $this->HauteurProduit = $HauteurProduit;
 
@@ -160,7 +159,7 @@ private ?Categorie $Categorie = null;
         return $this->SectionProduit;
     }
 
-    public function setSectionProduit(?float $SectionProduit): static
+    public function setSectionProduit(?float $SectionProduit): self
     {
         $this->SectionProduit = $SectionProduit;
 
@@ -172,7 +171,7 @@ private ?Categorie $Categorie = null;
         return $this->Marge;
     }
 
-    public function setMarge(?float $Marge): static
+    public function setMarge(?float $Marge): self
     {
         $this->Marge = $Marge;
 
@@ -184,21 +183,21 @@ private ?Categorie $Categorie = null;
         return $this->PrixML;
     }
 
-    public function setPrixML(float $PrixML): static
+    public function setPrixML(float $PrixML): self
     {
         $this->PrixML = $PrixML;
 
         return $this;
     }
 
-    public function getCategorie(): ?Categorie
+    public function getMateriau(): ?Materiau
     {
-        return $this->Categorie;
+        return $this->materiau;
     }
 
-    public function setCategorie(?Categorie $Categorie): static
+    public function setMateriau(?Materiau $materiau): self
     {
-        $this->Categorie = $Categorie;
+        $this->materiau = $materiau;
 
         return $this;
     }
@@ -211,17 +210,17 @@ private ?Categorie $Categorie = null;
         return $this->details;
     }
 
-    public function addDetail(Detail $detail): static
+    public function addDetail(Detail $detail): self
     {
         if (!$this->details->contains($detail)) {
-            $this->details->add($detail);
+            $this->details[] = $detail;
             $detail->setProduit($this);
         }
 
         return $this;
     }
 
-    public function removeDetail(Detail $detail): static
+    public function removeDetail(Detail $detail): self
     {
         if ($this->details->removeElement($detail)) {
             // set the owning side to null (unless already changed)
@@ -234,29 +233,29 @@ private ?Categorie $Categorie = null;
     }
 
     /**
-     * @return Collection<int, Barre>
+     * @return Collection<int, Stock>
      */
-    public function getBarres(): Collection
+    public function getStocks(): Collection
     {
-        return $this->barres;
+        return $this->stocks;
     }
 
-    public function addBarre(Barre $barre): static
+    public function addStock(Stock $stock): self
     {
-        if (!$this->barres->contains($barre)) {
-            $this->barres->add($barre);
-            $barre->setProduit($this);
+        if (!$this->stocks->contains($stock)) {
+            $this->stocks[] = $stock;
+            $stock->setProduit($this);
         }
 
         return $this;
     }
 
-    public function removeBarre(Barre $barre): static
+    public function removeStock(Stock $stock): self
     {
-        if ($this->barres->removeElement($barre)) {
+        if ($this->stocks->removeElement($stock)) {
             // set the owning side to null (unless already changed)
-            if ($barre->getProduit() === $this) {
-                $barre->setProduit(null);
+            if ($stock->getProduit() === $this) {
+                $stock->setProduit(null);
             }
         }
 
@@ -271,17 +270,17 @@ private ?Categorie $Categorie = null;
         return $this->produitFournisseurs;
     }
 
-    public function addProduitFournisseur(ProduitFournisseur $produitFournisseur): static
+    public function addProduitFournisseur(ProduitFournisseur $produitFournisseur): self
     {
         if (!$this->produitFournisseurs->contains($produitFournisseur)) {
-            $this->produitFournisseurs->add($produitFournisseur);
+            $this->produitFournisseurs[] = $produitFournisseur;
             $produitFournisseur->setProduit($this);
         }
 
         return $this;
     }
 
-    public function removeProduitFournisseur(ProduitFournisseur $produitFournisseur): static
+    public function removeProduitFournisseur(ProduitFournisseur $produitFournisseur): self
     {
         if ($this->produitFournisseurs->removeElement($produitFournisseur)) {
             // set the owning side to null (unless already changed)

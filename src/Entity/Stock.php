@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\BarreRepository;
+use App\Repository\StockRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: BarreRepository::class)]
-class Barre
+#[ORM\Entity(repositoryClass: StockRepository::class)]
+class Stock
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,15 +21,15 @@ class Barre
     #[ORM\Column]
     private ?float $Longueur = null;
 
-    #[ORM\ManyToOne(inversedBy: 'barres')]
+    #[ORM\ManyToOne(inversedBy: 'stocks')]
     private ?Produit $Produit = null;
 
-    #[ORM\OneToMany(targetEntity: EntrepotBarre::class, mappedBy: 'Barre')]
-    private Collection $entrepotBarres;
+    #[ORM\OneToMany(targetEntity: EntrepotStock::class, mappedBy: 'Stock')]
+    private Collection $entrepotStocks;
 
     public function __construct()
     {
-        $this->entrepotBarres = new ArrayCollection();
+        $this->entrepotStocks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,6 +69,36 @@ class Barre
     public function setProduit(?Produit $Produit): static
     {
         $this->Produit = $Produit;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EntrepotStock>
+     */
+    public function getEntrepotStocks(): Collection
+    {
+        return $this->entrepotStocks;
+    }
+
+    public function addEntrepotStock(EntrepotStock $entrepotStock): static
+    {
+        if (!$this->entrepotStocks->contains($entrepotStock)) {
+            $this->entrepotStocks->add($entrepotStock);
+            $entrepotStock->setStock($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEntrepotStock(EntrepotStock $entrepotStock): static
+    {
+        if ($this->entrepotStocks->removeElement($entrepotStock)) {
+            // set the owning side to null (unless already changed)
+            if ($entrepotStock->getStock() === $this) {
+                $entrepotStock->setStock(null);
+            }
+        }
 
         return $this;
     }

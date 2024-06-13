@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\FournisseursRepository;
+use App\Repository\FournisseurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: FournisseursRepository::class)]
-class Fournisseurs
+#[ORM\Entity(repositoryClass: FournisseurRepository::class)]
+class Fournisseur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,15 +16,15 @@ class Fournisseurs
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $NomFournisseur = null;
+    private ?string $nomFournisseur = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $TypeFourniture = null;
+    private ?string $typeFourniture = null;
 
-    #[ORM\Column]
-    private ?float $PrixHTFournisseur = null;
+    #[ORM\Column(type: 'float')]
+    private ?float $prixHTFournisseur = null;
 
-    #[ORM\OneToMany(targetEntity: ProduitFournisseur::class, mappedBy: 'Fournisseur')]
+    #[ORM\OneToMany(targetEntity: ProduitFournisseur::class, mappedBy: 'fournisseur')]
     private Collection $produitFournisseurs;
 
     public function __construct()
@@ -39,36 +39,36 @@ class Fournisseurs
 
     public function getNomFournisseur(): ?string
     {
-        return $this->NomFournisseur;
+        return $this->nomFournisseur;
     }
 
-    public function setNomFournisseur(string $NomFournisseur): static
+    public function setNomFournisseur(string $nomFournisseur): static
     {
-        $this->NomFournisseur = $NomFournisseur;
+        $this->nomFournisseur = $nomFournisseur;
 
         return $this;
     }
 
     public function getTypeFourniture(): ?string
     {
-        return $this->TypeFourniture;
+        return $this->typeFourniture;
     }
 
-    public function setTypeFourniture(string $TypeFourniture): static
+    public function setTypeFourniture(string $typeFourniture): static
     {
-        $this->TypeFourniture = $TypeFourniture;
+        $this->typeFourniture = $typeFourniture;
 
         return $this;
     }
 
     public function getPrixHTFournisseur(): ?float
     {
-        return $this->PrixHTFournisseur;
+        return $this->prixHTFournisseur;
     }
 
-    public function setPrixHTFournisseur(float $PrixHTFournisseur): static
+    public function setPrixHTFournisseur(float $prixHTFournisseur): static
     {
-        $this->PrixHTFournisseur = $PrixHTFournisseur;
+        $this->prixHTFournisseur = $prixHTFournisseur;
 
         return $this;
     }

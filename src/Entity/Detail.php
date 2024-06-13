@@ -19,6 +19,12 @@ class Detail
     #[ORM\Column]
     private ?int $Longueur = null;
 
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $prix_unitaire = null;
+
+    #[ORM\Column(name: "montant_total", type: 'float', nullable: true)]
+    private ?float $montant_total = null;
+
     #[ORM\ManyToOne(inversedBy: 'details')]
     private ?Produit $Produit = null;
 
@@ -38,7 +44,6 @@ class Detail
     public function setQuantite(int $Quantite): static
     {
         $this->Quantite = $Quantite;
-
         return $this;
     }
 
@@ -50,7 +55,28 @@ class Detail
     public function setLongueur(int $Longueur): static
     {
         $this->Longueur = $Longueur;
+        return $this;
+    }
 
+    public function getPrixUnitaire(): ?float
+    {
+        return $this->prix_unitaire;
+    }
+
+    public function setPrixUnitaire(?float $prix_unitaire): static
+    {
+        $this->prix_unitaire = $prix_unitaire;
+        return $this;
+    }
+
+    public function getMontantTotal(): ?float
+    {
+        return $this->montant_total;
+    }
+
+    public function setMontantTotal(?float $montant_total): static
+    {
+        $this->montant_total = $montant_total;
         return $this;
     }
 
@@ -62,7 +88,6 @@ class Detail
     public function setProduit(?Produit $Produit): static
     {
         $this->Produit = $Produit;
-
         return $this;
     }
 
@@ -74,7 +99,6 @@ class Detail
     public function setCommande(?Commande $Commande): static
     {
         $this->Commande = $Commande;
-
         return $this;
     }
 }

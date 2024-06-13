@@ -27,12 +27,12 @@ class Entrepot
     #[ORM\Column(length: 255)]
     private ?string $Rue = null;
 
-    #[ORM\OneToMany(targetEntity: EntrepotBarre::class, mappedBy: 'Entrepot')]
-    private Collection $entrepotBarres;
+    #[ORM\OneToMany(targetEntity: EntrepotStock::class, mappedBy: 'Entrepot')]
+    private Collection $entrepotStockes;
 
     public function __construct()
     {
-        $this->entrepotBarres = new ArrayCollection();
+        $this->entrepotStockes = new ArrayCollection();
     }
 
     public function getId(): ?int

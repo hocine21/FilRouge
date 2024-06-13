@@ -11,70 +11,70 @@ class ProduitFournisseur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'integer')]
+    private ?int $id;
 
-    #[ORM\ManyToOne(inversedBy: 'produitFournisseurs')]
-    private ?Fournisseurs $Fournisseur = null;
+    #[ORM\ManyToOne(targetEntity: Fournisseur::class, inversedBy: 'produitFournisseurs')]
+    private ?Fournisseur $fournisseur = null;
 
-    #[ORM\ManyToOne(inversedBy: 'produitFournisseurs')]
-    private ?Produit $Produit = null;
+    #[ORM\ManyToOne(targetEntity: Produit::class, inversedBy: 'produitFournisseurs')]
+    private ?Produit $produit = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $Date = null;
+    private ?\DateTimeInterface $date;
 
     #[ORM\Column(length: 255)]
-    private ?string $Quantite = null;
+    private ?string $quantite;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFournisseur(): ?Fournisseurs
+    public function getFournisseur(): ?Fournisseur
     {
-        return $this->Fournisseur;
+        return $this->fournisseur;
     }
 
-    public function setFournisseur(?Fournisseurs $Fournisseur): static
+    public function setFournisseur(?Fournisseur $fournisseur): self
     {
-        $this->Fournisseur = $Fournisseur;
+        $this->fournisseur = $fournisseur;
 
         return $this;
     }
 
     public function getProduit(): ?Produit
     {
-        return $this->Produit;
+        return $this->produit;
     }
 
-    public function setProduit(?Produit $Produit): static
+    public function setProduit(?Produit $produit): self
     {
-        $this->Produit = $Produit;
+        $this->produit = $produit;
 
         return $this;
     }
 
     public function getDate(): ?\DateTimeInterface
     {
-        return $this->Date;
+        return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $Date): static
+    public function setDate(\DateTimeInterface $date): self
     {
-        $this->Date = $Date;
+        $this->date = $date;
 
         return $this;
     }
 
     public function getQuantite(): ?string
     {
-        return $this->Quantite;
+        return $this->quantite;
     }
 
-    public function setQuantite(string $Quantite): static
+    public function setQuantite(string $quantite): self
     {
-        $this->Quantite = $Quantite;
+        $this->quantite = $quantite;
 
         return $this;
     }
