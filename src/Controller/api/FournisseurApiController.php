@@ -14,7 +14,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/fournisseurs')]
 class FournisseurApiController extends AbstractController
-
 {
     private $entityManager;
     private $serializer;
@@ -44,6 +43,8 @@ class FournisseurApiController extends AbstractController
         $fournisseur->setNomFournisseur($data['nomFournisseur'] ?? null);
         $fournisseur->setTypeFourniture($data['typeFourniture'] ?? null);
         $fournisseur->setPrixHTFournisseur($data['prixHTFournisseur'] ?? null);
+        $fournisseur->setEmail($data['email'] ?? null);
+        $fournisseur->setTelephone($data['telephone'] ?? null);
 
         $errors = $this->validator->validate($fournisseur);
 
@@ -72,6 +73,8 @@ class FournisseurApiController extends AbstractController
         $fournisseur->setNomFournisseur($data['nomFournisseur'] ?? $fournisseur->getNomFournisseur());
         $fournisseur->setTypeFourniture($data['typeFourniture'] ?? $fournisseur->getTypeFourniture());
         $fournisseur->setPrixHTFournisseur($data['prixHTFournisseur'] ?? $fournisseur->getPrixHTFournisseur());
+        $fournisseur->setEmail($data['email'] ?? $fournisseur->getEmail());
+        $fournisseur->setTelephone($data['telephone'] ?? $fournisseur->getTelephone());
 
         $errors = $this->validator->validate($fournisseur);
 

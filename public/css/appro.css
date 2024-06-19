@@ -32,15 +32,15 @@ a {
 }
 
 form {
-    margin-bottom: 20px;
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     padding: 20px;
 }
 
 input[type="text"],
 input[type="number"],
+input[type="email"],
+input[type="tel"], /* Ajouté pour l'input numéro de téléphone */
 select {
     width: calc(100% - 16px); /* Pour compenser le padding de 8px des côtés */
     margin-bottom: 10px;
@@ -53,12 +53,14 @@ select {
 
 input[type="text"]:focus,
 input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
 select:focus {
     border-color: #007bff;
 }
 
 button {
-    padding: 14px 24px;
+    padding: 12px 24px; /* Légèrement réduit par rapport à l'original */
     border-radius: 8px;
     background-color: #007bff;
     border: none;
@@ -78,7 +80,7 @@ button:hover {
 
 @media (min-width: 768px) {
     button {
-        padding: 16px 36px;
+        padding: 14px 28px; /* Taille légèrement augmentée pour les grands écrans */
     }
 }
 
@@ -114,39 +116,42 @@ button:hover {
     gap: 20px;
 }
 
+/* New Flex Container for Form and Table */
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 90%; /* Adjusted width for the container */
+    padding: 20px;
+    gap: 20px;
+    overflow-x: auto; /* Ajouté pour permettre le scroll horizontal si nécessaire */
+}
+
+.flex-item {
+    flex: 1;
+    margin: 0 10px;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 24px; /* Augmentation de la taille de la card */
+    margin-top: 10px; /* Added margin to align with the table's title */
+    overflow: hidden; /* Pour éviter le scroll horizontal */
+    min-width: 100%; /* Assure que la card prend toute la largeur disponible */
+}
+
 #ajoutFournisseur {
-    border: 2px solid white;
     padding: 15px;
-    border-radius: 15px;
-    background-color: #007bff;
-    visibility: hidden;
+    flex: 1;
 }
 
-#ajoutFournisseur form {
-    max-width: 400px;
-    margin: auto;
-}
-
-.buttons .button:hover {
-    background-color: #0056b3;
-}
-
-#orderForm {
-    position: absolute;
-    top: 950px;
-    visibility: hidden;
-}
-
-#stockStatus {
-    position: absolute;
-    top: 350px;
-    visibility: hidden;
-}
-
-#orderStatus {
-    position: absolute;
-    top: 350px;
-    visibility: hidden;
+#tableauFournisseurs {
+    flex: 2;
+    max-height: 400px; /* Adjust this value to your needs */
+    overflow-y: auto;
+    overflow-x: hidden; /* Ajouté pour éviter le scroll horizontal */
 }
 
 table {
@@ -188,6 +193,7 @@ tbody tr:hover {
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
+    font-size: 14px; /* Taille réduite pour les boutons Modifier et Supprimer */
 }
 
 .crud-buttons button:hover {
@@ -260,6 +266,57 @@ tbody tr:hover {
 }
 
 .search-bar button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.card h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: #007bff;
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+.filter-item label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.filter-item input,
+.filter-item select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filters button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-left: 10px;
+}
+
+.filters button:hover {
     background-color: #0056b3;
     transform: translateY(-2px);
 }

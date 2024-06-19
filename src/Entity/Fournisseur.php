@@ -24,6 +24,12 @@ class Fournisseur
     #[ORM\Column(type: 'float')]
     private ?float $prixHTFournisseur = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $email = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $telephone = null;
+
     #[ORM\OneToMany(targetEntity: ProduitFournisseur::class, mappedBy: 'fournisseur')]
     private Collection $produitFournisseurs;
 
@@ -69,6 +75,30 @@ class Fournisseur
     public function setPrixHTFournisseur(float $prixHTFournisseur): static
     {
         $this->prixHTFournisseur = $prixHTFournisseur;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): static
+    {
+        $this->telephone = $telephone;
 
         return $this;
     }

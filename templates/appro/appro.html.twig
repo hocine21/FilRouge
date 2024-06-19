@@ -21,175 +21,264 @@
                 <a id="btnAjoutFournisseur"><button class="ajout">Ajout Fournisseur</button></a>
             </div>
         </div>
-        <!-- Formulaire pour ajouter un fournisseur -->
-        <div id="ajoutFournisseur" style="visibility: hidden;">
-            <form id="addSupplierForm">
+        <div class="flex-container">
+            <!-- Formulaire pour ajouter un fournisseur -->
+            <div id="ajoutFournisseur" class="flex-item card">
                 <h2 id="formTitle">Ajouter un Fournisseur</h2>
-                <input type="text" id="supplierName" name="nomFournisseur" placeholder="Nom du fournisseur" required>
-                <input type="text" id="supplierType" name="typeFourniture" placeholder="Type de fourniture" required>
-                <input type="number" id="supplierPrice" name="prixHTFournisseur" placeholder="Prix HT" required>
-                <input type="hidden" id="supplierId" name="supplierId">
-                <button type="submit" class="button-71" role="button">Ajouter Fournisseur</button>
-                <button type="button" id="btnAnnuler" style="display: none;">Annuler</button>
-            </form>
-        </div>
-        <!-- Tableau pour afficher les fournisseurs -->
-        <div id="tableauFournisseurs">
-            <h2>Liste des Fournisseurs</h2>
-            <table id="supplierTable">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Type</th>
-                        <th>Prix HT</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="supplierTableBody">
-                    <!-- Les fournisseurs seront ajoutés ici dynamiquement -->
-                </tbody>
-            </table>
+                <form id="addSupplierForm">
+                    <input type="text" id="supplierName" name="nomFournisseur" placeholder="Nom du fournisseur" required>
+                    <input type="text" id="supplierType" name="typeFourniture" placeholder="Type de fourniture" required>
+                    <input type="number" id="supplierPrice" name="prixHTFournisseur" placeholder="Prix HT" required>
+                    <input type="email" id="supplierEmail" name="email" placeholder="Email du fournisseur" required>
+                    <input type="tel" id="supplierPhone" name="telephone" placeholder="Téléphone du fournisseur" required>
+                    <input type="hidden" id="supplierId" name="supplierId">
+                    <button type="submit" class="button-71" role="button">Ajouter Fournisseur</button>
+                    <button type="button" id="btnAnnuler" style="display: none;">Annuler</button>
+                </form>
+            </div>
+            <!-- Tableau pour afficher les fournisseurs avec filtres -->
+            <div id="tableauFournisseurs" class="flex-item card">
+                <div class="filters">
+                    <div class="filter-item">
+                        <label for="filterType">Type de fourniture :</label>
+                        <select id="filterType">
+                            <option value="">Tous</option>
+                            <!-- Options de type de fourniture seront ajoutées dynamiquement via JavaScript -->
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label for="filterPriceMin">Prix Min :</label>
+                        <input type="number" id="filterPriceMin" placeholder="0">
+                    </div>
+                    <div class="filter-item">
+                        <label for="filterPriceMax">Prix Max :</label>
+                        <input type="number" id="filterPriceMax" placeholder="0">
+                    </div>
+                    <button id="applyFilters">Appliquer les filtres</button>
+                    <button id="resetFilters">Réinitialiser les filtres</button>
+                </div>
+                <h2>Liste des Fournisseurs</h2>
+                <table id="supplierTable">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Type</th>
+                            <th>Prix HT</th>
+                            <th>Email</th> <!-- Nouvelle colonne pour l'email -->
+                            <th>Téléphone</th> <!-- Nouvelle colonne pour le téléphone -->
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="supplierTableBody">
+                        <!-- Les fournisseurs seront ajoutés ici dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <footer>
         <p>Ceci est le pied de page.</p>
     </footer>
-    <script>
-           document.addEventListener('DOMContentLoaded', function() {
+</body>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
     const formAjoutFournisseur = document.getElementById('addSupplierForm');
     const btnAjoutFournisseur = document.getElementById('btnAjoutFournisseur');
     const tableFournisseurs = document.getElementById('supplierTableBody');
+    const filterType = document.getElementById('filterType');
+    const filterPriceMin = document.getElementById('filterPriceMin');
+    const filterPriceMax = document.getElementById('filterPriceMax');
+    const applyFilters = document.getElementById('applyFilters');
+    const resetFilters = document.getElementById('resetFilters');
 
-// Vérification que tableFournisseurs existe avant de l'utiliser
-if (!tableFournisseurs) {
-    console.error('Erreur : élément avec ID supplierTableBody non trouvé');
-    return; // Arrêter l'exécution si l'élément n'est pas trouvé
-}
-
-// Fonction pour récupérer et afficher les fournisseurs depuis l'API
-function fetchAndDisplaySuppliers() {
-    fetch('/api/fournisseurs')
-        .then(response => response.json())
-        .then(data => {
-            // Effacer le contenu actuel du tableau
-            tableFournisseurs.innerHTML = '';
-
-            // Boucler à travers les données des fournisseurs et les afficher dans le tableau
-            data.forEach(fournisseur => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${fournisseur.nomFournisseur}</td>
-                    <td>${fournisseur.typeFourniture}</td>
-                    <td>${fournisseur.prixHTFournisseur}</td>
-                    <td>
-                        <button class="btnModifier" data-id="${fournisseur.id}">Modifier</button>
-                        <button class="btnSupprimer" data-id="${fournisseur.id}">Supprimer</button>
-                    </td>
-                `;
-                tableFournisseurs.appendChild(tr);
-            });
-        })
-        .catch(error => console.error('Erreur lors de la récupération des fournisseurs :', error));
-}
-
-// Gérer l'événement de soumission du formulaire d'ajout/modification de fournisseur
-formAjoutFournisseur.addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const formData = {
-        nomFournisseur: document.getElementById('supplierName').value,
-        typeFourniture: document.getElementById('supplierType').value,
-        prixHTFournisseur: parseFloat(document.getElementById('supplierPrice').value)
-    };
-
-    // Envoyer les données à l'API pour l'ajout ou la modification d'un fournisseur
-    let apiUrl = '/api/fournisseurs/nouveau';
-    let method = 'POST';
-
-    // Vérifier si le formulaire est utilisé pour la modification
-    if (formAjoutFournisseur.getAttribute('data-mode') === 'edit') {
-        const fournisseurId = formAjoutFournisseur.getAttribute('data-id');
-        apiUrl = `/api/fournisseurs/${fournisseurId}/modifier`;
-        method = 'PUT';
+    if (!tableFournisseurs) {
+        console.error('Erreur : élément avec ID supplierTableBody non trouvé');
+        return;
     }
 
-    fetch(apiUrl, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (method === 'POST') {
-                alert('Fournisseur ajouté avec succès');
-            } else {
-                alert('Fournisseur modifié avec succès');
-                formAjoutFournisseur.removeAttribute('data-mode'); // Réinitialiser le mode du formulaire
-                formAjoutFournisseur.removeAttribute('data-id'); // Réinitialiser l'ID du fournisseur en mode édition
-            }
-            formAjoutFournisseur.reset(); // Réinitialiser le formulaire après l'ajout/modification
-            fetchAndDisplaySuppliers(); // Rafraîchir la liste des fournisseurs
-        })
-        .catch(error => console.error('Erreur lors de l\'ajout/modification du fournisseur :', error));
-});
-
-// Gérer le clic sur le bouton "Ajout Fournisseur" pour afficher/cacher le formulaire
-btnAjoutFournisseur.addEventListener('click', function() {
-    const ajoutFournisseur = document.getElementById('ajoutFournisseur');
-    if (ajoutFournisseur.style.visibility === 'hidden') {
-        ajoutFournisseur.style.visibility = 'visible';
-        fetchAndDisplaySuppliers(); // Afficher les fournisseurs lors de l'affichage du formulaire
-    } else {
-        ajoutFournisseur.style.visibility = 'hidden';
-    }
-});
-
-// Gérer le clic sur les boutons de modification et de suppression dans le tableau
-tableFournisseurs.addEventListener('click', function(event) {
-    const target = event.target;
-    if (target.classList.contains('btnModifier')) {
-        // Récupérer l'ID du fournisseur à modifier
-        const fournisseurId = target.getAttribute('data-id');
-        // Pré-remplir le formulaire avec les données du fournisseur à modifier
-        fetch(`/api/fournisseurs/${fournisseurId}`)
+    // Fonction pour récupérer et afficher les fournisseurs depuis l'API
+    function fetchAndDisplaySuppliers() {
+        fetch('/api/fournisseurs')
             .then(response => response.json())
             .then(data => {
-                // Remplir le formulaire avec les données du fournisseur récupéré
-                document.getElementById('supplierName').value = data.nomFournisseur;
-                document.getElementById('supplierType').value = data.typeFourniture;
-                document.getElementById('supplierPrice').value = data.prixHTFournisseur;
-                // Définir l'attribut data-mode="edit" et data-id pour indiquer le mode de modification
-                formAjoutFournisseur.setAttribute('data-mode', 'edit');
-                formAjoutFournisseur.setAttribute('data-id', fournisseurId);
-                // Faire défiler vers le formulaire d'ajout/modification
-                const ajoutFournisseur = document.getElementById('ajoutFournisseur');
-                ajoutFournisseur.style.visibility = 'visible';
-                ajoutFournisseur.scrollIntoView({ behavior: 'smooth' });
-            })
-            .catch(error => console.error('Erreur lors de la récupération du fournisseur pour modification :', error));
-    } else if (target.classList.contains('btnSupprimer')) {
-        // Récupérer l'ID du fournisseur à supprimer
-        const fournisseurId = target.getAttribute('data-id');
-        // Implémenter la logique de suppression ici
-        if (confirm('Voulez-vous vraiment supprimer ce fournisseur ?')) {
-            fetch(`/api/fournisseurs/${fournisseurId}`, {
-                    method: 'DELETE'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert('Fournisseur supprimé avec succès');
-                    fetchAndDisplaySuppliers(); // Rafraîchir la liste des fournisseurs après suppression
-                })
-                .catch(error => console.error('Erreur lors de la suppression du fournisseur :', error));
-        }
-    }
-});
+                // Effacer le contenu actuel du tableau
+                tableFournisseurs.innerHTML = '';
 
-// Appeler cette fonction au chargement initial pour afficher les fournisseurs existants
-fetchAndDisplaySuppliers();
+                // Appliquer les filtres aux données
+                const filteredData = data.filter(fournisseur => {
+                    const priceMin = parseFloat(filterPriceMin.value) || 0;
+                    const priceMax = parseFloat(filterPriceMax.value) || Number.MAX_VALUE;
+                    const type = filterType.value;
+                    const price = parseFloat(fournisseur.prixHTFournisseur);
+
+                    return (type === "" || fournisseur.typeFourniture === type) &&
+                           (price >= priceMin) &&
+                           (price <= priceMax);
+                });
+
+                // Boucler à travers les données filtrées des fournisseurs et les afficher dans le tableau
+                filteredData.forEach(fournisseur => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${fournisseur.nomFournisseur}</td>
+                        <td>${fournisseur.typeFourniture}</td>
+                        <td>${fournisseur.prixHTFournisseur}</td>
+                        <td>${fournisseur.email}</td>
+                        <td>${fournisseur.telephone}</td>
+                        <td>
+                            <button class="btnModifier" data-id="${fournisseur.id}">Modifier</button>
+                            <button class="btnSupprimer" data-id="${fournisseur.id}">Supprimer</button>
+                        </td>
+                    `;
+                    tableFournisseurs.appendChild(tr);
+                });
+
+                // Mettre à jour les options du filtre de type de fourniture
+                updateTypeFilterOptions(data);
+            })
+            .catch(error => console.error('Erreur lors de la récupération des fournisseurs :', error));
+    }
+
+    // Fonction pour mettre à jour les options du filtre de type de fourniture
+    function updateTypeFilterOptions(data) {
+        const uniqueTypes = getUniqueTypes(data);
+        const currentType = filterType.value; // Conserver la valeur actuelle du filtre
+
+        filterType.innerHTML = '<option value="">Tous</option>'; // Réinitialiser les options
+
+        uniqueTypes.forEach(type => {
+            const option = document.createElement('option');
+            option.textContent = type;
+            option.value = type;
+            filterType.appendChild(option);
+        });
+
+        filterType.value = currentType; // Rétablir la sélection précédente
+    }
+
+    // Fonction pour récupérer les types de fourniture uniques à partir des données des fournisseurs
+    function getUniqueTypes(data) {
+        const types = data.map(fournisseur => fournisseur.typeFourniture);
+        return Array.from(new Set(types)); // Retourner un tableau avec des valeurs uniques
+    }
+
+    // Écouteur d'événement pour soumettre le formulaire d'ajout/modification de fournisseur
+    formAjoutFournisseur.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = {
+            nomFournisseur: document.getElementById('supplierName').value,
+            typeFourniture: document.getElementById('supplierType').value,
+            prixHTFournisseur: parseFloat(document.getElementById('supplierPrice').value),
+            email: document.getElementById('supplierEmail').value,
+            telephone: document.getElementById('supplierPhone').value
+        };
+
+        let apiUrl = '/api/fournisseurs/nouveau';
+        let method = 'POST';
+
+        const supplierId = document.getElementById('supplierId').value;
+        if (supplierId) {
+            apiUrl = `/api/fournisseurs/${supplierId}/modifier`;
+            method = 'PUT';
+        }
+
+        fetch(apiUrl, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (method === 'POST') {
+                    alert('Fournisseur ajouté avec succès');
+                } else {
+                    alert('Fournisseur modifié avec succès');
+                    document.getElementById('btnAnnuler').click(); // Simuler un clic sur le bouton Annuler pour cacher le formulaire
+                }
+                formAjoutFournisseur.reset();
+                fetchAndDisplaySuppliers();
+            })
+            .catch(error => console.error('Erreur lors de l\'ajout/modification du fournisseur :', error));
+    });
+
+    // Écouteur d'événement pour le clic sur le bouton Ajout Fournisseur
+    btnAjoutFournisseur.addEventListener('click', function() {
+        const ajoutFournisseur = document.getElementById('ajoutFournisseur');
+        if (ajoutFournisseur.style.display === 'none' || ajoutFournisseur.style.display === '') {
+            ajoutFournisseur.style.display = 'block';
+            document.getElementById('formTitle').textContent = 'Ajouter un Fournisseur';
+            document.getElementById('btnAnnuler').style.display = 'inline-block';
+        } else {
+            ajoutFournisseur.style.display = 'none';
+            document.getElementById('formTitle').textContent = 'Modifier un Fournisseur';
+            document.getElementById('btnAnnuler').style.display = 'none';
+            formAjoutFournisseur.reset();
+            document.getElementById('supplierId').value = '';
+        }
+    });
+
+    // Écouteur d'événement pour le clic sur le bouton Annuler
+    document.getElementById('btnAnnuler').addEventListener('click', function() {
+        document.getElementById('ajoutFournisseur').style.display = 'none';
+        formAjoutFournisseur.reset();
+        document.getElementById('supplierId').value = '';
+    });
+
+    // Écouteurs d'événement pour les boutons Modifier et Supprimer dans le tableau
+    tableFournisseurs.addEventListener('click', function(event) {
+        if (event.target.classList.contains('btnModifier')) {
+            const fournisseurId = event.target.getAttribute('data-id');
+            fetch(`/api/fournisseurs/${fournisseurId}`)
+                .then(response => response.json())
+                .then(fournisseur => {
+                    document.getElementById('supplierName').value = fournisseur.nomFournisseur;
+                    document.getElementById('supplierType').value = fournisseur.typeFourniture;
+                    document.getElementById('supplierPrice').value = fournisseur.prixHTFournisseur;
+                    document.getElementById('supplierEmail').value = fournisseur.email;
+                    document.getElementById('supplierPhone').value = fournisseur.telephone;
+                    document.getElementById('supplierId').value = fournisseur.id;
+
+                    document.getElementById('btnAjoutFournisseur').click(); // Afficher le formulaire
+                })
+                .catch(error => console.error('Erreur lors de la récupération du fournisseur :', error));
+        } else if (event.target.classList.contains('btnSupprimer')) {
+            const fournisseurId = event.target.getAttribute('data-id');
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?')) {
+                fetch(`/api/fournisseurs/${fournisseurId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => {
+                        if (response.status === 204) {
+                            alert('Fournisseur supprimé avec succès');
+                            fetchAndDisplaySuppliers(); // Rafraîchir la liste des fournisseurs après la suppression
+                        } else {
+                            throw new Error('Erreur lors de la suppression du fournisseur');
+                        }
+                    })
+                    .catch(error => console.error('Erreur lors de la suppression du fournisseur :', error));
+            }
+        }
+    });
+
+    // Écouteur d'événement pour appliquer les filtres
+    applyFilters.addEventListener('click', function() {
+        fetchAndDisplaySuppliers();
+    });
+
+    // Écouteur d'événement pour réinitialiser les filtres
+    resetFilters.addEventListener('click', function() {
+        filterType.value = '';
+        filterPriceMin.value = '';
+        filterPriceMax.value = '';
+        fetchAndDisplaySuppliers();
+    });
+
+    // Charger et afficher les fournisseurs au chargement de la page
+    fetchAndDisplaySuppliers();
 });
-    </script>
+</script>
 </body>
 </html>
