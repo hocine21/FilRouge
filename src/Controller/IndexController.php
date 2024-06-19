@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,5 +38,10 @@ class IndexController extends AbstractController
         return $this->render('super_admin/super_admin.html.twig', [
             'controller_name' => 'IndexController',
         ]);
+    }
+
+    public function appro(): Response
+    {
+        return $this->render('appro/appro.html.twig');
     }
 }

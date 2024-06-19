@@ -7,6 +7,7 @@ connexion:
   path: /api/connexion
   controller: 'App\Controller\api\ConnexionController::connexion'
   methods: ['POST']
+  
 api_inscription:
   path: /api/inscription
   controller: 'App\Controller\api\InscriptionController::inscription'
@@ -208,3 +209,42 @@ email_send:
     path: /send-email
     controller: 'App\Controller\EmailController::sendEmail'
     methods: ['GET', 'POST']
+appro:
+    path: /appro
+    controller: App\Controller\IndexController::appro
+    methods: GET
+api_fournisseur_index:
+  path: '/api/fournisseurs/'
+  controller: 'App\Controller\api\FournisseurApiController::index'
+  methods: ['GET']
+
+api_fournisseur_new:
+  path: '/api/fournisseurs/nouveau'
+  controller: 'App\Controller\api\FournisseurApiController::nouveau'
+  methods: ['POST']
+
+api_fournisseur_afficher:
+  path: '/api/fournisseurs/{id}'
+  controller: 'App\Controller\api\FournisseurApiController::afficher'
+  methods: ['GET']
+  requirements:
+    id: \d+   # contrainte pour id : uniquement des chiffres
+
+api_fournisseur_modifier:
+  path: '/api/fournisseurs/{id}/modifier'
+  controller: 'App\Controller\api\FournisseurApiController::modifier'
+  methods: ['PUT', 'PATCH']
+  requirements:
+    id: \d+   # contrainte pour id : uniquement des chiffres
+
+api_fournisseur_supprimer:
+  path: '/api/fournisseurs/{id}'
+  controller: 'App\Controller\api\FournisseurApiController::supprimer'
+  methods: ['DELETE']
+  requirements:
+    id: \d+   # contrainte pour id : uniquement des chiffres
+
+api_fournisseur_recherche:
+  path: '/api/fournisseurs/recherche'
+  controller: 'App\Controller\api\FournisseurApiController::recherche'
+  methods: ['GET']

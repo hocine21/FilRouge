@@ -4,11 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="stylesheet" href="{{ asset('css/style-connexion.css') }}">
-     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
-     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
-
-
+    <link rel="stylesheet" href="{{ asset('css/style-connexion.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Inclure Font Awesome via CDN -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap">
@@ -21,39 +19,39 @@
 <body>
     {% include 'menu.html.twig' %}
 
-<div class="container-block">
-    <div class="block-text">
-        <h1>Bienvenue chez COUP'ACIER, vous pouvez vous connecter :</h1>
-    </div>
-    <div class="block co-cre">
-        <div class="login-form">
-            <form action="#" method="POST">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit" class="button">Connexion</button>
-            </form>
+    <div class="container-block">
+        <div class="block-text">
+            <h1>Bienvenue chez COUP'ACIER, vous pouvez vous connecter :</h1>
         </div>
+        <div class="block co-cre">
 
-        <div class="create-account">
-            <p>Vous n'avez pas encore de compte ? Créez votre compte :</p>
-            <a href="{{ path('app_choix') }}"><button class="button create">Créer un compte</button></a>
+            <div class="login-form">
+                <form action="{{ path('connexion') }}" method="POST" class="login-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <!-- Champ CSRF automatiquement géré par Symfony -->
+                    <input type="hidden" id="csrf_token" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <button type="submit">Se connecter</button>
+                </form>
+            </div>
+
+            <div class="create-account">
+                <p>Vous n'avez pas encore de compte ? Créez votre compte :</p>
+                <a href="{{ path('app_choix') }}"><button class="button create">Créer un compte</button></a>
+            </div>
         </div>
     </div>
 
-</div>
-
-{% include 'footer.html.twig' %}
-<script src="{{ asset('js/menu.js') }}"></script>
-<script src="{{ asset('js/connexion.js') }}"></script>
-
-
-
+    {% include 'footer.html.twig' %}
+    <script src="{{ asset('js/menu.js') }}"></script>
+    <script src="{{ asset('js/connexion.js') }}"></script>
 
 </body>
 
