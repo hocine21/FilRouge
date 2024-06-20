@@ -40,7 +40,7 @@ form {
 input[type="text"],
 input[type="number"],
 input[type="email"],
-input[type="tel"], /* Ajouté pour l'input numéro de téléphone */
+input[type="tel"] /* Ajouté pour l'input numéro de téléphone */,
 select {
     width: calc(100% - 16px); /* Pour compenser le padding de 8px des côtés */
     margin-bottom: 10px;
@@ -142,12 +142,14 @@ button:hover {
     min-width: 100%; /* Assure que la card prend toute la largeur disponible */
 }
 
-#ajoutFournisseur {
+#ajoutFournisseur,
+#ajoutEntrepot {
     padding: 15px;
     flex: 1;
 }
 
-#tableauFournisseurs {
+#tableauFournisseurs,
+#tableauEntrepots {
     flex: 2;
     max-height: 400px; /* Adjust this value to your needs */
     overflow-y: auto;
@@ -216,21 +218,6 @@ tbody tr:hover {
 }
 
 .header-buttons button:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-}
-
-#ajoutFournisseur button {
-    padding: 12px 24px;
-    border-radius: 8px;
-    background-color: #007bff;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-#ajoutFournisseur button:hover {
     background-color: #0056b3;
     transform: translateY(-2px);
 }
@@ -319,4 +306,29 @@ tbody tr:hover {
 .filters button:hover {
     background-color: #0056b3;
     transform: translateY(-2px);
+}
+
+/* Slider Styles */
+.slider {
+    overflow-x: hidden;
+    white-space: nowrap;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.slider::-webkit-scrollbar {
+    display: none;
+}
+
+.slide {
+    display: inline-block;
+    width: 100%;
+    transition: transform 0.3s ease-in-out;
+}
+
+@media (min-width: 768px) {
+    .slide {
+        width: calc(50% - 20px);
+        margin-right: 20px;
+    }
 }

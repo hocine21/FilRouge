@@ -28,11 +28,11 @@ class Entrepot
     private ?string $Rue = null;
 
     #[ORM\OneToMany(targetEntity: EntrepotStock::class, mappedBy: 'Entrepot')]
-    private Collection $entrepotStockes;
+    private Collection $entrepotStocks;
 
     public function __construct()
     {
-        $this->entrepotStockes = new ArrayCollection();
+        $this->entrepotStocks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -89,29 +89,29 @@ class Entrepot
     }
 
     /**
-     * @return Collection<int, EntrepotBarre>
+     * @return Collection<int, EntrepotStock>
      */
-    public function getEntrepotBarres(): Collection
+    public function getEntrepotStocks(): Collection
     {
-        return $this->entrepotBarres;
+        return $this->entrepotStocks;
     }
 
-    public function addEntrepotBarre(EntrepotBarre $entrepotBarre): static
+    public function addEntrepotStock(EntrepotStock $entrepotStock): static
     {
-        if (!$this->entrepotBarres->contains($entrepotBarre)) {
-            $this->entrepotBarres->add($entrepotBarre);
-            $entrepotBarre->setEntrepot($this);
+        if (!$this->entrepotStocks->contains($entrepotStock)) {
+            $this->entrepotStocks->add($entrepotStock);
+            $entrepotStock->setEntrepot($this);
         }
 
         return $this;
     }
 
-    public function removeEntrepotBarre(EntrepotBarre $entrepotBarre): static
+    public function removeEntrepotStock(EntrepotStock $entrepotStock): static
     {
-        if ($this->entrepotBarres->removeElement($entrepotBarre)) {
+        if ($this->entrepotStocks->removeElement($entrepotStock)) {
             // set the owning side to null (unless already changed)
-            if ($entrepotBarre->getEntrepot() === $this) {
-                $entrepotBarre->setEntrepot(null);
+            if ($entrepotStock->getEntrepot() === $this) {
+                $entrepotStock->setEntrepot(null);
             }
         }
 

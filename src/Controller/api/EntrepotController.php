@@ -9,44 +9,44 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/api/entrepots')]
 class EntrepotController extends AbstractController
 {
-    private $entityManager;
-    private $serializer;
-    private $validator;
-    private $entrepotRepository;
+    private EntityManagerInterface $entityManager;
+    private ValidatorInterface $validator;
+    private EntrepotRepository $entrepotRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator, EntrepotRepository $entrepotRepository)
+    public function __construct(EntityManagerInterface $entityManager, ValidatorInterface $validator, EntrepotRepository $entrepotRepository)
     {
         $this->entityManager = $entityManager;
-        $this->serializer = $serializer;
         $this->validator = $validator;
         $this->entrepotRepository = $entrepotRepository;
     }
 
     #[Route('/', name: 'api_entrepots_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(): JsonResponse
     {
         $entrepots = $this->entrepotRepository->findAll();
-        $data = $this->serializer->serialize($entrepots, 'json');
 
-        return new JsonResponse($data, Response::HTTP_OK, [], true);
-    }
+        $data = [];
+        foreach ($entrepots as $entrepot) {
+            $data[] = [
+                'id' => $entrepot->getId(),
+                'nom' => $entrepot->getNom(),
+                'ville' => $entrepot->getVille(),
+                'codePostale' => $entrepot->getCodePostale(),
+                'rue' => $entrepot->getRue(),
+            ];
+        }
 
-    #[Route('/codes-postaux', name: 'api_entrepots_codes_postaux', methods: ['GET'])]
-    public function getCodesPostaux(): Response
-    {
-        $codesPostaux = $this->entrepotRepository->findAllDistinctCodesPostaux();
-        return new JsonResponse($codesPostaux, Response::HTTP_OK);
+        return new JsonResponse($data, Response::HTTP_OK);
     }
 
     #[Route('/{id}', name: 'api_entrepots_show', methods: ['GET'])]
-    public function show($id, EntrepotRepository $entrepotRepository): Response 
+    public function show($id, EntrepotRepository $entrepotRepository): JsonResponse 
     {
         $entrepot = $entrepotRepository->find($id);
 
@@ -54,13 +54,19 @@ class EntrepotController extends AbstractController
             return new JsonResponse(['message' => 'Entrepot not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $data = $this->serializer->serialize($entrepot, 'json');
+        $data = [
+            'id' => $entrepot->getId(),
+            'nom' => $entrepot->getNom(),
+            'ville' => $entrepot->getVille(),
+            'codePostale' => $entrepot->getCodePostale(),
+            'rue' => $entrepot->getRue(),
+        ];
 
-        return new JsonResponse($data, Response::HTTP_OK, [], true);
+        return new JsonResponse($data, Response::HTTP_OK);
     }
 
     #[Route('/create', name: 'api_entrepots_create', methods: ['POST'])]
-    public function create(Request $request): Response
+    public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -82,7 +88,7 @@ class EntrepotController extends AbstractController
     }
 
     #[Route('/{id}', name: 'api_entrepots_update', methods: ['PUT'])]
-    public function update($id, Request $request, EntrepotRepository $entrepotRepository): Response
+    public function update($id, Request $request, EntrepotRepository $entrepotRepository): JsonResponse
     {
         $entrepot = $entrepotRepository->find($id);
 
@@ -108,7 +114,7 @@ class EntrepotController extends AbstractController
     }
 
     #[Route('/{id}', name: 'api_entrepots_delete', methods: ['DELETE'])]
-    public function delete($id, EntrepotRepository $entrepotRepository): Response
+    public function delete($id, EntrepotRepository $entrepotRepository): JsonResponse
     {
         $entrepot = $entrepotRepository->find($id);
 

@@ -18,7 +18,8 @@
         <div class="block-text">
             <h1>Bienvenue sur la page ADMINISTRATEUR, vous pouvez vous connecter et serez redirigé vers votre plateforme :</h1>
             <div class="button">
-                <a id="btnAjoutFournisseur"><button class="ajout">Ajout Fournisseur</button></a>
+                <button id="btnAjoutFournisseur" class="ajout">Gestion Des Fournisseurs</button>
+                <a id="btnAjoutEntrepot"><button class="ajout">Gestion Des Entrepots</button></a>
             </div>
         </div>
         <div class="flex-container">
@@ -75,210 +76,40 @@
                 </table>
             </div>
         </div>
+        <div class="flex-container">
+            <!-- Formulaire pour ajouter/modifier un entrepôt -->
+            <div id="ajoutEntrepot" class="flex-item card">
+                <h2 id="entrepotFormTitle">Ajouter/Modifier un Entrepôt</h2>
+                <form id="addEntrepotForm">
+                    <input type="text" id="entrepotName" name="nom" placeholder="Nom de l'entrepôt" required>
+                    <input type="text" id="entrepotVille" name="ville" placeholder="Ville" required>
+                    <input type="text" id="entrepotCodePostal" name="codePostale" placeholder="Code Postal" required>
+                    <input type="text" id="entrepotRue" name="rue" placeholder="Rue" required>
+                    <input type="hidden" id="entrepotId" name="entrepotId">
+                    <button type="submit" id="btnSaveEntrepot">Enregistrer</button>
+                    <button type="button" id="btnCancelEntrepot">Annuler</button>
+                </form>
+            </div>
+            <!-- Tableau pour afficher les entrepôts -->
+            <div id="tableauEntrepots" class="flex-item card">
+                <h2>Liste des Entrepôts</h2>
+                <table id="entrepotTable">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Ville</th>
+                            <th>Code Postal</th>
+                            <th>Rue</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="entrepotTableBody">
+                        <!-- Les entrepôts seront ajoutés ici dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <footer>
-        <p>Ceci est le pied de page.</p>
-    </footer>
-</body>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const formAjoutFournisseur = document.getElementById('addSupplierForm');
-    const btnAjoutFournisseur = document.getElementById('btnAjoutFournisseur');
-    const tableFournisseurs = document.getElementById('supplierTableBody');
-    const filterType = document.getElementById('filterType');
-    const filterPriceMin = document.getElementById('filterPriceMin');
-    const filterPriceMax = document.getElementById('filterPriceMax');
-    const applyFilters = document.getElementById('applyFilters');
-    const resetFilters = document.getElementById('resetFilters');
-
-    if (!tableFournisseurs) {
-        console.error('Erreur : élément avec ID supplierTableBody non trouvé');
-        return;
-    }
-
-    // Fonction pour récupérer et afficher les fournisseurs depuis l'API
-    function fetchAndDisplaySuppliers() {
-        fetch('/api/fournisseurs')
-            .then(response => response.json())
-            .then(data => {
-                // Effacer le contenu actuel du tableau
-                tableFournisseurs.innerHTML = '';
-
-                // Appliquer les filtres aux données
-                const filteredData = data.filter(fournisseur => {
-                    const priceMin = parseFloat(filterPriceMin.value) || 0;
-                    const priceMax = parseFloat(filterPriceMax.value) || Number.MAX_VALUE;
-                    const type = filterType.value;
-                    const price = parseFloat(fournisseur.prixHTFournisseur);
-
-                    return (type === "" || fournisseur.typeFourniture === type) &&
-                           (price >= priceMin) &&
-                           (price <= priceMax);
-                });
-
-                // Boucler à travers les données filtrées des fournisseurs et les afficher dans le tableau
-                filteredData.forEach(fournisseur => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${fournisseur.nomFournisseur}</td>
-                        <td>${fournisseur.typeFourniture}</td>
-                        <td>${fournisseur.prixHTFournisseur}</td>
-                        <td>${fournisseur.email}</td>
-                        <td>${fournisseur.telephone}</td>
-                        <td>
-                            <button class="btnModifier" data-id="${fournisseur.id}">Modifier</button>
-                            <button class="btnSupprimer" data-id="${fournisseur.id}">Supprimer</button>
-                        </td>
-                    `;
-                    tableFournisseurs.appendChild(tr);
-                });
-
-                // Mettre à jour les options du filtre de type de fourniture
-                updateTypeFilterOptions(data);
-            })
-            .catch(error => console.error('Erreur lors de la récupération des fournisseurs :', error));
-    }
-
-    // Fonction pour mettre à jour les options du filtre de type de fourniture
-    function updateTypeFilterOptions(data) {
-        const uniqueTypes = getUniqueTypes(data);
-        const currentType = filterType.value; // Conserver la valeur actuelle du filtre
-
-        filterType.innerHTML = '<option value="">Tous</option>'; // Réinitialiser les options
-
-        uniqueTypes.forEach(type => {
-            const option = document.createElement('option');
-            option.textContent = type;
-            option.value = type;
-            filterType.appendChild(option);
-        });
-
-        filterType.value = currentType; // Rétablir la sélection précédente
-    }
-
-    // Fonction pour récupérer les types de fourniture uniques à partir des données des fournisseurs
-    function getUniqueTypes(data) {
-        const types = data.map(fournisseur => fournisseur.typeFourniture);
-        return Array.from(new Set(types)); // Retourner un tableau avec des valeurs uniques
-    }
-
-    // Écouteur d'événement pour soumettre le formulaire d'ajout/modification de fournisseur
-    formAjoutFournisseur.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const formData = {
-            nomFournisseur: document.getElementById('supplierName').value,
-            typeFourniture: document.getElementById('supplierType').value,
-            prixHTFournisseur: parseFloat(document.getElementById('supplierPrice').value),
-            email: document.getElementById('supplierEmail').value,
-            telephone: document.getElementById('supplierPhone').value
-        };
-
-        let apiUrl = '/api/fournisseurs/nouveau';
-        let method = 'POST';
-
-        const supplierId = document.getElementById('supplierId').value;
-        if (supplierId) {
-            apiUrl = `/api/fournisseurs/${supplierId}/modifier`;
-            method = 'PUT';
-        }
-
-        fetch(apiUrl, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (method === 'POST') {
-                    alert('Fournisseur ajouté avec succès');
-                } else {
-                    alert('Fournisseur modifié avec succès');
-                    document.getElementById('btnAnnuler').click(); // Simuler un clic sur le bouton Annuler pour cacher le formulaire
-                }
-                formAjoutFournisseur.reset();
-                fetchAndDisplaySuppliers();
-            })
-            .catch(error => console.error('Erreur lors de l\'ajout/modification du fournisseur :', error));
-    });
-
-    // Écouteur d'événement pour le clic sur le bouton Ajout Fournisseur
-    btnAjoutFournisseur.addEventListener('click', function() {
-        const ajoutFournisseur = document.getElementById('ajoutFournisseur');
-        if (ajoutFournisseur.style.display === 'none' || ajoutFournisseur.style.display === '') {
-            ajoutFournisseur.style.display = 'block';
-            document.getElementById('formTitle').textContent = 'Ajouter un Fournisseur';
-            document.getElementById('btnAnnuler').style.display = 'inline-block';
-        } else {
-            ajoutFournisseur.style.display = 'none';
-            document.getElementById('formTitle').textContent = 'Modifier un Fournisseur';
-            document.getElementById('btnAnnuler').style.display = 'none';
-            formAjoutFournisseur.reset();
-            document.getElementById('supplierId').value = '';
-        }
-    });
-
-    // Écouteur d'événement pour le clic sur le bouton Annuler
-    document.getElementById('btnAnnuler').addEventListener('click', function() {
-        document.getElementById('ajoutFournisseur').style.display = 'none';
-        formAjoutFournisseur.reset();
-        document.getElementById('supplierId').value = '';
-    });
-
-    // Écouteurs d'événement pour les boutons Modifier et Supprimer dans le tableau
-    tableFournisseurs.addEventListener('click', function(event) {
-        if (event.target.classList.contains('btnModifier')) {
-            const fournisseurId = event.target.getAttribute('data-id');
-            fetch(`/api/fournisseurs/${fournisseurId}`)
-                .then(response => response.json())
-                .then(fournisseur => {
-                    document.getElementById('supplierName').value = fournisseur.nomFournisseur;
-                    document.getElementById('supplierType').value = fournisseur.typeFourniture;
-                    document.getElementById('supplierPrice').value = fournisseur.prixHTFournisseur;
-                    document.getElementById('supplierEmail').value = fournisseur.email;
-                    document.getElementById('supplierPhone').value = fournisseur.telephone;
-                    document.getElementById('supplierId').value = fournisseur.id;
-
-                    document.getElementById('btnAjoutFournisseur').click(); // Afficher le formulaire
-                })
-                .catch(error => console.error('Erreur lors de la récupération du fournisseur :', error));
-        } else if (event.target.classList.contains('btnSupprimer')) {
-            const fournisseurId = event.target.getAttribute('data-id');
-            if (confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?')) {
-                fetch(`/api/fournisseurs/${fournisseurId}`, {
-                        method: 'DELETE'
-                    })
-                    .then(response => {
-                        if (response.status === 204) {
-                            alert('Fournisseur supprimé avec succès');
-                            fetchAndDisplaySuppliers(); // Rafraîchir la liste des fournisseurs après la suppression
-                        } else {
-                            throw new Error('Erreur lors de la suppression du fournisseur');
-                        }
-                    })
-                    .catch(error => console.error('Erreur lors de la suppression du fournisseur :', error));
-            }
-        }
-    });
-
-    // Écouteur d'événement pour appliquer les filtres
-    applyFilters.addEventListener('click', function() {
-        fetchAndDisplaySuppliers();
-    });
-
-    // Écouteur d'événement pour réinitialiser les filtres
-    resetFilters.addEventListener('click', function() {
-        filterType.value = '';
-        filterPriceMin.value = '';
-        filterPriceMax.value = '';
-        fetchAndDisplaySuppliers();
-    });
-
-    // Charger et afficher les fournisseurs au chargement de la page
-    fetchAndDisplaySuppliers();
-});
-</script>
+    <script src="{{ asset('js/appro.js') }}"></script>
 </body>
 </html>
