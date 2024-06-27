@@ -1,3 +1,9 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 /* General Styles */
 body {
@@ -5,17 +11,25 @@ body {
     background-color: #f8f9fa;
     color: #212529;
     margin: 0; /* Pour supprimer les marges par défaut du corps */
-    overflow-y: auto;
 }
+
 .container-block {
     background: linear-gradient(to bottom right, #ff7f00, #eebb23); /* Dégradé orange */
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    min-height: 800px;
+    min-height: 00px;
 }
 
 
-
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    transition: color 0.3s ease, font-size 0.3s ease; /* Ajouter une transition sur la couleur et la taille de la police */
+}
 
 .container h1,
 .container a {
@@ -24,7 +38,10 @@ body {
     
 }
 
-
+header {
+    color: orange;
+    padding: 20px 0;
+}
 
 .icon-container{
     display: flex;
@@ -66,6 +83,7 @@ nav ul li a {
     text-decoration: none;
     color: orange;
     transition: color 0.3s ease;
+    font-size: 20px;
 }
 
 
@@ -105,7 +123,7 @@ h2{
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    margin: 50px 0;
+    margin-top: 50px ;
     margin-left: 20px;
     margin-right: 20px;
 }
@@ -209,6 +227,57 @@ h2{
 .buttons .admin {
     background-image: linear-gradient(to right, #bc2121, #FF8E8E); /* Dégradé de rouge pour le bouton Config */
 }
+
+footer {
+    display: flex;
+    bottom: 0; /* Fixer le footer au bas de la fenêtre */
+    width: 100%; /* Pour étendre le footer sur toute la largeur */
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+footer .container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.footer-left nav ul{
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-left nav ul li {
+    text-align: left;
+}
+
+
+.footer-center{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-right{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+footer .button{
+    padding: 10px 15px; /* Ajuster la taille des boutons */
+    font-size: 14px;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.send{
+    background-image: linear-gradient(to right, #28a745, #218838); /* Dégradé vert pour le bouton Créer un compte */
+    color: white;
+}
+
 
 @media screen and (max-width: 768px) {
     .image-block img {
@@ -394,4 +463,86 @@ h2{
     }
     
 
+}
+
+.container-block {
+    position: relative;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    z-index: 999;
+    transition: transform 0.5s ease-in-out;
+}
+
+.blue-overlay {
+    background: linear-gradient(to bottom right, #ff7f00, #eebb23);
+    left: 0;
+}
+
+.red-overlay {
+    background: linear-gradient(to bottom right, #eebb23, #ff7f00);
+    left: 50%;
+}
+
+.show-blue-overlay {
+    transform: translateX(-100%);
+}
+
+.show-red-overlay {
+    transform: translateX(100%);
+}
+
+.show-button {
+    color: darkorange;
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #fff;
+    border: 5px solid darkorange;
+    border-radius: 5px;
+    opacity: 0; /* Initial opacity */
+    animation: fadeIn 3s ease 4s forwards; /* Utilisation de l'animation fadeIn définie ci-dessous */
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.bonjour-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    font-weight: bold;
+    z-index: 1000;
+    color: white;
+}
+
+.bonjour-letter {
+    opacity: 0;
+    display: inline-block;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.bonjour-letter.show {
+    opacity: 1;
+}
+
+.hidden {
+    display: none !important;
 }
