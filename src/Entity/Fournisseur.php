@@ -1,36 +1,45 @@
 <?php
 
+
 namespace App\Entity;
 
 use App\Repository\FournisseurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FournisseurRepository::class)]
 class Fournisseur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
+    #[Groups(['fournisseur_index', 'fournisseur_detail'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['fournisseur_index', 'fournisseur_detail'])]
     private ?string $nomFournisseur = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['fournisseur_index', 'fournisseur_detail'])]
     private ?string $typeFourniture = null;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['fournisseur_index', 'fournisseur_detail'])]
     private ?float $prixHTFournisseur = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['fournisseur_detail'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Groups(['fournisseur_detail'])]
     private ?string $telephone = null;
 
-    #[ORM\OneToMany(targetEntity: ProduitFournisseur::class, mappedBy: 'fournisseur')]
+    #[ORM\OneToMany(targetEntity: ProduitFournisseur::class, mappedBy: 'fournisseur', cascade: ['persist', 'remove'])]
+    #[Groups(['fournisseur_detail'])]
     private Collection $produitFournisseurs;
 
     public function __construct()
@@ -48,10 +57,9 @@ class Fournisseur
         return $this->nomFournisseur;
     }
 
-    public function setNomFournisseur(string $nomFournisseur): static
+    public function setNomFournisseur(string $nomFournisseur): self
     {
         $this->nomFournisseur = $nomFournisseur;
-
         return $this;
     }
 
@@ -60,10 +68,9 @@ class Fournisseur
         return $this->typeFourniture;
     }
 
-    public function setTypeFourniture(string $typeFourniture): static
+    public function setTypeFourniture(string $typeFourniture): self
     {
         $this->typeFourniture = $typeFourniture;
-
         return $this;
     }
 
@@ -72,10 +79,9 @@ class Fournisseur
         return $this->prixHTFournisseur;
     }
 
-    public function setPrixHTFournisseur(float $prixHTFournisseur): static
+    public function setPrixHTFournisseur(float $prixHTFournisseur): self
     {
         $this->prixHTFournisseur = $prixHTFournisseur;
-
         return $this;
     }
 
@@ -84,10 +90,9 @@ class Fournisseur
         return $this->email;
     }
 
-    public function setEmail(?string $email): static
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -96,10 +101,9 @@ class Fournisseur
         return $this->telephone;
     }
 
-    public function setTelephone(?string $telephone): static
+    public function setTelephone(?string $telephone): self
     {
         $this->telephone = $telephone;
-
         return $this;
     }
 
@@ -111,25 +115,22 @@ class Fournisseur
         return $this->produitFournisseurs;
     }
 
-    public function addProduitFournisseur(ProduitFournisseur $produitFournisseur): static
+    public function addProduitFournisseur(ProduitFournisseur $produitFournisseur): self
     {
         if (!$this->produitFournisseurs->contains($produitFournisseur)) {
-            $this->produitFournisseurs->add($produitFournisseur);
+            $this->produitFournisseurs[] = $produitFournisseur;
             $produitFournisseur->setFournisseur($this);
         }
-
         return $this;
     }
 
-    public function removeProduitFournisseur(ProduitFournisseur $produitFournisseur): static
+    public function removeProduitFournisseur(ProduitFournisseur $produitFournisseur): self
     {
         if ($this->produitFournisseurs->removeElement($produitFournisseur)) {
-            // set the owning side to null (unless already changed)
             if ($produitFournisseur->getFournisseur() === $this) {
                 $produitFournisseur->setFournisseur(null);
             }
         }
-
         return $this;
     }
 }

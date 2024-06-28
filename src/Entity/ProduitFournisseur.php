@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ProduitFournisseurRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProduitFournisseurRepository::class)]
@@ -15,12 +14,14 @@ class ProduitFournisseur
     private ?int $id;
 
     #[ORM\ManyToOne(targetEntity: Fournisseur::class, inversedBy: 'produitFournisseurs')]
-    private ?Fournisseur $fournisseur = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Fournisseur $fournisseur;
 
     #[ORM\ManyToOne(targetEntity: Produit::class, inversedBy: 'produitFournisseurs')]
-    private ?Produit $produit = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Produit $produit;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $date;
 
     #[ORM\Column(length: 255)]

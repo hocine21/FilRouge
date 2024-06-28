@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const filterPriceMax = document.getElementById('filterPriceMax');
     const applyFilters = document.getElementById('applyFilters');
     const resetFilters = document.getElementById('resetFilters');
+    const searchName = document.getElementById('searchName'); // Nouvelle barre de recherche
 
     if (!tableFournisseurs) {
         console.error('Erreur : élément avec ID supplierTableBody non trouvé');
@@ -30,10 +31,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     const priceMax = parseFloat(filterPriceMax.value) || Number.MAX_VALUE;
                     const type = filterType.value;
                     const price = parseFloat(fournisseur.prixHTFournisseur);
+                    const searchQuery = searchName.value.toLowerCase(); // Obtenir la valeur de la barre de recherche
 
                     return (type === "" || fournisseur.typeFourniture === type) &&
                            (price >= priceMin) &&
-                           (price <= priceMax);
+                           (price <= priceMax) &&
+                           fournisseur.nomFournisseur.toLowerCase().includes(searchQuery); // Filtrer par nom de fournisseur
                 });
 
                 // Boucler à travers les données filtrées des fournisseurs et les afficher dans le tableau
@@ -138,9 +141,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Écouteur d'événement pour le clic sur le bouton Ajout Fournisseur
     btnAjoutFournisseur.addEventListener('click', function() {
-        formAjoutFournisseur.reset();
-        document.getElementById('supplierId').value = '';
-        toggleFormAndTable(true); // Afficher le formulaire et le tableau
+        const isCurrentlyVisible = ajoutFournisseur.style.display === 'block';
+        toggleFormAndTable(!isCurrentlyVisible);
     });
 
     // Écouteur d'événement pour le clic sur le bouton Annuler
@@ -194,12 +196,19 @@ document.addEventListener('DOMContentLoaded', function() {
         filterType.value = '';
         filterPriceMin.value = '';
         filterPriceMax.value = '';
+        searchName.value = ''; // Réinitialiser la barre de recherche
+        fetchAndDisplaySuppliers();
+    });
+
+    // Écouteur d'événement pour la barre de recherche
+    searchName.addEventListener('input', function() {
         fetchAndDisplaySuppliers();
     });
 
     // Charger et afficher les fournisseurs au chargement de la page
     fetchAndDisplaySuppliers();
 });
+
 
 
 //code entrepot 
@@ -361,3 +370,224 @@ document.addEventListener('DOMContentLoaded', function() {
     // Charger et afficher les entrepôts au chargement de la page
     fetchAndDisplayEntrepots();
 });
+//code produit 
+// app.js
+
+document.getElementById('addProductForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Empêche le comportement par défaut du formulaire
+
+    // Créer un objet FormData
+    const formData = new FormData();
+
+    // Récupérer les valeurs du formulaire et les ajouter à l'objet FormData
+    formData.append('nomProduit', document.getElementById('nomProduit').value);
+    formData.append('image', document.getElementById('image').files[0]);
+    formData.append('largeurProduit', parseFloat(document.getElementById('largeurProduit').value));
+    formData.append('epaisseurProduit', parseFloat(document.getElementById('epaisseurProduit').value));
+    formData.append('masseProduit', parseFloat(document.getElementById('masseProduit').value));
+    formData.append('formeProduit', document.getElementById('formeProduit').value);
+    formData.append('hauteurProduit', parseFloat(document.getElementById('hauteurProduit').value));
+    formData.append('sectionProduit', parseFloat(document.getElementById('sectionProduit').value));
+    formData.append('marge', parseFloat(document.getElementById('marge').value));
+    formData.append('prixML', parseFloat(document.getElementById('prixML').value));
+
+    console.log([...formData.entries()]); // Afficher les entrées de formData pour déboguer
+
+    // Envoyer la requête POST à l'API Symfony avec fetch
+    fetch('http://localhost:8080/api/produits', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erreur lors de l\'ajout du produit');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Succès : Afficher la réponse
+        document.getElementById('responseMessage').innerHTML = `<p>Produit ajouté avec succès !</p>`;
+    })
+    .catch(error => {
+        // Erreur : Afficher l'erreur
+        console.error('Erreur lors de l\'ajout du produit :', error);
+        document.getElementById('responseMessage').innerHTML = `<p>Erreur : ${error.message}</p>`;
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('http://localhost:8080/api/produits')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des produits');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const productsTable = document.getElementById('productsTable');
+            data.forEach(product => {
+                const row = createProductRow(product);
+                productsTable.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Erreur lors de la récupération des produits :', error));
+});
+
+function createProductRow(product) {
+    const row = document.createElement('tr');
+
+    const nomProduitCell = document.createElement('td');
+    nomProduitCell.textContent = product.nomProduit;
+    row.appendChild(nomProduitCell);
+
+    const imageCell = document.createElement('td');
+    const image = document.createElement('img');
+    image.src = `http://localhost:8080/pictures/${product.image}`;
+    image.alt = product.nomProduit;
+    image.style.maxWidth = '100px'; // Ajustez la taille de l'image selon vos besoins
+    imageCell.appendChild(image);
+    row.appendChild(imageCell);
+
+    const largeurCell = document.createElement('td');
+    largeurCell.textContent = product.largeurProduit;
+    row.appendChild(largeurCell);
+
+    const epaisseurCell = document.createElement('td');
+    epaisseurCell.textContent = product.epaisseurProduit;
+    row.appendChild(epaisseurCell);
+
+    const masseCell = document.createElement('td');
+    masseCell.textContent = product.masseProduit;
+    row.appendChild(masseCell);
+
+    const formeCell = document.createElement('td');
+    formeCell.textContent = product.formeProduit;
+    row.appendChild(formeCell);
+
+    const hauteurCell = document.createElement('td');
+    hauteurCell.textContent = product.hauteurProduit || 'N/A';
+    row.appendChild(hauteurCell);
+
+    const sectionCell = document.createElement('td');
+    sectionCell.textContent = product.sectionProduit || 'N/A';
+    row.appendChild(sectionCell);
+
+    const margeCell = document.createElement('td');
+    margeCell.textContent = product.marge;
+    row.appendChild(margeCell);
+
+    const prixMLCell = document.createElement('td');
+    prixMLCell.textContent = product.prixML;
+    row.appendChild(prixMLCell);
+
+    return row;
+}
+
+
+
+async function fetchSuppliers() {
+    try {
+        const response = await fetch('/api/fournisseurs');
+        const fournisseurs = await response.json();
+
+        // Sélectionner le fournisseur à partir d'une liste déroulante
+        const fournisseurSelect = document.getElementById('fournisseurId');
+        fournisseurs.forEach(fournisseur => {
+            const option = document.createElement('option');
+            option.value = fournisseur.id;
+            option.textContent = fournisseur.nomFournisseur;
+            fournisseurSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des fournisseurs:', error);
+        alert('Erreur lors de la récupération des fournisseurs. Veuillez réessayer.');
+    }
+}
+async function fetchSuppliers() {
+    try {
+        const response = await fetch('/api/fournisseurs');
+        const fournisseurs = await response.json();
+
+        const fournisseurSelect = document.getElementById('fournisseurId');
+        fournisseurs.forEach(fournisseur => {
+            const option = document.createElement('option');
+            option.value = fournisseur.id;
+            option.textContent = fournisseur.nomFournisseur;
+            fournisseurSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des fournisseurs:', error);
+        alert('Erreur lors de la récupération des fournisseurs. Veuillez réessayer.');
+    }
+}
+
+async function fetchProducts() {
+    try {
+        const response = await fetch('/api/produits');
+        const produits = await response.json();
+        const productsList = document.getElementById('productsList');
+
+        produits.forEach(produit => {
+            const productDiv = document.createElement('div');
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'product';
+            checkbox.value = produit.id;
+
+            const label = document.createElement('label');
+            label.textContent = `${produit.nomProduit} (ID: ${produit.id})`;
+
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.name = `quantity[${produit.id}]`;
+            quantityInput.placeholder = 'Quantité';
+            quantityInput.required = true;
+
+            productDiv.appendChild(checkbox);
+            productDiv.appendChild(label);
+            productDiv.appendChild(quantityInput);
+
+            productsList.appendChild(productDiv);
+        });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des produits:', error);
+        alert('Erreur lors de la récupération des produits. Veuillez réessayer.');
+    }
+}
+
+document.getElementById('productForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const fournisseurId = document.getElementById('fournisseurId').value;
+    const products = [];
+
+    document.querySelectorAll('input[name="product"]:checked').forEach(checkbox => {
+        const productId = checkbox.value;
+        const quantity = document.querySelector(`input[name="quantity[${productId}]"]`).value;
+        products.push({ id: productId, quantity: quantity });
+    });
+
+    try {
+        const response = await fetch('http://localhost:8080/api/produit-fournisseur', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                fournisseurId: fournisseurId,
+                produits: products,
+                date: new Date().toISOString()
+            })
+        });
+
+        const data = await response.json();
+        alert(data.message);
+    } catch (error) {
+        console.error('Erreur lors de la commande au fournisseur:', error);
+        alert('Erreur lors de la commande au fournisseur. Veuillez réessayer.');
+    }
+});
+
+fetchSuppliers();
+fetchProducts();

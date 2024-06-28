@@ -36,37 +36,28 @@ api_modifier_employe:
 
 
 # config/routes/api.yaml
-api_produits_new:
-    path: /api/produit/nouveau
-    controller: 'App\Controller\api\ProduitController::new'
-    methods: ['POST']
+# config/routes.yaml
 # config/routes.yaml
 
-api_produits_list:
+# config/routes.yaml
+
+# config/routes.yaml
+
+# Routes for ProduitController
+api_produit_list:
     path: /api/produits
-    controller: App\Controller\api\ProduitController::index
+    controller: 'App\Controller\api\ProduitController::getProduits'
     methods: ['GET']
 
-api_produits_show:
+api_produit_add:
+    path: /api/produits
+    controller: 'App\Controller\api\ProduitController::addProduit'
+    methods: ['POST']
+
+api_produit_delete:
     path: /api/produits/{id}
-    controller: App\Controller\api\ProduitController::show
-    methods: ['GET']
-    requirements:
-        id: '\d+'
-
-api_produits_update:
-    path: /api/produits/update/{id}
-    controller: App\Controller\api\ProduitController::update
-    methods: ['PUT']
-    requirements:
-        id: '\d+'
-
-api_produits_delete:
-    path: /api/produits/delete/{id}
-    controller: App\Controller\api\ProduitController::delete
+    controller: 'App\Controller\api\ProduitController::deleteProduit'
     methods: ['DELETE']
-    requirements:
-        id: '\d+'
 
 
 # config/routes.yaml
@@ -248,3 +239,9 @@ api_fournisseur_recherche:
   path: '/api/fournisseurs/recherche'
   controller: 'App\Controller\api\FournisseurApiController::recherche'
   methods: ['GET']
+# config/routes.yaml
+
+api_produit_fournisseur_add:
+    path: /api/produit-fournisseur
+    controller: 'App\Controller\api\ProduitFournisseurController::addProduitFournisseur'
+    methods: ['POST']

@@ -332,3 +332,65 @@ tbody tr:hover {
         margin-right: 20px;
     }
 }
+/* Style pour la barre de recherche */
+#searchName {
+    padding: 10px;
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 5px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#searchName:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+/* Optionnel: Ajout d'une icône de recherche à l'intérieur du champ */
+#searchName::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* Conteneur pour la barre de recherche */
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.filter-item label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+/* Style pour les icônes */
+.icons {
+    display: flex;
+    gap: 15px;
+}
+
+.icon {
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+/* Couleur spécifique pour chaque icône */
+.icon i.fa-sign-out-alt {
+    color: red; /* Icône de déconnexion en rouge */
+}
+
+.icon i.fa-user-tie {
+    color: green; /* Icône de service d'approvisionnement en vert (ou autre couleur de votre choix) */
+}
+
+/* Effet au survol */
+.icon:hover {
+    color: #007bff; /* Change la couleur au survol (facultatif) */
+}
