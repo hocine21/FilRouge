@@ -3,17 +3,15 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
-
 connexion:
   path: /api/connexion
   controller: 'App\Controller\api\ConnexionController::connexion'
   methods: ['POST']
-
+  
 api_inscription:
   path: /api/inscription
   controller: 'App\Controller\api\InscriptionController::inscription'
   methods: ['POST']
-
 api_inscription_employe:
   path: /api/inscription/employe
   controller: 'App\Controller\api\InscriptionEmployeController::inscription'
@@ -34,66 +32,51 @@ api_modifier_employe:
   controller: 'App\Controller\api\InscriptionEmployeController::modifierEmploye'
   methods: ['PUT']
 
-api_produits_new:
-  path: /api/produit/nouveau
-  controller: 'App\Controller\api\ProduitController::new'
-  methods: ['POST']
+# config/routes.yaml
 
-api_produits_list:
-  path: /api/produits
-  controller: App\Controller\api\ProduitController::index
-  methods: ['GET']
 
-api_produits_show:
-  path: /api/produits/{id}
-  controller: App\Controller\api\ProduitController::show
-  methods: ['GET']
-  requirements:
-    id: '\d+'
+# config/routes/api.yaml
+# config/routes.yaml
+# config/routes.yaml
 
-api_produits_update:
-  path: /api/produits/update/{id}
-  controller: App\Controller\api\ProduitController::update
-  methods: ['PUT']
-  requirements:
-    id: '\d+'
+# config/routes.yaml
 
-api_produits_delete:
-  path: /api/produits/delete/{id}
-  controller: App\Controller\api\ProduitController::delete
-  methods: ['DELETE']
-  requirements:
-    id: '\d+'
 
+# config/routes.yaml
+
+# Routes pour le contrôleur PanierController
 panier_ajouter:
-  path: /panier/ajouter
-  controller: 'App\Controller\PanierController::ajouterProduitAuPanier'
-  methods: ['POST']
+    path: /panier/ajouter
+    controller: 'App\Controller\PanierController::ajouterProduitAuPanier'
+    methods: ['POST']
 
 panier_afficher:
-  path: /panier
-  controller: 'App\Controller\PanierController::afficherPanier'
-  methods: ['GET']
+    path: /panier
+    controller: 'App\Controller\PanierController::afficherPanier'
+    methods: ['GET']
 
 panier_modifier:
-  path: /panier/modifier/{id}
-  controller: 'App\Controller\PanierController::modifierDetailPanier'
-  methods: ['PUT']
+    path: /panier/modifier/{id}
+    controller: 'App\Controller\PanierController::modifierDetailPanier'
+    methods: ['PUT']
 
 panier_supprimer:
-  path: /panier/supprimer/{id}
-  controller: 'App\Controller\PanierController::supprimerDetailPanier'
-  methods: ['DELETE']
+    path: /panier/supprimer/{id}
+    controller: 'App\Controller\PanierController::supprimerDetailPanier'
+    methods: ['DELETE']
 
 panier_vider:
-  path: /panier/vider
-  controller: 'App\Controller\PanierController::viderPanier'
-  methods: ['DELETE']
+    path: /panier/vider
+    controller: 'App\Controller\PanierController::viderPanier'
+    methods: ['DELETE']
 
+
+# config/routes.yaml
 calculate_distance:
-  path: /distance/{postalCode1}/{masseKgPerMeter}/{length}/{quantity}
-  controller: 'App\Controller\DistanceController::calculateDistance'
-  methods: ['GET']
+    path: /distance/{postalCode1}/{masseKgPerMeter}/{length}/{quantity}
+    controller: 'App\Controller\DistanceController::calculateDistance'
+    methods: ['GET']
+
 
 api_entrepots_index:
   path: /api/entrepots
@@ -124,21 +107,20 @@ api_entrepots_delete:
   path: /api/entrepots/{id}
   controller: 'App\Controller\api\EntrepotController::delete'
   methods: [DELETE]
-
 app_entrepot_codes_postaux:
   path: /api/entrepots/codes-postaux
   controller: 'App\Controller\api\EntrepotController::codesPostaux'
   methods: ['GET']
+# config/routes.yaml
 
 prix_matiere_premiere:
   path: /prix-matiere-premiere
   controller: 'App\Controller\MatierePremiereController::getPrixMatierePremiere'
   methods: ['GET']
-
+# config/routes.yaml
 holidays:
-  path: /holidays/{year}
-  controller: App\Controller\HolidayController::index
-
+    path: /holidays/{year}
+    controller: App\Controller\HolidayController::index
 checkout:
   path: /checkout
   controller: App\Controller\PaymentController::checkout
@@ -158,7 +140,6 @@ payment_cancel:
   path: /payment/cancel
   controller: App\Controller\PaymentController::paymentCancel
   methods: ['GET']
-
 api_produits_search_nom:
   path: '/api/produits/search/nom/{nom_produit}'
   controller: 'App\Controller\ConfigurateurController::searchByNom'
@@ -172,41 +153,39 @@ api_produits_search_nom_masse:
     masse_produit: '.+'  # Accepte n'importe quelle chaîne de caractères
 
 app_inscriptionParticulier:
-  path: '/inscriptionParticulier'
-  controller: 'App\Controller\api\InscriptionController::index'
-  methods: ['GET']
+    path: '/inscriptionParticulier'
+    controller: 'App\Controller\api\InscriptionController::index'
+    methods: ['GET']
 
 inscription_pro:
-  path: /inscription/pro
-  controller: App\Controller\api\InscriptionController::pro
-
+    path: /inscription/pro
+    controller: App\Controller\api\InscriptionController::pro
+  
+# config/routes.yaml
 app_index:
-  path: /accueil
-  controller: 'App\Controller\IndexController::index'
+    path: /accueil
+    controller: 'App\Controller\IndexController::index'
 
 app_choix:
-  path: /choix
-  controller: 'App\Controller\IndexController::choix'
-
+    path: /choix
+    controller: 'App\Controller\IndexController::choix'
 app_connexion:
-  path: /connexion
-  controller: App\Controller\IndexController::connexion
-  methods: ['GET']
-
+    path: /connexion
+    controller: App\Controller\IndexController::connexion
+    methods: ['GET']
 app_super_admin:
-  path: /super-admin
-  controller: App\Controller\IndexController::superAdmin
+    path: /super-admin
+    controller: App\Controller\IndexController::superAdmin
+# config/routes.yaml
 
 email_send:
-  path: /send-email
-  controller: 'App\Controller\EmailController::sendEmail'
-  methods: ['GET', 'POST']
-
+    path: /send-email
+    controller: 'App\Controller\EmailController::sendEmail'
+    methods: ['GET', 'POST']
 appro:
-  path: /appro
-  controller: App\Controller\IndexController::appro
-  methods: ['GET']
-
+    path: /appro
+    controller: App\Controller\IndexController::appro
+    methods: GET
 api_fournisseur_index:
   path: '/api/fournisseurs/'
   controller: 'App\Controller\api\FournisseurApiController::index'
@@ -243,7 +222,18 @@ api_fournisseur_recherche:
   controller: 'App\Controller\api\FournisseurApiController::recherche'
   methods: ['GET']
 
+# config/routes.yaml
+
+api_produit_add:
+    path: /api/produits
+    controller: App\Controller\api\ProduitController::addProduit
+    methods: POST
+
+api_produits_get:
+    path: /api/produits
+    controller: App\Controller\api\ProduitController::getProduits
+    methods: GET
 app_produits:
-  path: /produits
-  controller: App\Controller\IndexController::produits
-  methods: ['GET']
+    path: /produit
+    controller: App\Controller\IndexController::produits
+    methods: GET
