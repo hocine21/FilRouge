@@ -3,210 +3,115 @@
 namespace App\Controller\api;
 
 use App\Entity\Produit;
-use App\Repository\CategorieRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * @Route("/api/produits")
- */
 class ProduitController extends AbstractController
 {
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
-    /**
-     * @Route("/api/produit/nouveau", name="api_produits_new", methods={"POST"})
-     */
-    public function new(Request $request, CategorieRepository $categorieRepository, EntityManagerInterface $entityManager): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-    
-        // Vérification des données requises
-        if (!isset($data['categorie_id'], $data['nom_produit'], $data['image'], $data['prix_ml'])) {
-            return new JsonResponse(['message' => 'Missing required data'], Response::HTTP_BAD_REQUEST);
-        }
-    
-        // Récupération de la catégorie
-        $categorie = $categorieRepository->find($data['categorie_id']);
-        if (!$categorie) {
-            return new JsonResponse(['message' => 'Category not found'], Response::HTTP_NOT_FOUND);
-        }
-    
-        // Création du produit
-        $produit = new Produit();
-        $produit->setCategorie($categorie);
-        $produit->setNomProduit($data['nom_produit']);
-        $produit->setImage($data['image']);
-        $produit->setPrixML($data['prix_ml']);
-    
-        // Paramètres facultatifs
-        if (isset($data['largeur_produit'])) {
-            $produit->setLargeurProduit($data['largeur_produit']);
-        }
-        if (isset($data['marge'])) {
-            $produit->setMarge($data['marge']);
-        }
-        if (isset($data['epaisseur_produit'])) {
-            $produit->setEpaisseurProduit($data['epaisseur_produit']);
-        }
-        if (isset($data['hauteur_produit'])) {
-            $produit->setHauteurProduit($data['hauteur_produit']);
-        }
-        if (isset($data['masse_produit'])) {
-            $produit->setMasseProduit($data['masse_produit']);
-        }
-        if (isset($data['forme_produit'])) {
-            $produit->setFormeProduit($data['forme_produit']);
-        }
-        if (isset($data['section_produit'])) {
-            $produit->setSectionProduit($data['section_produit']);
-        }
-    
-        $entityManager->persist($produit);
-        $entityManager->flush();
-    
-        return new JsonResponse(['message' => 'Produit created!', 'id' => $produit->getId()], Response::HTTP_CREATED);
-    }
- /**
-     * @Route("/", name="api_produits_list", methods={"GET"})
-     */
-    public function index(): JsonResponse
-    {
-        $produits = $this->entityManager->getRepository(Produit::class)->findAll();
-        $data = [];
 
+    /**
+     * @Route("/api/produits", name="api_produit_add", methods={"POST"})
+     */
+    public function addProduit(Request $request, ValidatorInterface $validator): Response
+    {
+        // Récupérer les données du formulaire
+        $nomProduit = $request->get('nomProduit');
+        $largeurProduit = $request->get('largeurProduit');
+        $epaisseurProduit = $request->get('epaisseurProduit');
+        $masseProduit = $request->get('masseProduit');
+        $formeProduit = $request->get('formeProduit');
+        $hauteurProduit = $request->get('hauteurProduit');
+        $sectionProduit = $request->get('sectionProduit');
+        $marge = $request->get('marge');
+        $prixML = $request->get('prixML');
+
+        // Récupérer le fichier uploadé
+        /** @var UploadedFile $imageFile */
+        $imageFile = $request->files->get('image');
+
+        if ($imageFile) {
+            $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $imageFile->getClientOriginalExtension();
+            $newFilename = uniqid() . '.' . $extension;
+
+            try {
+                // Déplacer le fichier vers le répertoire des images
+                $imageFile->move($this->getParameter('pictures_directory'), $newFilename);
+            } catch (FileException $e) {
+                return $this->json(['error' => 'Erreur lors du téléchargement de l\'image.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            // Créer un nouvel objet Produit
+            $produit = new Produit();
+            $produit->setNomProduit($nomProduit);
+            $produit->setImage($newFilename);
+            $produit->setLargeurProduit($largeurProduit !== null ? (float) $largeurProduit : null);
+            $produit->setEpaisseurProduit($epaisseurProduit !== null ? (float) $epaisseurProduit : null);
+            $produit->setMasseProduit($masseProduit !== null ? (float) $masseProduit : null);
+            $produit->setFormeProduit($formeProduit ?: null); // FormeProduit is a string that can be null
+            $produit->setHauteurProduit($hauteurProduit !== null ? (float) $hauteurProduit : null);
+            $produit->setSectionProduit($sectionProduit !== null ? (float) $sectionProduit : null);
+            $produit->setMarge($marge !== null ? (float) $marge : null);
+            $produit->setPrixML($prixML !== null ? (float) $prixML : null);
+
+            // Valider l'objet Produit
+            $errors = $validator->validate($produit);
+            if (count($errors) > 0) {
+                $errorMessages = [];
+                foreach ($errors as $error) {
+                    $errorMessages[$error->getPropertyPath()] = $error->getMessage();
+                }
+                return $this->json(['errors' => $errorMessages], Response::HTTP_BAD_REQUEST);
+            }
+
+            // Persister l'objet Produit en base de données
+            $this->entityManager->persist($produit);
+            $this->entityManager->flush();
+
+            return $this->json(['success' => true, 'message' => 'Produit ajouté avec succès'], Response::HTTP_CREATED);
+        } else {
+            return $this->json(['error' => 'Image non fournie.'], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @Route("/api/produits", name="api_produits_get", methods={"GET"})
+     */
+    public function getProduits(): Response
+    {
+        $repository = $this->entityManager->getRepository(Produit::class);
+        $produits = $repository->findAll();
+
+        // Transformer les objets Produit en un tableau associatif pour l'envoi JSON
+        $produitsArray = [];
         foreach ($produits as $produit) {
-            $data[] = [
+            $produitsArray[] = [
                 'id' => $produit->getId(),
-                'nom_produit' => $produit->getNomProduit(),
+                'nomProduit' => $produit->getNomProduit(),
                 'image' => $produit->getImage(),
-                'prix_ml' => $produit->getPrixML(),
-                'epaisseur_produit' => $produit->getEpaisseurProduit(),
-                'hauteur_produit' => $produit->getHauteurProduit(),
-                'largeur_produit' => $produit->getLargeurProduit(),
-                'masse_produit' => $produit->getMasseProduit(),
+                'largeurProduit' => $produit->getLargeurProduit(),
+                'epaisseurProduit' => $produit->getEpaisseurProduit(),
+                'masseProduit' => $produit->getMasseProduit(),
+                'formeProduit' => $produit->getFormeProduit(),
+                'hauteurProduit' => $produit->getHauteurProduit(),
+                'sectionProduit' => $produit->getSectionProduit(),
                 'marge' => $produit->getMarge(),
-                'forme_produit' => $produit->getFormeProduit(),
-                'section_produit' => $produit->getSectionProduit()
-                // Ajoutez d'autres propriétés de l'entité Produit ici
+                'prixML' => $produit->getPrixML(),
             ];
         }
 
-        return new JsonResponse($data, Response::HTTP_OK);
-    }
-
-    /**
-     * @Route("/{id}", name="api_produits_show", methods={"GET"})
-     */
-    public function show($id): JsonResponse
-    {
-        $produit = $this->entityManager->getRepository(Produit::class)->find($id);
-
-        if (!$produit) {
-            return new JsonResponse(['message' => 'Produit not found'], Response::HTTP_NOT_FOUND);
-        }
-
-        $data = [
-            'id' => $produit->getId(),
-            'nom_produit' => $produit->getNomProduit(),
-            'image' => $produit->getImage(),
-            'prix_ml' => $produit->getPrixML(),
-            'epaisseur_produit' => $produit->getEpaisseurProduit(),
-            'hauteur_produit' => $produit->getHauteurProduit(),
-            'largeur_produit' => $produit->getLargeurProduit(),
-            'masse_produit' => $produit->getMasseProduit(),
-            'marge' => $produit->getMarge(),
-            'forme_produit' => $produit->getFormeProduit(),
-            'section_produit' => $produit->getSectionProduit()
-            // Ajoutez d'autres propriétés de l'entité Produit ici
-        ];
-
-        return new JsonResponse($data, Response::HTTP_OK);
-    }
-
-    /**
- * @Route("/update/{id}", name="api_produits_update", methods={"PUT"})
- */
-public function update(Request $request, $id): JsonResponse
-{
-    $data = json_decode($request->getContent(), true);
-    $produit = $this->entityManager->getRepository(Produit::class)->find($id);
-
-    if (!$produit) {
-        return new JsonResponse(['message' => 'Produit not found'], Response::HTTP_NOT_FOUND);
-    }
-
-    // Mettre à jour les propriétés du produit
-    // Assurez-vous de valider et de filtrer les données d'entrée si nécessaire
-
-    if (isset($data['nom_produit'])) {
-        $produit->setNomProduit($data['nom_produit']);
-    }
-
-    if (isset($data['image'])) {
-        $produit->setImage($data['image']);
-    }
-
-    if (isset($data['prix_ml'])) {
-        $produit->setPrixML($data['prix_ml']);
-    }
-
-    if (isset($data['epaisseur_produit'])) {
-        $produit->setEpaisseurProduit($data['epaisseur_produit']);
-    }
-
-    if (isset($data['hauteur_produit'])) {
-        $produit->setHauteurProduit($data['hauteur_produit']);
-    }
-
-    if (isset($data['largeur_produit'])) {
-        $produit->setLargeurProduit($data['largeur_produit']);
-    }
-
-    if (isset($data['masse_produit'])) {
-        $produit->setMasseProduit($data['masse_produit']);
-    }
-
-    if (isset($data['marge'])) {
-        $produit->setMarge($data['marge']);
-    }
-
-    if (isset($data['forme_produit'])) {
-        $produit->setFormeProduit($data['forme_produit']);
-    }
-
-    if (isset($data['section_produit'])) {
-        $produit->setSectionProduit($data['section_produit']);
-    }
-
-    $this->entityManager->flush();
-
-    return new JsonResponse(['message' => 'Produit updated!'], Response::HTTP_OK);
-}
-
-
-    /**
-     * @Route("/delete/{id}", name="api_produits_delete", methods={"DELETE"})
-     */
-    public function delete($id): JsonResponse
-    {
-        $produit = $this->entityManager->getRepository(Produit::class)->find($id);
-
-        if (!$produit) {
-            return new JsonResponse(['message' => 'Produit not found'], Response::HTTP_NOT_FOUND);
-        }
-
-        $this->entityManager->remove($produit);
-        $this->entityManager->flush();
-
-        return new JsonResponse(['message' => 'Produit deleted!'], Response::HTTP_OK);
+        return $this->json($produitsArray);
     }
 }

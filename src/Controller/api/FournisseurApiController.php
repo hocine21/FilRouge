@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller\api;
 
 use App\Entity\Fournisseur;
@@ -15,9 +14,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/api/fournisseurs')]
 class FournisseurApiController extends AbstractController
 {
-    private $entityManager;
-    private $serializer;
-    private $validator;
+    private EntityManagerInterface $entityManager;
+    private SerializerInterface $serializer;
+    private ValidatorInterface $validator;
 
     public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator)
     {
@@ -30,7 +29,10 @@ class FournisseurApiController extends AbstractController
     public function index(FournisseurRepository $fournisseurRepository): JsonResponse
     {
         $fournisseurs = $fournisseurRepository->findAll();
-        $data = $this->serializer->serialize($fournisseurs, 'json');
+
+        $data = $this->serializer->serialize($fournisseurs, 'json', [
+            'groups' => 'fournisseur_index'
+        ]);
 
         return new JsonResponse($data, JsonResponse::HTTP_OK, [], true);
     }
@@ -39,6 +41,7 @@ class FournisseurApiController extends AbstractController
     public function nouveau(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+
         $fournisseur = new Fournisseur();
         $fournisseur->setNomFournisseur($data['nomFournisseur'] ?? null);
         $fournisseur->setTypeFourniture($data['typeFourniture'] ?? null);
@@ -61,7 +64,9 @@ class FournisseurApiController extends AbstractController
     #[Route('/{id}', name: 'api_fournisseur_afficher', methods: ['GET'])]
     public function afficher(Fournisseur $fournisseur): JsonResponse
     {
-        $data = $this->serializer->serialize($fournisseur, 'json');
+        $data = $this->serializer->serialize($fournisseur, 'json', [
+            'groups' => 'fournisseur_detail'
+        ]);
 
         return new JsonResponse($data, JsonResponse::HTTP_OK, [], true);
     }
@@ -70,6 +75,7 @@ class FournisseurApiController extends AbstractController
     public function modifier(Request $request, Fournisseur $fournisseur): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+
         $fournisseur->setNomFournisseur($data['nomFournisseur'] ?? $fournisseur->getNomFournisseur());
         $fournisseur->setTypeFourniture($data['typeFourniture'] ?? $fournisseur->getTypeFourniture());
         $fournisseur->setPrixHTFournisseur($data['prixHTFournisseur'] ?? $fournisseur->getPrixHTFournisseur());
@@ -101,7 +107,10 @@ class FournisseurApiController extends AbstractController
     {
         $term = $request->query->get('term', '');
         $fournisseurs = $fournisseurRepository->findByNomFournisseur($term);
-        $data = $this->serializer->serialize($fournisseurs, 'json');
+
+        $data = $this->serializer->serialize($fournisseurs, 'json', [
+            'groups' => 'fournisseur_index'
+        ]);
 
         return new JsonResponse($data, JsonResponse::HTTP_OK, [], true);
     }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,18 +9,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>Page d'Accueil</title>
 </head>
+
 <body>
     <header>
         <div class="container">
             <h1>COUP'ACIER</h1>
+            <div class="icons">
+                <span class="icon">
+                    <i class="fas fa-user-tie" title="Service d'approvisionnement"></i>
+                </span>
+                <span class="icon">
+                    <i class="fas fa-sign-out-alt" title="Déconnexion"></i>
+                </span>
+            </div>
         </div>
     </header>
+
     <div class="container-block">
         <div class="block-text">
             <h1>Bienvenue sur la page ADMINISTRATEUR, vous pouvez vous connecter et serez redirigé vers votre plateforme :</h1>
             <div class="button">
                 <button id="btnAjoutFournisseur" class="ajout">Gestion Des Fournisseurs</button>
                 <a id="btnAjoutEntrepot"><button class="ajout">Gestion Des Entrepots</button></a>
+                <a id="btnAjoutProduit"><button class="ajout">Gestion Des Produits</button></a>
             </div>
         </div>
         <div class="flex-container">
@@ -37,9 +49,14 @@
                     <button type="button" id="btnAnnuler" style="display: none;">Annuler</button>
                 </form>
             </div>
+
             <!-- Tableau pour afficher les fournisseurs avec filtres -->
             <div id="tableauFournisseurs" class="flex-item card">
                 <div class="filters">
+                    <div class="filter-item">
+                        <label for="searchName">Rechercher par nom :</label>
+                        <input type="text" id="searchName" placeholder="Nom du fournisseur">
+                    </div>
                     <div class="filter-item">
                         <label for="filterType">Type de fourniture :</label>
                         <select id="filterType">
@@ -65,8 +82,8 @@
                             <th>Nom</th>
                             <th>Type</th>
                             <th>Prix HT</th>
-                            <th>Email</th> <!-- Nouvelle colonne pour l'email -->
-                            <th>Téléphone</th> <!-- Nouvelle colonne pour le téléphone -->
+                            <th>Email</th>
+                            <th>Téléphone</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -109,7 +126,75 @@
                 </table>
             </div>
         </div>
-    </div>
+        <h1>Ajouter un produit</h1>
+<form id="addProductForm" enctype="multipart/form-data">
+    <label for="nomProduit">Nom du produit :</label><br>
+    <input type="text" id="nomProduit" name="nomProduit" required><br><br>
+
+    <label for="image">Image :</label><br>
+    <input type="file" id="image" name="image" accept="image/*" required><br><br>
+
+    <label for="largeurProduit">Largeur du produit :</label><br>
+    <input type="number" id="largeurProduit" name="largeurProduit" step="0.01" required><br><br>
+
+    <label for="epaisseurProduit">Épaisseur du produit :</label><br>
+    <input type="number" id="epaisseurProduit" name="epaisseurProduit" step="0.01" required><br><br>
+
+    <label for="masseProduit">Masse du produit :</label><br>
+    <input type="number" id="masseProduit" name="masseProduit" step="0.01" required><br><br>
+
+    <label for="formeProduit">Forme du produit :</label><br>
+    <input type="text" id="formeProduit" name="formeProduit"><br><br>
+
+    <label for="hauteurProduit">Hauteur du produit :</label><br>
+    <input type="number" id="hauteurProduit" name="hauteurProduit" step="0.01"><br><br>
+
+    <label for="sectionProduit">Section du produit :</label><br>
+    <input type="number" id="sectionProduit" name="sectionProduit" step="0.01"><br><br>
+
+    <label for="marge">Marge :</label><br>
+    <input type="number" id="marge" name="marge" step="0.01" required><br><br>
+
+    <label for="prixML">Prix par mètre linéaire :</label><br>
+    <input type="number" id="prixML" name="prixML" step="0.01" required><br><br>
+
+    <button type="submit">Ajouter le produit</button>
+</form>
+
+<h1>Liste des Produits</h1>
+    <table id="productsTable">
+        <thead>
+            <tr>
+                <th>Nom du Produit</th>
+                <th>Image</th>
+                <th>Largeur</th>
+                <th>Épaisseur</th>
+                <th>Masse</th>
+                <th>Forme</th>
+                <th>Hauteur</th>
+                <th>Section</th>
+                <th>Marge</th>
+                <th>Prix par mètre linéaire</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Les lignes de produit seront ajoutées ici dynamiquement -->
+        </tbody>
+    </table>
+    <h1>Ajouter une commande fournisseur</h1>
+    <form id="productForm">
+        <div>
+            <label for="fournisseurId">Sélectionner un fournisseur :</label>
+            <select id="fournisseurId" name="fournisseurId" required></select>
+        </div>
+        <div id="productsList">
+            <!-- Products will be populated here dynamically -->
+        </div>
+        <button type="submit">Envoyer</button>
+    </form>
+    
+        <div id="responseMessage"></div>
     <script src="{{ asset('js/appro.js') }}"></script>
 </body>
+
 </html>

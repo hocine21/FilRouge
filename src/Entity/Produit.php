@@ -45,10 +45,6 @@ class Produit
     #[ORM\Column(type: 'float', nullable: false)]
     private ?float $PrixML = null;
 
-    #[ORM\ManyToOne(targetEntity: Materiau::class)]
-    #[ORM\JoinColumn(name: 'materiau_id', referencedColumnName: 'id', nullable: false)]
-    private ?Materiau $materiau;
-
     #[ORM\OneToMany(targetEntity: Detail::class, mappedBy: 'Produit')]
     private Collection $details;
 
@@ -186,18 +182,6 @@ class Produit
     public function setPrixML(float $PrixML): self
     {
         $this->PrixML = $PrixML;
-
-        return $this;
-    }
-
-    public function getMateriau(): ?Materiau
-    {
-        return $this->materiau;
-    }
-
-    public function setMateriau(?Materiau $materiau): self
-    {
-        $this->materiau = $materiau;
 
         return $this;
     }
