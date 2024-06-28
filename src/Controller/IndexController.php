@@ -40,6 +40,14 @@ class IndexController extends AbstractController
         ]);
     }
 
+    #[Route('/produit', name: 'app_produits')]
+    public function produits(): Response
+    {
+        return $this->render('produit/produit.html.twig', [
+            'controller_name' => 'IndexController',
+        ]);
+    }
+
     public function appro(): Response
     {
         return $this->render('appro/appro.html.twig');
