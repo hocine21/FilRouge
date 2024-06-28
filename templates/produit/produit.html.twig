@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/style-produit.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
+    
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Inclure Font Awesome via CDN -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Page d'Accueil</title>
+</head>
+<body>
+
+{% include 'menu.html.twig' %}
+    <main class="container-block">
+        <div class="block-text">
+            <h2>Nos Produits</h2>
+            <p>Sur cette page, vous trouverez une sélection variée de produits métalliques de haute qualité pour
+                répondre à vos besoins en matière de construction et de rénovation. Chaque produit est accompagné d'une
+                description détaillée pour vous aider à choisir celui qui convient le mieux à votre projet. Vous avez la
+                possibilité d'ajouter les produits sélectionnés à votre panier en un seul clic, facilitant ainsi le
+                processus d'achat. De plus, notre fonction de configuration vous permet de personnaliser certains
+                produits selon vos spécifications avant de passer votre commande. Explorez notre gamme de produits et
+                profitez d'une expérience de magasinage pratique et personnalisée.</p>
+        </div>
+        <section id="commande2">
+            <div class="product-card" data-id="ferPlats">
+                <img src="{{'pictures/ferPlat.jpg'}}" alt="Fer Plats">
+                <h3>Fer Plats</h3>
+                <p class="price">€25.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <a href="#" class="cart-link"><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=ferPlats" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            
+            <div class="product-card" data-id="corniereAileEgale">
+                <img src="{{'pictures/corniereAilesEgales.jpeg'}}" alt="Fer Plats">
+                <h3>Cornières a Ailes Égales</h3>
+                <p class="price">€30.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=corniereAileEgale" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            <div class="product-card" data-id="corniereAileInegale">
+                <img src="{{'pictures/corniereAilesInegales.jpeg'}}" alt="Cornières a Ailes Inégales">
+                <h3>Cornières a Ailes Inégales</h3>
+                <p class="price">€28.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=corniereAileInegale" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            <div class="product-card" data-id="ferEnT">
+                <img src="{{'pictures/ferEnT.png'}}" alt="Fer en T">
+                <h3>Fer en T</h3>
+                <p class="price">€22.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=ferEnT" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            <div class="product-card" id="poutrelleIpeNormale">
+                <img src="{{'pictures/poutrelleIpeNormale.jpeg'}}" alt="Fer en T">
+                <h3>Poutrelle IPE Normale</h3>
+                <p class="price">€22.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=poutrelleIpeNormale" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            <div class="product-card" id="poutrelleUpe">
+                <img src="{{'pictures/poutrelleUpe.jpeg'}}" alt="Fer en T">
+                <h3>Poutrelle UPE</h3>
+                <p class="price">€22.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=poutrelleUpe" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            <div class="product-card" id="poutrelleHeaHeb">
+                <img src="{{'pictures/poutrelleHeaHeb.jpeg'}}" alt="Fer en T">
+                <h3>Poutrelle HEA/HEB</h3>
+                <p class="price">€22.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=poutrelleHeaHeb" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            <div class="product-card" id="poutrelleUpnUac">
+                <img src="{{'pictures/upn.jpg'}}" alt="Fer en T">
+                <h3>Poutrelle UPN/UAC</h3>
+                <p class="price">€22.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=poutrelleUpnUac" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            <div class="product-card" id="tubeRond">
+                <img src="{{'pictures/tubeRond.jpeg'}}" alt="Fer en T">
+                <h3>Tubes Ronds</h3>
+                <p class="price">€22.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=tubeRond" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            <div class="product-card" id="tubesCarre">
+                <img src="{{'pictures/tubesCarre.jpeg'}}" alt="Fer en T">
+                <h3>Tubes Carrés</h3>
+                <p class="price">€22.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=tubesCarre" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            <div class="product-card" id="tubesCarre100">
+                <img src="{{'pictures/tubesCarre.jpeg'}}" alt="Fer en T">
+                <h3>Tubes Carrés (100cm)</h3>
+                <p class="price">€22.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=tubesCarre100" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            <div class="product-card" id="tubesRectangulaires">
+                <img src="{{'pictures/tubesRectangulaires.jpeg'}}" alt="Fer en T">
+                <h3>Tubes Rectangulaires</h3>
+                <p class="price">€22.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=tubesRectangulaires" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            <div class="product-card" id="barreRondPleine">
+                <img src="{{'pictures/barreRondPleine.jpeg'}}" alt="Fer en T">
+                <h3>Barres Rondes (Pleine)</h3>
+                <p class="price">€22.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=barreRondPleine" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+            <div class="product-card" id="barreCarrePlein">
+                <img src="{{'pictures/barreCarreplein.jpeg'}}" alt="Fer en T">
+                <h3>Barres Carrées (Pleine)</h3>
+                <p class="price">€22.00</p>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <a href="#" class="cart-link"></a><button class="add-to-cart"><i class="fas fa-shopping-cart"></i></button></a>
+                <a href="produitBis.html?id=barreCarrePlein" class="cart-link"><button class="add-to-cart"><i class="fas fa-info"></i></button></a>
+            </div>
+
+            <!-- Ajoutez d'autres cartes pour chaque produit -->
+        </section>
+    </main>
+    
+</body>
+{% include 'footer.html.twig' %}
+<script src="{{ asset('js/menu.js') }}"></script>
+<script src="{{ asset('js/index.js') }}"></script>
+
+</html>
