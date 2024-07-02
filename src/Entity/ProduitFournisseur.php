@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProduitFournisseurRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProduitFournisseurRepository::class)]
@@ -15,17 +16,26 @@ class ProduitFournisseur
 
     #[ORM\ManyToOne(targetEntity: Fournisseur::class, inversedBy: 'produitFournisseurs')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Fournisseur $fournisseur;
+    private ?Fournisseur $fournisseur = null;
 
     #[ORM\ManyToOne(targetEntity: Produit::class, inversedBy: 'produitFournisseurs')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Produit $produit;
+    private ?Produit $produit = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $date;
+    #[ORM\Column(length: 50)]
+    private ?string $etatCommande;
 
-    #[ORM\Column(length: 255)]
-    private ?string $quantite;
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $etatLivraison;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateCommande;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateLivraison;
+
+    #[ORM\Column(type: 'integer')]
+    private ?int $quantiteCommande;
 
     public function getId(): ?int
     {
@@ -56,26 +66,62 @@ class ProduitFournisseur
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getEtatCommande(): ?string
     {
-        return $this->date;
+        return $this->etatCommande;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setEtatCommande(string $etatCommande): self
     {
-        $this->date = $date;
+        $this->etatCommande = $etatCommande;
 
         return $this;
     }
 
-    public function getQuantite(): ?string
+    public function getEtatLivraison(): ?string
     {
-        return $this->quantite;
+        return $this->etatLivraison;
     }
 
-    public function setQuantite(string $quantite): self
+    public function setEtatLivraison(?string $etatLivraison): self
     {
-        $this->quantite = $quantite;
+        $this->etatLivraison = $etatLivraison;
+
+        return $this;
+    }
+
+    public function getDateCommande(): ?\DateTimeInterface
+    {
+        return $this->dateCommande;
+    }
+
+    public function setDateCommande(?\DateTimeInterface $dateCommande): self
+    {
+        $this->dateCommande = $dateCommande;
+
+        return $this;
+    }
+
+    public function getDateLivraison(): ?\DateTimeInterface
+    {
+        return $this->dateLivraison;
+    }
+
+    public function setDateLivraison(?\DateTimeInterface $dateLivraison): self
+    {
+        $this->dateLivraison = $dateLivraison;
+
+        return $this;
+    }
+
+    public function getQuantiteCommande(): ?int
+    {
+        return $this->quantiteCommande;
+    }
+
+    public function setQuantiteCommande(int $quantiteCommande): self
+    {
+        $this->quantiteCommande = $quantiteCommande;
 
         return $this;
     }

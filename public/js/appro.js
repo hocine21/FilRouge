@@ -482,27 +482,7 @@ function createProductRow(product) {
 
     return row;
 }
-
-
-
-async function fetchSuppliers() {
-    try {
-        const response = await fetch('/api/fournisseurs');
-        const fournisseurs = await response.json();
-
-        // Sélectionner le fournisseur à partir d'une liste déroulante
-        const fournisseurSelect = document.getElementById('fournisseurId');
-        fournisseurs.forEach(fournisseur => {
-            const option = document.createElement('option');
-            option.value = fournisseur.id;
-            option.textContent = fournisseur.nomFournisseur;
-            fournisseurSelect.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Erreur lors de la récupération des fournisseurs:', error);
-        alert('Erreur lors de la récupération des fournisseurs. Veuillez réessayer.');
-    }
-}
+// Récupérer les fournisseurs depuis l'API Symfony
 async function fetchSuppliers() {
     try {
         const response = await fetch('/api/fournisseurs');
@@ -520,74 +500,178 @@ async function fetchSuppliers() {
         alert('Erreur lors de la récupération des fournisseurs. Veuillez réessayer.');
     }
 }
+// script.js
 
-async function fetchProducts() {
-    try {
-        const response = await fetch('/api/produits');
-        const produits = await response.json();
-        const productsList = document.getElementById('productsList');
+document.addEventListener('DOMContentLoaded', function() {
 
-        produits.forEach(produit => {
-            const productDiv = document.createElement('div');
+    const apiUrl = 'http://localhost:8080/api/produit-fournisseur';
 
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.name = 'product';
-            checkbox.value = produit.id;
+    // Récupérer les produits depuis l'API Symfony
+    async function fetchProducts() {
+        try {
+            const response = await fetch('/api/produits');
+            const produits = await response.json();
+            const productsList = document.getElementById('productsList');
 
-            const label = document.createElement('label');
-            label.textContent = `${produit.nomProduit} (ID: ${produit.id})`;
+            produits.forEach(produit => {
+                const productDiv = document.createElement('div');
 
-            const quantityInput = document.createElement('input');
-            quantityInput.type = 'number';
-            quantityInput.name = `quantity[${produit.id}]`;
-            quantityInput.placeholder = 'Quantité';
-            quantityInput.required = true;
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'product';
+                checkbox.value = produit.id;
 
-            productDiv.appendChild(checkbox);
-            productDiv.appendChild(label);
-            productDiv.appendChild(quantityInput);
+                const label = document.createElement('label');
+                label.innerHTML = `<i class="fas fa-info-circle" onclick="showProductDetails(${produit.id})"></i> ${produit.nomProduit} (ID: ${produit.id})`;
 
-            productsList.appendChild(productDiv);
-        });
-    } catch (error) {
-        console.error('Erreur lors de la récupération des produits:', error);
-        alert('Erreur lors de la récupération des produits. Veuillez réessayer.');
+                const quantityInput = document.createElement('input');
+                quantityInput.type = 'number';
+                quantityInput.name = `quantiteCommande[${produit.id}]`;
+                quantityInput.placeholder = 'Quantité';
+                quantityInput.required = true;
+
+                productDiv.appendChild(checkbox);
+                productDiv.appendChild(label);
+                productDiv.appendChild(quantityInput);
+
+                productsList.appendChild(productDiv);
+            });
+        } catch (error) {
+            console.error('Erreur lors de la récupération des produits:', error);
+            alert('Erreur lors de la récupération des produits. Veuillez réessayer.');
+        }
     }
-}
 
-document.getElementById('productForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
+    // Envoyer la commande fournisseur
+    document.getElementById('productForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
 
-    const fournisseurId = document.getElementById('fournisseurId').value;
-    const products = [];
+        const fournisseurId = document.getElementById('fournisseurId').value;
+        const produits = [];
 
-    document.querySelectorAll('input[name="product"]:checked').forEach(checkbox => {
-        const productId = checkbox.value;
-        const quantity = document.querySelector(`input[name="quantity[${productId}]"]`).value;
-        products.push({ id: productId, quantity: quantity });
+        document.querySelectorAll('input[name="product"]:checked').forEach(checkbox => {
+            const productId = checkbox.value;
+            const quantiteCommande = document.querySelector(`input[name="quantiteCommande[${productId}]"]`).value;
+            produits.push({ id: productId, quantiteCommande: quantiteCommande });
+        });
+
+        try {
+            const response = await fetch('/api/produit-fournisseur', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    fournisseurId: fournisseurId,
+                    produits: produits,
+                    dateCommande: new Date().toISOString()
+                })
+            });
+
+            const data = await response.json();
+            alert(data.message);
+        } catch (error) {
+            console.error('Erreur lors de l\'ajout de la commande fournisseur:', error);
+            alert('Erreur lors de l\'ajout de la commande fournisseur. Veuillez réessayer.');
+        }
     });
 
-    try {
-        const response = await fetch('http://localhost:8080/api/produit-fournisseur', {
-            method: 'POST',
+    // Charger les fournisseurs et les produits au chargement de la page
+    fetchSuppliers();
+    fetchProducts();
+
+    // Fonction pour charger et afficher les données depuis l'API
+    function loadProduits() {
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const produitsBody = document.getElementById('produits-body');
+                produitsBody.innerHTML = ''; // Efface le contenu actuel du tableau
+
+                data.forEach(produit => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${produit.id}</td>
+                        <td>${produit.fournisseur.nom}</td>
+                        <td>${produit.produit.nom}</td>
+                        <td>${produit.quantiteCommande}</td>
+                        <td>${new Date(produit.dateCommande).toLocaleDateString()}</td>
+                        <td>${produit.etatCommande}</td>
+                        <td>${produit.etatLivraison}</td>
+                        <td>
+                            <button onclick="updateProduit(${produit.id})">Modifier</button>
+                        </td>
+                    `;
+                    produitsBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des produits :', error);
+                alert('Une erreur est survenue lors du chargement des produits.');
+            });
+    }
+
+    // Fonction pour afficher le formulaire de mise à jour
+    function updateProduit(id) {
+        const confirmation = confirm('Êtes-vous sûr de vouloir modifier ce produit ?');
+        if (!confirmation) return;
+
+        const newEtatLivraison = prompt('Entrez le nouvel état de livraison :');
+        if (newEtatLivraison === null) return; // L'utilisateur a annulé
+
+        const updateData = {
+            etatLivraison: newEtatLivraison
+        };
+
+        fetch(`${apiUrl}/${id}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                fournisseurId: fournisseurId,
-                produits: products,
-                date: new Date().toISOString()
-            })
+            body: JSON.stringify(updateData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            loadProduits(); // Recharge les produits après la mise à jour
+        })
+        .catch(error => {
+            console.error('Erreur lors de la mise à jour du produit :', error);
+            alert('Une erreur est survenue lors de la mise à jour du produit.');
         });
-
-        const data = await response.json();
-        alert(data.message);
-    } catch (error) {
-        console.error('Erreur lors de la commande au fournisseur:', error);
-        alert('Erreur lors de la commande au fournisseur. Veuillez réessayer.');
     }
-});
 
-fetchSuppliers();
-fetchProducts();
+    // Fonction pour afficher les détails du produit dans un modal
+    function showProductDetails(productId) {
+        fetch(`${apiUrl}/${productId}`)
+            .then(response => response.json())
+            .then(data => {
+                const modal = document.getElementById('productDetailsModal');
+                const modalContent = document.getElementById('productDetailsContent');
+                modalContent.innerHTML = `
+                    <strong>ID:</strong> ${data.produit.id}<br>
+                    <strong>Nom:</strong> ${data.produit.nom}<br>
+                    <strong>Largeur:</strong> ${data.produit.largeur}<br>
+                    <strong>Masse:</strong> ${data.produit.masse}<br>
+                    <strong>Épaisseur:</strong> ${data.produit.epaisseur}<br>
+                    <strong>Forme:</strong> ${data.produit.forme || 'Non spécifiée'}<br>
+                    <strong>Hauteur:</strong> ${data.produit.hauteur}<br>
+                    <strong>Section:</strong> ${data.produit.section}<br>
+                `;
+                modal.classList.add('active');
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des détails du produit :', error);
+                alert('Une erreur est survenue lors du chargement des détails du produit.');
+            });
+    }
+
+    // Fonction pour fermer le modal des détails du produit
+    function closeProductDetails() {
+        const modal = document.getElementById('productDetailsModal');
+        modal.classList.remove('active');
+    }
+
+    // Chargement initial des produits lors du chargement de la page
+    loadProduits();
+});

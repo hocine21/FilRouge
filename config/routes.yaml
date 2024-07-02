@@ -237,3 +237,23 @@ app_produits:
     path: /produit
     controller: App\Controller\IndexController::produits
     methods: GET
+# config/routes/api.yaml
+api_produit_fournisseur_add:
+    path: /api/produit-fournisseur
+    controller: App\Controller\api\ProduitFournisseurController::addProduitFournisseur
+    methods: [POST]
+
+api_produit_fournisseur_update:
+    path: /api/produit-fournisseur/{id}
+    controller: App\Controller\api\ProduitFournisseurController::updateProduitFournisseur
+    methods: [PUT]
+
+api_produit_fournisseur_get:
+    path: /api/produit-fournisseur/{id}
+    controller: App\Controller\api\ProduitFournisseurController::getProduitFournisseur
+    methods: [GET]
+
+api_produit_fournisseur_get_all:
+    path: /api/produit-fournisseur
+    controller: App\Controller\api\ProduitFournisseurController::getAllProduitFournisseur
+    methods: [GET]

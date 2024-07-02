@@ -183,16 +183,41 @@
     </table>
     <h1>Ajouter une commande fournisseur</h1>
     <form id="productForm">
-        <div>
-            <label for="fournisseurId">Sélectionner un fournisseur :</label>
-            <select id="fournisseurId" name="fournisseurId" required></select>
-        </div>
+        <select id="fournisseurId">
+            <!-- Options des fournisseurs seront ajoutées ici -->
+        </select>
         <div id="productsList">
-            <!-- Products will be populated here dynamically -->
+            <!-- Les produits seront ajoutés ici -->
         </div>
-        <button type="submit">Envoyer</button>
+        <button type="submit">Envoyer la commande</button>
     </form>
-    
+    <h1>Gestion des Produits Fournisseur</h1>
+
+    <div id="productsList"></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom Produit</th>
+                <th>Fournisseur</th>
+                <th>Quantité Commandée</th>
+                <th>Date Commande</th>
+                <th>État Commande</th>
+                <th>État Livraison</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="produits-body"></tbody>
+    </table>
+
+    <!-- Modal pour afficher les détails du produit -->
+    <div id="productDetailsModal" class="product-details">
+        <h2>Détails du Produit</h2>
+        <p id="productDetailsContent"></p>
+        <button onclick="closeProductDetails()">Fermer</button>
+    </div>
+
         <div id="responseMessage"></div>
     <script src="{{ asset('js/appro.js') }}"></script>
 </body>
