@@ -1,10 +1,10 @@
 <?php
-
 namespace App\Controller\api;
 
 use App\Entity\Client;
 use App\Entity\Employe;
 use Doctrine\ORM\EntityManagerInterface;
+use Firebase\JWT\JWT;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class ConnexionController extends AbstractController
 {
-    #[Route('/connexion', name: 'connexion', methods: ['POST'])]
+    #[Route('/api/connexion', name: 'connexion', methods: ['POST'])]
     public function connexion(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): JsonResponse
     {
         try {
@@ -30,43 +30,52 @@ class ConnexionController extends AbstractController
             }
 
             // Vérifier si l'utilisateur est un client
-            $client = $entityManager->getRepository(Client::class)->findOneBy(['AdresseEmail' => $data['AdresseEmail']]);
-            if ($client !== null && $passwordHasher->isPasswordValid($client, $data['MotDePasse'])) {
-                // Construire la réponse avec les informations du client
-                $response = [
-                    'message' => 'Connexion réussie en tant que client',
-                    'user' => [
-                        'id' => $client->getId(),
-                        'nom' => $client->getNom(),
-                        'prenom' => $client->getPrenom(),
-                        'adresse_email' => $client->getAdresseEmail(),
-                        'roles' => $client->getRoles()
-                    ]
-                ];
-                return $this->json($response, 200);
+            $user = $entityManager->getRepository(Client::class)->findOneBy(['AdresseEmail' => $data['AdresseEmail']]);
+            if ($user === null) {
+                // Vérifier si l'utilisateur est un employé
+                $user = $entityManager->getRepository(Employe::class)->findOneBy(['AdresseEmail' => $data['AdresseEmail']]);
             }
 
-            // Vérifier si l'utilisateur est un employé
-            $employe = $entityManager->getRepository(Employe::class)->findOneBy(['AdresseEmail' => $data['AdresseEmail']]);
-            if ($employe !== null && $passwordHasher->isPasswordValid($employe, $data['MotDePasse'])) {
-                // Construire la réponse avec les informations de l'employé
-                $response = [
-                    'message' => 'Connexion réussie en tant qu\'employé',
-                    'user' => [
-                        'id' => $employe->getId(),
-                        'nom' => $employe->getNom(),
-                        'prenom' => $employe->getPrenom(),
-                        'adresse_email' => $employe->getAdresseEmail(),
-                        'roles' => $employe->getRoles()
-                    ]
-                ];
-                return $this->json($response, 200);
+            // Si aucun utilisateur n'est trouvé
+            if ($user === null) {
+                throw new AuthenticationException('Adresse e-mail ou mot de passe incorrect.');
             }
 
-            // Si l'utilisateur n'est pas connecté ou les informations sont incorrectes, renvoyer une erreur d'authentification
-            throw new AuthenticationException('Adresse e-mail ou mot de passe incorrect.');
+            // Vérifier si le mot de passe est valide
+            if (!$passwordHasher->isPasswordValid($user, $data['MotDePasse'])) {
+                throw new AuthenticationException('Adresse e-mail ou mot de passe incorrect.');
+            }
 
-        } catch (AuthenticationException $e) {
+            // Générer un jeton JWT
+            $tokenPayload = [
+                'user_id' => $user->getId(),
+                'nom' => $user->getNom(),
+                'prenom' => $user->getPrenom(),
+                'roles' => $user->getRoles(),
+                'exp' => time() + 3600, // Expire dans 1 heure
+            ];
+
+            $jwtSecret = 'your_jwt_secret'; // Clé secrète pour signer le JWT, à remplacer par une valeur sécurisée
+
+            $token = JWT::encode($tokenPayload, $jwtSecret);
+
+            // Construire la réponse avec les informations de l'utilisateur et le jeton
+            $response = [
+                'message' => 'Connexion réussie',
+                'user' => [
+                    'id' => $user->getId(),
+                    'nom' => $user->getNom(),
+                    'prenom' => $user->getPrenom(),
+                    'adresse_email' => $user->getAdresseEmail(),
+                    'roles' => $user->getRoles()
+                ],
+                'access_token' => $token
+            ];
+
+            return $this->json($response, 200);
+
+        } catch (\Throwable $e) {
+            // Capturer toute exception générée pendant le processus d'authentification
             return $this->json(['error' => $e->getMessage()], 401);
         }
     }

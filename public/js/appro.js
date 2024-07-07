@@ -414,7 +414,6 @@ document.getElementById('addProductForm').addEventListener('submit', function(ev
         document.getElementById('responseMessage').innerHTML = `<p>Erreur : ${error.message}</p>`;
     });
 });
-
 document.addEventListener('DOMContentLoaded', function() {
     fetch('http://localhost:8080/api/produits')
         .then(response => {
@@ -424,89 +423,148 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
+            const productsByName = groupProductsByName(data);
             const productsTable = document.getElementById('productsTable');
-            data.forEach(product => {
-                const row = createProductRow(product);
+
+            for (const [productName, products] of Object.entries(productsByName)) {
+                const row = createProductRow(productName, products);
                 productsTable.appendChild(row);
-            });
+            }
         })
         .catch(error => console.error('Erreur lors de la récupération des produits :', error));
 });
 
-function createProductRow(product) {
+function groupProductsByName(products) {
+    return products.reduce((acc, product) => {
+        if (!acc[product.nomProduit]) {
+            acc[product.nomProduit] = [];
+        }
+        acc[product.nomProduit].push(product);
+        return acc;
+    }, {});
+}
+
+function createProductRow(productName, products) {
     const row = document.createElement('tr');
 
     const nomProduitCell = document.createElement('td');
-    nomProduitCell.textContent = product.nomProduit;
-    row.appendChild(nomProduitCell);
+    const card = document.createElement('div');
+    card.classList.add('product-card');
 
-    const imageCell = document.createElement('td');
     const image = document.createElement('img');
-    image.src = `http://localhost:8080/pictures/${product.image}`;
-    image.alt = product.nomProduit;
-    image.style.maxWidth = '100px'; // Ajustez la taille de l'image selon vos besoins
-    imageCell.appendChild(image);
-    row.appendChild(imageCell);
+    image.src = `http://localhost:8080/pictures/${products[0].image}`;
+    image.alt = productName;
+    image.style.cursor = 'pointer';
+    image.style.maxWidth = '100px';
+    image.addEventListener('click', () => {
+        toggleProductDetails(products, row);
+    });
 
-    const largeurCell = document.createElement('td');
-    largeurCell.textContent = product.largeurProduit;
-    row.appendChild(largeurCell);
+    const productNameText = document.createElement('p');
+    productNameText.textContent = productName;
+    productNameText.style.fontWeight = 'bold';
+    card.appendChild(image);
+    card.appendChild(productNameText);
 
-    const epaisseurCell = document.createElement('td');
-    epaisseurCell.textContent = product.epaisseurProduit;
-    row.appendChild(epaisseurCell);
-
-    const masseCell = document.createElement('td');
-    masseCell.textContent = product.masseProduit;
-    row.appendChild(masseCell);
-
-    const formeCell = document.createElement('td');
-    formeCell.textContent = product.formeProduit;
-    row.appendChild(formeCell);
-
-    const hauteurCell = document.createElement('td');
-    hauteurCell.textContent = product.hauteurProduit || 'N/A';
-    row.appendChild(hauteurCell);
-
-    const sectionCell = document.createElement('td');
-    sectionCell.textContent = product.sectionProduit || 'N/A';
-    row.appendChild(sectionCell);
-
-    const margeCell = document.createElement('td');
-    margeCell.textContent = product.marge;
-    row.appendChild(margeCell);
-
-    const prixMLCell = document.createElement('td');
-    prixMLCell.textContent = product.prixML;
-    row.appendChild(prixMLCell);
+    nomProduitCell.appendChild(card);
+    row.appendChild(nomProduitCell);
 
     return row;
 }
-// Récupérer les fournisseurs depuis l'API Symfony
-async function fetchSuppliers() {
-    try {
-        const response = await fetch('/api/fournisseurs');
-        const fournisseurs = await response.json();
 
-        const fournisseurSelect = document.getElementById('fournisseurId');
-        fournisseurs.forEach(fournisseur => {
-            const option = document.createElement('option');
-            option.value = fournisseur.id;
-            option.textContent = fournisseur.nomFournisseur;
-            fournisseurSelect.appendChild(option);
+function toggleProductDetails(products, row) {
+    let detailsRow = row.nextElementSibling;
+
+    // Check if the details row already exists
+    if (detailsRow && detailsRow.classList.contains('details-row')) {
+        detailsRow.remove();
+    } else {
+        detailsRow = document.createElement('tr');
+        detailsRow.classList.add('details-row');
+        const detailsCell = document.createElement('td');
+        detailsCell.colSpan = 1;
+
+        const detailsTable = document.createElement('table');
+        detailsTable.classList.add('details-table');
+        const headerRow = document.createElement('tr');
+        
+        const headers = [
+            'Largeur', 'Épaisseur', 'Masse', 'Forme', 'Hauteur', 'Section', 'Marge', 'Prix ML'
+        ];
+        
+        headers.forEach(headerText => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            headerRow.appendChild(th);
         });
-    } catch (error) {
-        console.error('Erreur lors de la récupération des fournisseurs:', error);
-        alert('Erreur lors de la récupération des fournisseurs. Veuillez réessayer.');
+        detailsTable.appendChild(headerRow);
+
+        products.forEach(product => {
+            const detailRow = document.createElement('tr');
+
+            const largeurCell = document.createElement('td');
+            largeurCell.textContent = product.largeurProduit;
+            detailRow.appendChild(largeurCell);
+
+            const epaisseurCell = document.createElement('td');
+            epaisseurCell.textContent = product.epaisseurProduit;
+            detailRow.appendChild(epaisseurCell);
+
+            const masseCell = document.createElement('td');
+            masseCell.textContent = product.masseProduit;
+            detailRow.appendChild(masseCell);
+
+            const formeCell = document.createElement('td');
+            formeCell.textContent = product.formeProduit;
+            detailRow.appendChild(formeCell);
+
+            const hauteurCell = document.createElement('td');
+            hauteurCell.textContent = product.hauteurProduit || 'N/A';
+            detailRow.appendChild(hauteurCell);
+
+            const sectionCell = document.createElement('td');
+            sectionCell.textContent = product.sectionProduit || 'N/A';
+            detailRow.appendChild(sectionCell);
+
+            const margeCell = document.createElement('td');
+            margeCell.textContent = product.marge;
+            detailRow.appendChild(margeCell);
+
+            const prixMLCell = document.createElement('td');
+            prixMLCell.textContent = product.prixML;
+            detailRow.appendChild(prixMLCell);
+
+            detailsTable.appendChild(detailRow);
+        });
+
+        detailsCell.appendChild(detailsTable);
+        detailsRow.appendChild(detailsCell);
+        row.parentNode.insertBefore(detailsRow, row.nextSibling);
     }
 }
-// script.js
 
+// Récupérer les fournisseurs depuis l'API Symfony
 document.addEventListener('DOMContentLoaded', function() {
-
     const apiUrl = 'http://localhost:8080/api/produit-fournisseur';
 
-    // Récupérer les produits depuis l'API Symfony
+    async function fetchSuppliers() {
+        try {
+            const response = await fetch('/api/fournisseurs');
+            const fournisseurs = await response.json();
+
+            const fournisseurSelect = document.getElementById('fournisseurId');
+            fournisseurs.forEach(fournisseur => {
+                const option = document.createElement('option');
+                option.value = fournisseur.id;
+                option.textContent = fournisseur.nomFournisseur;
+                fournisseurSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Erreur lors de la récupération des fournisseurs:', error);
+            alert('Erreur lors de la récupération des fournisseurs. Veuillez réessayer.');
+        }
+    }
+
     async function fetchProducts() {
         try {
             const response = await fetch('/api/produits');
@@ -542,7 +600,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Envoyer la commande fournisseur
     document.getElementById('productForm').addEventListener('submit', async function(event) {
         event.preventDefault();
 
@@ -570,85 +627,118 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const data = await response.json();
             alert(data.message);
+            loadProduits(); // Recharger les produits après l'ajout
         } catch (error) {
             console.error('Erreur lors de l\'ajout de la commande fournisseur:', error);
             alert('Erreur lors de l\'ajout de la commande fournisseur. Veuillez réessayer.');
         }
     });
 
-    // Charger les fournisseurs et les produits au chargement de la page
-    fetchSuppliers();
-    fetchProducts();
+    async function loadProduits() {
+        try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            const produitsBody = document.getElementById('produits-body');
+            produitsBody.innerHTML = '';
 
-    // Fonction pour charger et afficher les données depuis l'API
-    function loadProduits() {
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                const produitsBody = document.getElementById('produits-body');
-                produitsBody.innerHTML = ''; // Efface le contenu actuel du tableau
-
-                data.forEach(produit => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${produit.id}</td>
-                        <td>${produit.fournisseur.nom}</td>
-                        <td>${produit.produit.nom}</td>
-                        <td>${produit.quantiteCommande}</td>
-                        <td>${new Date(produit.dateCommande).toLocaleDateString()}</td>
-                        <td>${produit.etatCommande}</td>
-                        <td>${produit.etatLivraison}</td>
-                        <td>
-                            <button onclick="updateProduit(${produit.id})">Modifier</button>
-                        </td>
-                    `;
-                    produitsBody.appendChild(row);
-                });
-            })
-            .catch(error => {
-                console.error('Erreur lors du chargement des produits :', error);
-                alert('Une erreur est survenue lors du chargement des produits.');
+            data.forEach(produit => {
+                const row = document.createElement('tr');
+                row.id = `row_${produit.id}`;
+                row.innerHTML = `
+                    <td>${produit.id}</td>
+                    <td>${produit.produit.nom}</td>
+                    <td>${produit.fournisseur.nom}</td>
+                    <td>${produit.quantiteCommande}</td>
+                    <td>${new Date(produit.dateCommande).toLocaleDateString()}</td>
+                    <td>${produit.etatCommande}</td>
+                    <td>${produit.etatLivraison}</td>
+                    <td>${produit.dateLivraison ? new Date(produit.dateLivraison).toLocaleDateString() : ''}</td>
+                    <td>
+                        <button onclick="updateProduit(${produit.id}, 'arrivé')">Arrivé</button>
+                        <button onclick="updateProduit(${produit.id}, 'retardé')">Retardé</button>
+                        <button onclick="showProductDetailsInTable(${produit.id})">Détails</button>
+                    </td>
+                `;
+                produitsBody.appendChild(row);
             });
+        } catch (error) {
+            console.error('Erreur lors du chargement des produits :', error);
+            alert('Une erreur est survenue lors du chargement des produits.');
+        }
     }
 
-    // Fonction pour afficher le formulaire de mise à jour
-    function updateProduit(id) {
-        const confirmation = confirm('Êtes-vous sûr de vouloir modifier ce produit ?');
+    window.updateProduit = async function(id, etatLivraison) {
+        const confirmation = confirm(`Êtes-vous sûr de vouloir marquer ce produit comme "${etatLivraison}" ?`);
         if (!confirmation) return;
 
-        const newEtatLivraison = prompt('Entrez le nouvel état de livraison :');
-        if (newEtatLivraison === null) return; // L'utilisateur a annulé
-
         const updateData = {
-            etatLivraison: newEtatLivraison
+            etatLivraison: etatLivraison,
+            dateLivraison: new Date().toISOString()
         };
 
-        fetch(`${apiUrl}/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updateData)
-        })
-        .then(response => response.json())
-        .then(data => {
+        try {
+            const response = await fetch(`${apiUrl}/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateData)
+            });
+
+            const data = await response.json();
             alert(data.message);
-            loadProduits(); // Recharge les produits après la mise à jour
-        })
-        .catch(error => {
+
+            if (etatLivraison === 'arrivé') {
+                // Appel à la nouvelle route pour mettre à jour le stock
+                const updateStockResponse = await fetch(`/api/produit-fournisseur/${id}/livraison-arrivee/stock`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        produitId: id,
+                        quantite: data.quantite  // Vous pouvez récupérer cette valeur de la réponse si nécessaire
+                    })
+                });
+
+                const stockData = await updateStockResponse.json();
+                alert(stockData.message);  // Afficher un message de succès pour la mise à jour du stock
+            }
+
+            loadProduits(); // Recharger les produits après l'ajout
+        } catch (error) {
             console.error('Erreur lors de la mise à jour du produit :', error);
             alert('Une erreur est survenue lors de la mise à jour du produit.');
-        });
+        }
     }
 
-    // Fonction pour afficher les détails du produit dans un modal
-    function showProductDetails(productId) {
-        fetch(`${apiUrl}/${productId}`)
-            .then(response => response.json())
-            .then(data => {
-                const modal = document.getElementById('productDetailsModal');
-                const modalContent = document.getElementById('productDetailsContent');
-                modalContent.innerHTML = `
+    window.showProductDetails = async function(productId) {
+        try {
+            const response = await fetch(`/api/produits/${productId}`);
+            const produit = await response.json();
+            alert(`
+                Nom: ${produit.nomProduit}
+                Largeur: ${produit.largeur}
+                Masse: ${produit.masse}
+                Épaisseur: ${produit.epaisseur}
+                Forme: ${produit.forme || 'Non spécifiée'}
+                Hauteur: ${produit.hauteur}
+                Section: ${produit.section}
+            `);
+        } catch (error) {
+            console.error('Erreur lors du chargement des détails du produit :', error);
+            alert('Une erreur est survenue lors du chargement des détails du produit.');
+        }
+    }
+
+    window.showProductDetailsInTable = async function(productId) {
+        try {
+            const response = await fetch(`/api/produit-fournisseur/${productId}`);
+            const data = await response.json();
+            const detailsRow = document.createElement('tr');
+            detailsRow.id = `detailsRow_${productId}`;
+            detailsRow.innerHTML = `
+                <td colspan="9">
                     <strong>ID:</strong> ${data.produit.id}<br>
                     <strong>Nom:</strong> ${data.produit.nom}<br>
                     <strong>Largeur:</strong> ${data.produit.largeur}<br>
@@ -657,21 +747,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     <strong>Forme:</strong> ${data.produit.forme || 'Non spécifiée'}<br>
                     <strong>Hauteur:</strong> ${data.produit.hauteur}<br>
                     <strong>Section:</strong> ${data.produit.section}<br>
-                `;
-                modal.classList.add('active');
-            })
-            .catch(error => {
-                console.error('Erreur lors du chargement des détails du produit :', error);
-                alert('Une erreur est survenue lors du chargement des détails du produit.');
-            });
+                    <button onclick="hideProductDetails(${productId})">Masquer</button>
+                </td>
+            `;
+
+            const existingRow = document.getElementById(`detailsRow_${productId}`);
+            if (existingRow) {
+                existingRow.parentNode.removeChild(existingRow);
+            } else {
+                document.getElementById(`row_${productId}`).insertAdjacentElement('afterend', detailsRow);
+            }
+        } catch (error) {
+            console.error('Erreur lors du chargement des détails du produit :', error);
+            alert('Une erreur est survenue lors du chargement des détails du produit.');
+        }
     }
 
-    // Fonction pour fermer le modal des détails du produit
-    function closeProductDetails() {
-        const modal = document.getElementById('productDetailsModal');
-        modal.classList.remove('active');
+    window.hideProductDetails = function(productId) {
+        const detailsRow = document.getElementById(`detailsRow_${productId}`);
+        if (detailsRow) {
+            detailsRow.parentNode.removeChild(detailsRow);
+        }
     }
 
-    // Chargement initial des produits lors du chargement de la page
+    fetchSuppliers();
+    fetchProducts();
     loadProduits();
 });

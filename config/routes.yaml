@@ -240,20 +240,33 @@ app_produits:
 # config/routes/api.yaml
 api_produit_fournisseur_add:
     path: /api/produit-fournisseur
-    controller: App\Controller\api\ProduitFournisseurController::addProduitFournisseur
-    methods: [POST]
+    controller: 'App\Controller\api\ProduitFournisseurController::addProduitFournisseur'
+    methods: ['POST']
 
 api_produit_fournisseur_update:
     path: /api/produit-fournisseur/{id}
-    controller: App\Controller\api\ProduitFournisseurController::updateProduitFournisseur
-    methods: [PUT]
+    controller: 'App\Controller\api\ProduitFournisseurController::updateProduitFournisseur'
+    methods: ['PUT']
+    requirements:
+        id: '\d+'
 
 api_produit_fournisseur_get:
     path: /api/produit-fournisseur/{id}
-    controller: App\Controller\api\ProduitFournisseurController::getProduitFournisseur
-    methods: [GET]
+    controller: 'App\Controller\api\ProduitFournisseurController::getProduitFournisseur'
+    methods: ['GET']
+    requirements:
+        id: '\d+'
 
 api_produit_fournisseur_get_all:
     path: /api/produit-fournisseur
-    controller: App\Controller\api\ProduitFournisseurController::getAllProduitFournisseur
-    methods: [GET]
+    controller: 'App\Controller\api\ProduitFournisseurController::getAllProduitFournisseur'
+    methods: ['GET']
+
+api_produit_fournisseur_livraison_arrivee_stock:
+    path: '/api/produit-fournisseur/{id}/livraison-arrivee/stock'
+    controller: 'App\Controller\api\ProduitFournisseurController::livraisonArriveeStock'
+    methods: ['PUT']
+pi_protected:
+    path: /api/protected
+    controller: App\Controller\api\ProtectedController::protectedRoute
+    methods: GET

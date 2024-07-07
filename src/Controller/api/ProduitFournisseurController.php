@@ -5,6 +5,7 @@ namespace App\Controller\api;
 use App\Entity\Produit;
 use App\Entity\Fournisseur;
 use App\Entity\ProduitFournisseur;
+use App\Entity\Stock;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -140,17 +141,17 @@ class ProduitFournisseurController extends AbstractController
             'id' => $produitFournisseur->getId(),
             'fournisseur' => [
                 'id' => $produitFournisseur->getFournisseur()->getId(),
-                'nom' => $produitFournisseur->getFournisseur()->getNomFournisseur() // Modification ici
+                'nom' => $produitFournisseur->getFournisseur()->getNomFournisseur()
             ],
             'produit' => [
                 'id' => $produitFournisseur->getProduit()->getId(),
-                'nom' => $produitFournisseur->getProduit()->getNomProduit(), // Modification ici
-                'largeur' => $produitFournisseur->getProduit()->getLargeurProduit(), // Modification ici
-                'masse' => $produitFournisseur->getProduit()->getMasseProduit(), // Modification ici
-                'epaisseur' => $produitFournisseur->getProduit()->getEpaisseurProduit(), // Modification ici
-                'forme' => $produitFournisseur->getProduit()->getFormeProduit(), // Modification ici
-                'hauteur' => $produitFournisseur->getProduit()->getHauteurProduit(), // Modification ici
-                'section' => $produitFournisseur->getProduit()->getSectionProduit(), // Modification ici
+                'nom' => $produitFournisseur->getProduit()->getNomProduit(),
+                'largeur' => $produitFournisseur->getProduit()->getLargeurProduit(),
+                'masse' => $produitFournisseur->getProduit()->getMasseProduit(),
+                'epaisseur' => $produitFournisseur->getProduit()->getEpaisseurProduit(),
+                'forme' => $produitFournisseur->getProduit()->getFormeProduit(),
+                'hauteur' => $produitFournisseur->getProduit()->getHauteurProduit(),
+                'section' => $produitFournisseur->getProduit()->getSectionProduit(),
             ],
             'etatCommande' => $produitFournisseur->getEtatCommande(),
             'etatLivraison' => $produitFournisseur->getEtatLivraison(),
@@ -175,17 +176,17 @@ class ProduitFournisseurController extends AbstractController
                 'id' => $produitFournisseur->getId(),
                 'fournisseur' => [
                     'id' => $produitFournisseur->getFournisseur()->getId(),
-                    'nom' => $produitFournisseur->getFournisseur()->getNomFournisseur() // Modification ici
+                    'nom' => $produitFournisseur->getFournisseur()->getNomFournisseur()
                 ],
                 'produit' => [
                     'id' => $produitFournisseur->getProduit()->getId(),
-                    'nom' => $produitFournisseur->getProduit()->getNomProduit(), // Modification ici
-                    'largeur' => $produitFournisseur->getProduit()->getLargeurProduit(), // Modification ici
-                    'masse' => $produitFournisseur->getProduit()->getMasseProduit(), // Modification ici
-                    'epaisseur' => $produitFournisseur->getProduit()->getEpaisseurProduit(), // Modification ici
-                    'forme' => $produitFournisseur->getProduit()->getFormeProduit(), // Modification ici
-                    'hauteur' => $produitFournisseur->getProduit()->getHauteurProduit(), // Modification ici
-                    'section' => $produitFournisseur->getProduit()->getSectionProduit(), // Modification ici
+                    'nom' => $produitFournisseur->getProduit()->getNomProduit(),
+                    'largeur' => $produitFournisseur->getProduit()->getLargeurProduit(),
+                    'masse' => $produitFournisseur->getProduit()->getMasseProduit(),
+                    'epaisseur' => $produitFournisseur->getProduit()->getEpaisseurProduit(),
+                    'forme' => $produitFournisseur->getProduit()->getFormeProduit(),
+                    'hauteur' => $produitFournisseur->getProduit()->getHauteurProduit(),
+                    'section' => $produitFournisseur->getProduit()->getSectionProduit(),
                 ],
                 'etatCommande' => $produitFournisseur->getEtatCommande(),
                 'etatLivraison' => $produitFournisseur->getEtatLivraison(),
@@ -197,4 +198,37 @@ class ProduitFournisseurController extends AbstractController
 
         return new JsonResponse($data, Response::HTTP_OK);
     }
+
+   /**
+ * @Route("/api/produit-fournisseur/{id}/livraison-arrivee/stock", name="api_produit_fournisseur_livraison_arrivee_stock", methods={"PUT"})
+ */
+public function livraisonArriveeStock(int $id): JsonResponse
+{
+    $produitFournisseur = $this->entityManager->getRepository(ProduitFournisseur::class)->find($id);
+
+    if (!$produitFournisseur) {
+        return new JsonResponse(['error' => 'ProduitFournisseur introuvable.'], Response::HTTP_NOT_FOUND);
+    }
+
+    // Récupérer le produit concerné et mettre à jour le stock ici
+    $produit = $produitFournisseur->getProduit();
+    $quantiteLivree = $produitFournisseur->getQuantiteCommande();
+    $longueurParDefaut = 600; // Longueur par défaut en cm (600 cm = 6 m)
+
+    // Ajouter la logique pour calculer et ajouter au stock ici
+    $stock = new Stock();
+    $stock->setProduit($produit);
+    $stock->setQuantite($quantiteLivree);
+    $stock->setLongueur($longueurParDefaut); // Longueur par défaut en mètres
+
+    try {
+        $this->entityManager->persist($stock);
+        $this->entityManager->flush();
+
+        return new JsonResponse(['success' => true, 'message' => 'Stock mis à jour avec succès.'], Response::HTTP_OK);
+    } catch (\Exception $e) {
+        return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+}
+
 }

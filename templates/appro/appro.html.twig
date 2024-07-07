@@ -162,63 +162,36 @@
 </form>
 
 <h1>Liste des Produits</h1>
-    <table id="productsTable">
-        <thead>
-            <tr>
-                <th>Nom du Produit</th>
-                <th>Image</th>
-                <th>Largeur</th>
-                <th>Épaisseur</th>
-                <th>Masse</th>
-                <th>Forme</th>
-                <th>Hauteur</th>
-                <th>Section</th>
-                <th>Marge</th>
-                <th>Prix par mètre linéaire</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Les lignes de produit seront ajoutées ici dynamiquement -->
-        </tbody>
-    </table>
+<table id="productsTable">
+    <!-- Rows with product names and images will be added here -->
+</table>
+
+<table id="detailsTable">
+    <!-- Rows with detailed product information will be added here -->
+</table>
+
     <h1>Ajouter une commande fournisseur</h1>
     <form id="productForm">
-        <select id="fournisseurId">
-            <!-- Options des fournisseurs seront ajoutées ici -->
-        </select>
-        <div id="productsList">
-            <!-- Les produits seront ajoutés ici -->
-        </div>
+        <select id="fournisseurId"></select>
+        <div id="productsList"></div>
         <button type="submit">Envoyer la commande</button>
     </form>
-    <h1>Gestion des Produits Fournisseur</h1>
-
-    <div id="productsList"></div>
-
     <table>
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Nom Produit</th>
+                <th>Produit</th>
                 <th>Fournisseur</th>
                 <th>Quantité Commandée</th>
                 <th>Date Commande</th>
                 <th>État Commande</th>
                 <th>État Livraison</th>
-                <th>Actions</th>
+                <th>Date Livraison</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody id="produits-body"></tbody>
     </table>
-
-    <!-- Modal pour afficher les détails du produit -->
-    <div id="productDetailsModal" class="product-details">
-        <h2>Détails du Produit</h2>
-        <p id="productDetailsContent"></p>
-        <button onclick="closeProductDetails()">Fermer</button>
-    </div>
-
-        <div id="responseMessage"></div>
     <script src="{{ asset('js/appro.js') }}"></script>
 </body>
 

@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
-class Client implements PasswordAuthenticatedUserInterface
+class Client implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -50,10 +50,10 @@ class Client implements PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $Roles = null;
 
-    #[ORM\OneToMany(targetEntity: Commande::class, mappedBy: 'Client')]
+    #[ORM\OneToMany(targetEntity: Commande::class, mappedBy: 'client')]
     private Collection $commandes;
 
-    #[ORM\OneToMany(targetEntity: Reclamation::class, mappedBy: 'Client')]
+    #[ORM\OneToMany(targetEntity: Reclamation::class, mappedBy: 'client')]
     private Collection $reclamations;
 
     public function __construct()
@@ -272,6 +272,11 @@ class Client implements PasswordAuthenticatedUserInterface
     public function getUsername(): ?string
     {
         return $this->AdresseEmail;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->getUsername();
     }
 
     public function eraseCredentials(): void

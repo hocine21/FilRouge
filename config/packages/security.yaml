@@ -1,39 +1,37 @@
-# config/packages/security.yaml
-
 security:
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    
+        App\Entity\Client:
+            algorithm: auto
+        App\Entity\Employe:
+            algorithm: auto
+
     providers:
-        # Configuration du fournisseur de données utilisateurs (exemple avec mémoire)
-        users_in_memory:
-            memory:
-                users:
-                    user1:
-                        password: '$2y$13$yOz9e1EjQwORodc5A5v2cO2T1IvPn6Z8YmQb4KZu1hfEo5VfQFfA6' # mot de passe "password"
-                        roles: ['ROLE_USER']
-                    admin:
-                        password: '$2y$13$N0H7rjzg/TOi5f3u4J2k7OrIeP8QgUQkL6bN7gJg4jYv2OJrcOpLa' # mot de passe "password"
-                        roles: ['ROLE_ADMIN']
-    
+        app_user_provider:
+            entity:
+                class: App\Entity\Client  # or App\Entity\User if you have a common base class
+                property: AdresseEmail
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        
-        main:
-            lazy: true
-            provider: users_in_memory
-            # Configuration de l'authentification par formulaire
-            form_login:
-                login_path: app_login  # Chemin vers le formulaire de connexion
-                check_path: app_login  # Chemin de vérification POST pour la connexion
-            
-            # Optionnel : Configuration du logout
-            logout:
-                path: app_logout  # Chemin pour se déconnecter
-                target: app_login  # Redirection après la déconnexion
-    
+
+        login:
+            pattern: ^/api/connexion
+            stateless: true
+            json_login:
+                check_path: /api/connexion
+                username_path: AdresseEmail
+                password_path: MotDePasse
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern: ^/api
+            stateless: true
+            jwt: ~
+
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/api/connexion, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/entrepots, roles: ROLE_PARTICULIER }
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
