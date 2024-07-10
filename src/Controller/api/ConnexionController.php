@@ -1,20 +1,22 @@
 <?php
+// ConnexionController.php
+
 namespace App\Controller\api;
 
-use App\Entity\Client;
-use App\Entity\Employe;
-use Doctrine\ORM\EntityManagerInterface;
-use Firebase\JWT\JWT;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\EntityManagerInterface;
+use Firebase\JWT\JWT;
+use App\Entity\Client;
+use App\Entity\Employe;
 
 class ConnexionController extends AbstractController
 {
-    #[Route('/api/connexion', name: 'connexion', methods: ['POST'])]
+    #[Route('/connexion', name: 'connexion', methods: ['POST'])]
     public function connexion(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): JsonResponse
     {
         try {
@@ -22,7 +24,7 @@ class ConnexionController extends AbstractController
             $data = json_decode($request->getContent(), true);
 
             // Vérifier si les champs nécessaires sont présents
-            $requiredFields = ['AdresseEmail', 'MotDePasse'];
+            $requiredFields = ['email', 'password'];
             foreach ($requiredFields as $field) {
                 if (!isset($data[$field]) || empty($data[$field])) {
                     return $this->json(['error' => 'Tous les champs doivent être renseignés.'], 400);
@@ -30,10 +32,10 @@ class ConnexionController extends AbstractController
             }
 
             // Vérifier si l'utilisateur est un client
-            $user = $entityManager->getRepository(Client::class)->findOneBy(['AdresseEmail' => $data['AdresseEmail']]);
+            $user = $entityManager->getRepository(Client::class)->findOneBy(['adresse_email' => $data['email']]);
             if ($user === null) {
                 // Vérifier si l'utilisateur est un employé
-                $user = $entityManager->getRepository(Employe::class)->findOneBy(['AdresseEmail' => $data['AdresseEmail']]);
+                $user = $entityManager->getRepository(Employe::class)->findOneBy(['adresse_email' => $data['email']]);
             }
 
             // Si aucun utilisateur n'est trouvé
@@ -42,7 +44,7 @@ class ConnexionController extends AbstractController
             }
 
             // Vérifier si le mot de passe est valide
-            if (!$passwordHasher->isPasswordValid($user, $data['MotDePasse'])) {
+            if (!$passwordHasher->isPasswordValid($user, $data['password'])) {
                 throw new AuthenticationException('Adresse e-mail ou mot de passe incorrect.');
             }
 
@@ -59,20 +61,15 @@ class ConnexionController extends AbstractController
 
             $token = JWT::encode($tokenPayload, $jwtSecret);
 
-            // Construire la réponse avec les informations de l'utilisateur et le jeton
-            $response = [
-                'message' => 'Connexion réussie',
-                'user' => [
-                    'id' => $user->getId(),
-                    'nom' => $user->getNom(),
-                    'prenom' => $user->getPrenom(),
-                    'adresse_email' => $user->getAdresseEmail(),
-                    'roles' => $user->getRoles()
-                ],
-                'access_token' => $token
-            ];
-
-            return $this->json($response, 200);
+            // Redirection en fonction du rôle de l'utilisateur
+            switch (true) {
+                case in_array('ROLE_SUPER_ADMIN', $user->getRoles()):
+                    return $this->redirectToRoute('app_super_admin');
+                    break;
+                // Ajouter d'autres cas pour d'autres rôles si nécessaire
+                default:
+                    throw new AuthenticationException('Vous n\'avez pas les autorisations nécessaires.');
+            }
 
         } catch (\Throwable $e) {
             // Capturer toute exception générée pendant le processus d'authentification

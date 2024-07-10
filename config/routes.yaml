@@ -266,7 +266,10 @@ api_produit_fournisseur_livraison_arrivee_stock:
     path: '/api/produit-fournisseur/{id}/livraison-arrivee/stock'
     controller: 'App\Controller\api\ProduitFournisseurController::livraisonArriveeStock'
     methods: ['PUT']
-pi_protected:
-    path: /api/protected
-    controller: App\Controller\api\ProtectedController::protectedRoute
-    methods: GET
+# config/routes.yaml
+
+check_role:
+    path: /api/check-role
+    controller: App\Controller\api\CheckRoleController::checkRole
+    methods: ['GET']
+

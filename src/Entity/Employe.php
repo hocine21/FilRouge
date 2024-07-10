@@ -7,9 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-
 #[ORM\Entity(repositoryClass: EmployeRepository::class)]
-class Employe implements PasswordAuthenticatedUserInterface
+class Employe implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -84,27 +83,25 @@ class Employe implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getRoles(): ?string
-    {
-        return $this->Roles;
-    }
-
-    public function setRoles(string $Roles): static
-    {
-        $this->Roles = $Roles;
-
-        return $this;
-    }
-    
     public function getPassword(): ?string
     {
-        // Retournez ici le mot de passe de l'employé
         return $this->MotDePasse;
     }
 
     public function getUserIdentifier(): string
     {
-        // Retournez ici l'identifiant de l'utilisateur, généralement l'adresse e-mail
         return $this->AdresseEmail;
+    }
+
+    // Implementing UserInterface method
+    public function getRoles(): array
+    {
+        return [$this->Roles];
+    }
+
+    // Implementing UserInterface method
+    public function eraseCredentials(): void
+    {
+        $this->MotDePasse = null;
     }
 }
