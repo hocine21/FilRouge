@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\api;
 
 use App\Entity\Employe;
@@ -34,7 +35,7 @@ class InscriptionEmployeController extends AbstractController
         }
 
         // Vérifier si l'e-mail existe déjà dans la base de données
-        $existingEmploye = $entityManager->getRepository(Employe::class)->findOneBy(['AdresseEmail' => $data['AdresseEmail']]);
+        $existingEmploye = $entityManager->getRepository(Employe::class)->findOneBy(['adresseEmail' => $data['AdresseEmail']]);
         if ($existingEmploye !== null) {
             return new JsonResponse(['error' => 'Cette adresse e-mail est déjà utilisée.'], JsonResponse::HTTP_BAD_REQUEST);
         }
@@ -54,8 +55,7 @@ class InscriptionEmployeController extends AbstractController
         $employe->setNom($data['Nom']);
         $employe->setPrenom($data['Prenom']);
         $employe->setAdresseEmail($data['AdresseEmail']);
-        $rolesAsString = implode(',', $data['Roles']);
-        $employe->setRoles($rolesAsString);
+        $employe->setRoles([$data['Roles']]); // Utiliser un tableau pour les rôles
 
         // Valider l'entité Employe
         $errors = $validator->validate($employe);
@@ -85,60 +85,5 @@ class InscriptionEmployeController extends AbstractController
         }
 
         return new JsonResponse(['message' => 'Inscription réussie. Un e-mail de confirmation a été envoyé à ' . $employe->getAdresseEmail()], JsonResponse::HTTP_CREATED);
-    }
-
-    #[Route('/api/inscription/employe/services/{service}', name: 'api_inscription_employe_services', methods: ['GET'])]
-    public function employesParService($service, EntityManagerInterface $entityManager): JsonResponse
-    {
-        $employes = $entityManager->getRepository(Employe::class)->findBy(['service' => $service]);
-        $data = [];
-        foreach ($employes as $employe) {
-            $data[] = [
-                'Nom' => $employe->getNom(),
-                'Prenom' => $employe->getPrenom(),
-                'AdresseEmail' => $employe->getAdresseEmail(),
-                'Service' => $employe->getService(),
-            ];
-        }
-        return new JsonResponse($data, JsonResponse::HTTP_OK);
-    }
-
-    #[Route('/api/inscription/employe/employes', name: 'api_inscription_employe_employes', methods: ['GET'])]
-    public function tousLesEmployes(EntityManagerInterface $entityManager): JsonResponse
-    {
-        $employes = $entityManager->getRepository(Employe::class)->findAll();
-        $data = [];
-        foreach ($employes as $employe) {
-            $data[] = [
-                'Nom' => $employe->getNom(),
-                'Prenom' => $employe->getPrenom(),
-                'AdresseEmail' => $employe->getAdresseEmail(),
-                'Service' => $employe->getService(),
-            ];
-        }
-        return new JsonResponse($data, JsonResponse::HTTP_OK);
-    }
-
-    #[Route('/api/inscription/employe/employe/{id}', name: 'api_modifier_employe', methods: ['PUT'])]
-    public function modifierEmploye($id, Request $request, EntityManagerInterface $entityManager): JsonResponse
-    {
-        $employe = $entityManager->getRepository(Employe::class)->find($id);
-        if (!$employe) {
-            return new JsonResponse(['error' => 'Employé non trouvé.'], JsonResponse::HTTP_NOT_FOUND);
-        }
-
-        $data = json_decode($request->getContent(), true);
-        // Mettez à jour les champs que vous voulez modifier, par exemple:
-        if (isset($data['Nom'])) {
-            $employe->setNom($data['Nom']);
-        }
-        if (isset($data['Prenom'])) {
-            $employe->setPrenom($data['Prenom']);
-        }
-        // Faites de même pour les autres champs...
-
-        $entityManager->flush();
-
-        return new JsonResponse(['message' => 'Employé modifié avec succès.'], JsonResponse::HTTP_OK);
     }
 }

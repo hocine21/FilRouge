@@ -44,6 +44,7 @@ security:
 
     access_control:
         - { path: ^/api/connexion, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/entrepots, roles: ROLE_PARTICULIER }
+        - { path: ^/api/entrepots, roles: ROLE_APPROVISIONNEMENT  }
         - { path: ^/super-admin, roles: ROLE_SUPER_ADMIN }
-
+        - { path: ^/appro, roles: ROLE_APPROVISIONNEMENT }
+        - { path: ^/api/inscription/employe, roles: ROLE_SUPER_ADMIN }

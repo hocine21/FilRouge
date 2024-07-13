@@ -26,18 +26,15 @@
         <div class="block co-cre">
 
             <div class="login-form">
-                <form action="{{ path('connexion') }}" method="POST" class="login-form">
+                <form id="loginForm" method="POST">
                     <div class="form-group">
-                        <label for="email">Email</label>
+                        <label for="email">Adresse Email:</label>
                         <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Mot de passe</label>
+                        <label for="password">Mot de Passe:</label>
                         <input type="password" id="password" name="password" required>
                     </div>
-                    <!-- Champ CSRF automatiquement géré par Symfony -->
-                    <input type="hidden" id="csrf_token" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
                     <button type="submit">Se connecter</button>
                 </form>
             </div>

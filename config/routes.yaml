@@ -173,16 +173,19 @@ app_connexion:
     path: /connexion
     controller: App\Controller\IndexController::connexion
     methods: ['GET']
+# config/routes.yaml
+
 app_super_admin:
     path: /super-admin
     controller: App\Controller\IndexController::superAdmin
+    methods: GET
 # config/routes.yaml
 
 email_send:
     path: /send-email
     controller: 'App\Controller\EmailController::sendEmail'
     methods: ['GET', 'POST']
-appro:
+app_appro:
     path: /appro
     controller: App\Controller\IndexController::appro
     methods: GET
@@ -271,5 +274,11 @@ api_produit_fournisseur_livraison_arrivee_stock:
 check_role:
     path: /api/check-role
     controller: App\Controller\api\CheckRoleController::checkRole
+    methods: ['GET']
+# config/routes.yaml
+
+app_logout:
+    path: /deconnexion
+    controller: App\Controller\SecurityController::logout
     methods: ['GET']
 

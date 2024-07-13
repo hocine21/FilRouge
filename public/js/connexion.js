@@ -1,43 +1,67 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const loginForm = document.querySelector('.login-form');
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Empêche le formulaire de se soumettre normalement
 
-    loginForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // Empêcher le formulaire de se soumettre normalement
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        
-        // Vérifier si l'élément CSRF existe avant de le récupérer
-        const csrfTokenElement = document.getElementById('csrf_token');
-        const csrfToken = csrfTokenElement ? csrfTokenElement.value : null;
+    // Données à envoyer à l'API Symfony
+    const formData = {
+        AdresseEmail: email,
+        MotDePasse: password
+    };
 
-        if (!csrfToken) {
-            console.error('Le jeton CSRF n\'a pas été trouvé.');
-            return;
+    // URL de l'API Symfony
+    const url = 'http://localhost:8080/api/connexion'; // Modifier l'URL selon votre environnement
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Adresse e-mail ou mot de passe incorrect.');
         }
+        return response.json();
+    })
+    .then(data => {
+        const token = data.token;
+        localStorage.setItem('jwtToken', token); // Stockage du token JWT
 
-        fetch('http://localhost:8080/api/connexion', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken // Inclure le jeton CSRF dans l'en-tête de la requête
-            },
-            body: JSON.stringify({ AdresseEmail: email, MotDePasse: password })
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Vérifier si la connexion a réussi
-            if (data.user) {
-                // Stocker les informations de l'utilisateur dans le localStorage
-                localStorage.setItem('user', JSON.stringify(data.user));
+        // Envoi du token JWT dans l'en-tête Authorization pour les futures requêtes
+        const headers = {
+            'Authorization': `Bearer ${token}`
+        };
 
-                // Rediriger l'utilisateur vers la page d'accueil
-                window.location.href = '/accueil';
-            } else {
-                // Afficher un message d'erreur
-                alert(data.error);
-            }
-        })
-        .catch(error => console.error('Erreur lors de la connexion:', error));
+        // Redirection en fonction des rôles
+        const decodedToken = parseJwt(token);
+        const roles = decodedToken.roles;
+        const userId = decodedToken.userId; // Assurez-vous que le payload JWT contient l'ID de l'utilisateur
+
+        if (roles.includes('ROLE_SUPER_ADMIN')) {
+            window.location.href = `http://localhost:8080/super-admin?role=${roles}&id=${userId}`;
+        } else if (roles.includes('ROLE_APPROVISIONNEMENT')) {
+            window.location.href = `http://localhost:8080/appro?role=${roles}&id=${userId}`;
+        } else {
+            console.log('Rôle non géré');
+            // Redirection vers une page par défaut ou affichage d'un message d'erreur
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error.message);
+        // Affichage de l'erreur à l'utilisateur (par exemple dans une div)
     });
 });
+
+// Fonction pour décoder le token JWT
+function parseJwt(token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}

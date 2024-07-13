@@ -61,15 +61,8 @@ class ConnexionController extends AbstractController
 
             $token = JWT::encode($tokenPayload, $jwtSecret);
 
-            // Redirection en fonction du rôle de l'utilisateur
-            switch (true) {
-                case in_array('ROLE_SUPER_ADMIN', $user->getRoles()):
-                    return $this->redirectToRoute('app_super_admin');
-                    break;
-                // Ajouter d'autres cas pour d'autres rôles si nécessaire
-                default:
-                    throw new AuthenticationException('Vous n\'avez pas les autorisations nécessaires.');
-            }
+            // Retourner le jeton JWT dans la réponse JSON
+            return $this->json(['token' => $token]);
 
         } catch (\Throwable $e) {
             // Capturer toute exception générée pendant le processus d'authentification
