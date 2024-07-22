@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ asset('css/style-config.css') }}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <!-- Inclure Font Awesome via CDN -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>Page d'Accueil</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html">
+          <h1>COUP'ACIER</h1>
+        </a>
+        <nav>
+          <ul>
+            <li><a href="{{ path('app_index') }}">Accueil</a></li>
+            <li><a href="{{ path('app_produits') }}">Produits</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="icon-container">
+          <a href="#" class="cart-link"><i class="fas fa-shopping-cart"></i></a>
+          <a href="#" class="connect-link"><i class="fas fa-user"></i></a>
+        </div>
+      </div>
+    </header>
+    <div class="container-block">
+      <div class="block-text">
+        <h1>Bienvenue chez COUP'ACIER, vous êtes un client :</h1>
+      </div>
+      <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <div class="input-group mb-3">
+                    <div class="form-select-custom" id="material-select">
+                        <img id="selected-material-img" src="alu.jpg" alt="">
+                        <select id="materialSelect" aria-label="Choose a material">
+                            <option selected value="">Choisir un matériau...</option>
+                            <option value="Acier" data-img-src="Acier.jpg">Acier</option>
+                            <option value="Aluminium" data-img-src="alu.jpg">Aluminium</option>
+                            <option value="Fer" data-img-src="fer.jpg">Fer</option>
+                            <option value="Corten" data-img-src="corten.webp">Corten</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <select class="form-select" id="typeSelect" aria-label="Choose a type" disabled>
+                        <option selected>Choisir un type...</option>
+                    </select>
+                    <div class="input-group mb-3">
+                      <select class="form-select" id="massSelect" aria-label="Choose a mass">
+                          <option selected>Choisir une masse...</option>
+                          <option value="1.25">1.25</option>
+                          <option value="1.75">1.75</option>
+                          <option value="2">2</option>
+                      </select>
+                  </div>
+                  <!-- Input for length -->
+                  <div class="input-group mb-3">
+                      <input type="number" class="form-control" id="lengthInput" placeholder="Longueur (m)" aria-label="Longueur (m)">
+                  </div>
+                  <!-- Input for quantity -->
+                  <div class="input-group mb-3">
+                      <input type="number" class="form-control" id="quantityInput" placeholder="Quantité" aria-label="Quantité">
+                  </div>
+                  <button class="button-78" role="button">Ajouter au panier</button>
+    
+                </div>
+            </div>
+        </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+       // Options de matériaux avec leurs types associés
+       const materialOptions = {
+           'Acier': [
+               { type: 'FERS PLATS', mass: ['1.25', '1.75', '2'] },
+               { type: 'CORNIÈRES A AILES ÉGALES', mass: ['1.25', '1.75', '2'] },
+               { type: 'CORNIÈRES A AILES INÉGALES', mass: ['1.25', '1.75', '2'] },
+               { type: 'FERS EN T', mass: ['1.25', '1.75', '2'] },
+               { type: 'POUTRELLES IPE NORMALES', mass: ['1.25', '1.75', '2'] },
+               { type: 'POUTRELLES UPE', mass: ['1.25', '1.75', '2'] },
+               { type: 'POUTRELLES HEA / HEB', mass: ['1.25', '1.75', '2'] },
+               { type: 'POUTRELLES UPN/UAC', mass: ['1.25', '1.75', '2'] },
+               { type: 'TUBES RONDS', mass: ['1.25', '1.75', '2'] },
+               { type: 'TUBES CARRÉS', mass: ['1.25', '1.75', '2'] },
+               { type: 'TUBES CARRÉS (100CM)', mass: ['1.25', '1.75', '2'] },
+               { type: 'TUBES RECTANGULAIRES', mass: ['1.25', '1.75', '2'] },
+               { type: 'BARRES RONDES (PLEINES)', mass: ['1.25', '1.75', '2'] },
+               { type: 'BARRES CARRÉES (PLEINES)', mass: ['1.25', '1.75', '2'] }
+           ],
+           'Aluminium': [
+               // Ajouter des types spécifiques à l'aluminium ici
+           ],
+           'Fer': [
+               // Ajouter des types spécifiques au fer ici
+           ],
+           'Corten': [
+               // Ajouter des types spécifiques au corten ici
+           ]
+       };
+   
+       // Sélecteur de matériaux
+       const materialSelect = document.getElementById('materialSelect');
+   
+       // Sélecteur de types
+       const typeSelect = document.getElementById('typeSelect');
+   
+       // Sélecteur de masse
+       const massSelect = document.getElementById('massSelect');
+   
+       // Sélecteur d'image
+       const materialImg = document.getElementById('selected-material-img');
+   
+       // Écouteur pour le changement de sélection de matériaux
+       materialSelect.addEventListener('change', function() {
+           const selectedOption = this.options[this.selectedIndex];
+           const material = selectedOption.value;
+           const types = materialOptions[material];
+   
+           // Réinitialiser le sélecteur de types et de masse
+           typeSelect.innerHTML = '<option selected>Choose a type...</option>';
+           massSelect.innerHTML = '<option selected>Choose a mass...</option>';
+   
+           // Mettre à jour l'image du matériau
+           const imgSrc = selectedOption.getAttribute('data-img-src');
+           if (imgSrc) {
+               materialImg.src = imgSrc;
+               materialImg.style.display = 'inline-block';
+           } else {
+               materialImg.style.display = 'none';
+           }
+   
+           // Ajouter les options de types correspondants
+           types.forEach(typeObj => {
+               const option = document.createElement('option');
+               option.value = typeObj.type;
+               option.textContent = typeObj.type;
+               option.classList.add('fade-in');
+               typeSelect.appendChild(option);
+           });
+           typeSelect.disabled = false;
+       });
+   
+       // Écouteur pour le changement de sélection de type
+       typeSelect.addEventListener('change', function() {
+           const material = materialSelect.value;
+           const type = this.value;
+           const selectedMaterial = materialOptions[material].find(obj => obj.type === type);
+   
+           // Réinitialiser le sélecteur de masse
+           massSelect.innerHTML = '<option selected>Choose a mass...</option>';
+   
+           // Ajouter les options de masse correspondantes
+           selectedMaterial.mass.forEach(mass => {
+               const option = document.createElement('option');
+               option.value = mass;
+               option.textContent = mass;
+               option.classList.add('fade-in');
+               massSelect.appendChild(option);
+           });
+           massSelect.disabled = false;
+       });
+   
+       // Écouteur pour le changement de sélection de masse
+       massSelect.addEventListener('change', function() {
+           const selectedMass = this.value;
+           console.log('Selected mass:', selectedMass);
+           // Vous pouvez utiliser la valeur sélectionnée ici pour effectuer d'autres opérations
+       });
+   });
+   
+   </script>
+
+  </body>
+</html>

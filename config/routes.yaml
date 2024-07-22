@@ -237,6 +237,10 @@ app_produits:
     path: /produit
     controller: App\Controller\IndexController::produits
     methods: GET
+app_config:
+    path: /config
+    controller: App\Controller\IndexController::config
+
 # config/routes/api.yaml
 api_produit_fournisseur_add:
     path: /api/produit-fournisseur
@@ -257,6 +261,4 @@ api_produit_fournisseur_get_all:
     path: /api/produit-fournisseur
     controller: App\Controller\api\ProduitFournisseurController::getAllProduitFournisseur
     methods: [GET]
-app_indexbis:
-    path: /accueil-bis
-    controller: 'App\Controller\IndexBisController::index'
+

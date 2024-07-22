@@ -24,6 +24,14 @@ class IndexController extends AbstractController
         ]);
     }
 
+    #[Route('/config', name: 'app_config')]
+    public function config(): Response
+    {
+        return $this->render('produit/config.html.twig', [
+            'controller_name' => 'IndexController',
+        ]);
+    }
+
     #[Route('/connexion', name: 'app_connexion')]
     public function connexion(): Response
     {

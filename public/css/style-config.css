@@ -1,0 +1,767 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General Styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    margin: 0; /* Pour supprimer les marges par défaut du corps */
+    overflow-y: auto; /* Activer le défilement vertical lorsque nécessaire */
+}
+/* Ajoutez ces styles CSS pour la barre de navigation */
+header {
+    background-color: white; /* Couleur de fond */
+    color: orange; /* Couleur du texte */
+    padding: 20px 0; /* Espacement intérieur */
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Ajoutez un padding sur les côtés */
+
+}
+
+h1 {
+    font-size: 24px; /* Taille de la police */
+    font-family: 'Montserrat', sans-serif;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li:last-child {
+    margin-right: 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: orange;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #ffd700;
+}
+
+nav ul li a:visited {
+    text-decoration: none;
+    color: orange; /* Couleur des liens visités */
+}
+
+.container a:link,
+.container a:visited {
+    text-decoration: none;
+    color: orange;
+}
+
+.container a:hover,
+.container a:focus {
+    color: #ffd700;
+}
+
+.icon-container .connect-link:link,
+.icon-container .connect-link:visited {
+    color: green;
+}
+
+.icon-container .connect-link:hover,
+.icon-container .connect-link:focus {
+    color: rgb(39, 231, 39);
+}
+
+
+.icon-container {
+    display: flex;
+    gap: 15px;
+}
+
+.cart-link {
+    color: orange;
+    text-decoration: none; /* Supprimer le soulignement du lien */
+    font-size: 20px; /* Ajuster la taille de l'icône */
+}
+
+.connect-link {
+    color: green;
+    text-decoration: none; /* Supprimer le soulignement du lien */
+    font-size: 20px; /* Ajuster la taille de l'icône */
+}
+
+
+
+.cart-link:hover, .connect-link:hover {
+    color: #ffd700;
+}
+
+
+.container-block {
+    background: linear-gradient(to bottom right, #ff7f00, #eebb23); /* Dégradé orange */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    min-height: 1200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.block-text {
+    background-image: url(Bandeau\ Fil\ rouge.jpg);
+    padding: 20px;
+    width: 100%;
+    margin-bottom: 50px;
+    color: white;
+    height: 290px;
+    background-size: cover;
+    border-bottom-left-radius: 35%;
+    border-bottom-right-radius: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.config{
+    display: flex;
+    justify-content: center;
+}
+
+.config form{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.form-group label{
+    font-size: 28px;
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.material-images{
+    display: flex;
+    margin-right: 10px;
+    margin-left: 10px;
+    padding: 5px;
+    gap: 30px;
+}
+
+.material-images input[type="radio"] {
+    display: none; /* Masquer les cases à cocher */
+}
+
+.material-images label {
+    flex: 1; /* Répartition égale de l'espace disponible */
+    margin-right: 10px; /* Espacement entre les images */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* Positionnement pour le texte */
+}
+
+.material-images label::before {
+    content: ''; /* Contenu vide */
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 3px solid transparent; /* Bordure transparente */
+    border-radius: 5px; /* Coins arrondis */
+}
+
+.material-images label:hover::before {
+    border-color: blue; /* Couleur de la bordure au survol */
+}
+
+.material-images input[type="radio"]:checked + label::before {
+    border-color: blue; /* Couleur de la bordure lorsque sélectionné */
+}
+
+.material-images img {
+    max-width: 180px; /* Pour que toutes les images aient la même largeur */
+    height: 180px; /* Pour conserver le rapport hauteur/largeur */
+    border-radius: 15px;
+}
+
+.material-images label span {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 30px;
+    font-weight: bold;
+    color: white; /* Couleur du texte */
+}
+
+
+.buttons {
+    margin-top: 20px;
+}
+
+.buttons .button {
+    cursor: pointer;
+    padding: 20px 40px;
+    margin-right: 10px;
+    font-size: 30px;
+    border: none;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 15px;
+    transition: background-color 0.3s ease;
+    background-image: linear-gradient(to right, #e83c69, #f56dcc); /* Dégradé rose foncé pour le bouton Config */
+    border: 2px solid white;
+
+}
+
+
+.buttons .button:hover {
+    background-color: #0056b3;
+}
+
+
+/* Styling pour le bouton de validation */
+.button-container input[type="submit"] {
+    margin-top: 30px;
+    padding: 30px 80px;
+    background-image: linear-gradient(to right, #4CAF50, #2E8B57); /* Dégradé vert */
+    color: #ffffff;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 25px;
+    border: 2px solid white;
+
+}
+
+/* Au survol, assombrir légèrement la couleur du bouton */
+.button-container input[type="submit"]:hover {
+    background-color: #3d8a5e;
+}
+
+.form-control {
+    width: 100%;
+    height: calc(2.25rem + 2px);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 2px solid #ced4da; /* Modification */
+    border-radius: 0.5rem; /* Modification */
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    padding: 0.375rem 0.75rem;
+    margin: 0.5rem 0; /* Ajout */
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Select styles */
+.form-select {
+    width: 100%;
+    height: calc(2.25rem + 2px);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    border: 2px solid #ced4da; /* Modification */
+    border-radius: 0.5rem; /* Modification */
+    padding: 0.375rem 0.75rem;
+    background-color: #fff;
+    appearance: none;
+    margin: 0.5rem 0; /* Ajout */
+}
+
+.form-select:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Styling for dropdown arrow */
+.form-select::-ms-expand {
+    display: none;
+}
+
+/* Styling for disabled inputs */
+.form-control[disabled], .form-select[disabled] {
+    background-color: #e9ecef;
+    opacity: 1;
+}
+
+/* Additional styles for custom select */
+.form-select-custom {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: calc(2.25rem + 2px);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    border: 2px solid #ced4da; /* Modification */
+    border-radius: 0.5rem; /* Modification */
+    padding: 0.375rem 0.75rem;
+    background-color: #fff;
+    margin: 0.5rem 0; /* Ajout */
+}
+
+.form-select-custom::after {
+    content: "▼"; /* Ajout */
+    position: absolute;
+    right: 0.75rem;
+    color: #495057;
+}
+
+.form-select-custom img {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    margin-right: 10px;
+    display: block; /* Modification */
+}
+
+.form-select-custom select {
+    appearance: none;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    background: transparent;
+}
+
+/* Card styles */
+.card {
+    border-radius: 2.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1.25rem;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* Animation styles */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+    
+}
+.button-78 {
+  align-items: center;
+  appearance: none;
+  background-clip: padding-box;
+  background-color: initial;
+  background-image: none;
+  border-style: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  flex-direction: row;
+  flex-shrink: 0;
+  font-family: Eina01,sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  justify-content: center;
+  line-height: 24px;
+  margin: 0;
+  min-height: 64px;
+  outline: none;
+  overflow: visible;
+  padding: 19px 26px;
+  pointer-events: auto;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  width: auto;
+  word-break: keep-all;
+  z-index: 0;
+}
+
+@media (min-width: 768px) {
+  .button-78 {
+    padding: 19px 32px;
+  }
+}
+
+.button-78:before,
+.button-78:after {
+  border-radius: 80px;
+}
+
+.button-78:before {
+  background-image: linear-gradient(92.83deg, #ff7426 0, #f93a13 100%);
+  content: "";
+  display: block;
+  height: 100%;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -2;
+}
+
+.button-78:after {
+  background-color: initial;
+  background-image: linear-gradient(#541a0f 0, #0c0d0d 100%);
+  bottom: 4px;
+  content: "";
+  display: block;
+  left: 4px;
+  overflow: hidden;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  transition: all 100ms ease-out;
+  z-index: -1;
+}
+
+.button-78:hover:not(:disabled):before {
+  background: linear-gradient(92.83deg, rgb(255, 116, 38) 0%, rgb(249, 58, 19) 100%);
+}
+
+.button-78:hover:not(:disabled):after {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  transition-timing-function: ease-in;
+  opacity: 0;
+}
+
+.button-78:active:not(:disabled) {
+  color: #ccc;
+}
+
+.button-78:active:not(:disabled):before {
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, .2), rgba(0, 0, 0, .2)), linear-gradient(92.83deg, #ff7426 0, #f93a13 100%);
+}
+
+.button-78:active:not(:disabled):after {
+  background-image: linear-gradient(#541a0f 0, #0c0d0d 100%);
+  bottom: 4px;
+  left: 4px;
+  right: 4px;
+  top: 4px;
+}
+
+.button-78:disabled {
+  cursor: default;
+  opacity: .24;
+}
+
+.mt-5 {
+    display: flex;
+    justify-content: center;
+}
+
+
+footer {
+    display: flex;
+    bottom: 0; /* Fixer le footer au bas de la fenêtre */
+    width: 100%; /* Pour étendre le footer sur toute la largeur */
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+footer .container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.footer-left nav ul{
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-left nav ul li {
+    text-align: left;
+}
+
+
+.footer-center{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-right{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+footer .button{
+    padding: 10px 15px; /* Ajuster la taille des boutons */
+    font-size: 14px;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.send{
+    background-image: linear-gradient(to right, #28a745, #218838); /* Dégradé vert pour le bouton Créer un compte */
+    color: white;
+}
+
+@media screen and (max-width: 935px) {
+    .material-images img {
+        width: 100px; /* Pour que toutes les images aient la même largeur */
+        height: 100px; /* Pour conserver le rapport hauteur/largeur */
+        border-radius: 15px;
+    }
+    
+    .material-images label span {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 20px;
+        font-weight: bold;
+        color: white; /* Couleur du texte */
+    }
+    
+}
+
+
+@media screen and (max-width: 630px) {
+
+
+    .material-images{
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+        gap: 10px;
+    }
+    .material-images img {
+        width: 500px; /* Pour que toutes les images aient la même largeur */
+        height: 100px; /* Pour conserver le rapport hauteur/largeur */
+        border-radius: 15px;
+    }
+
+    
+}
+
+@media screen and (max-width: 465px) {
+    .material-images{
+        display: flex;
+        margin-right: 10px;
+        margin-left: 10px;
+        padding: 5px;
+        gap: 0px;
+    }
+    .material-images img {
+        max-width: 150px; /* Pour que toutes les images aient la même largeur */
+        height: 80px; /* Pour conserver le rapport hauteur/largeur */
+        border-radius: 15px;
+    }
+    .material-images label span {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 10px;
+        font-weight: bold;
+        color: white; /* Couleur du texte */
+    }
+
+    .form-group label {
+        font-size: 15px;
+        color: white;
+        font-weight: bold;
+        padding: 5px;
+    }
+
+
+    
+}
+
+
+
+
+
+input[type="submit"] {
+    margin-top: 20px;
+    padding: 20px 40px; /* Espace intérieur des boutons */
+    background-image: linear-gradient(to right, #007bff, #0056b3); /* Dégradé bleu pour le bouton Connexion */
+    color: #fff; /* Couleur du texte blanc */
+    border: none; /* Supprimer la bordure */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer; /* Curseur pointeur au survol */
+    transition: background-color 0.3s ease; /* Transition fluide pour la couleur de fond */
+}
+
+
+
+footer {
+    position: fixed; /* Rendre le footer fixe */
+    bottom: 0; /* Fixer le footer au bas de la fenêtre */
+    width: 100%; /* Pour étendre le footer sur toute la largeur */
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+@media screen and (max-width: 768px) {
+    .image-block img {
+        width: 100%;
+        height: 90px; /* Hauteur fixe pour les images */
+        object-fit: cover; /* Redimensionne les images pour qu'elles couvrent le conteneur tout en conservant leur ratio */
+        border-radius: 5px;
+    }
+    .container{
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+
+    .overlay-text{
+        font-size: 18px;
+    }
+
+}
+
+@media screen and (max-width: 540px) {
+
+    .container-block{
+        min-height: 1800px;
+    }
+
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    header h1 {
+        margin-bottom: 20px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+
+    h2{
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .container{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-block img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover; /* Redimensionne les images pour qu'elles couvrent le conteneur tout en conservant leur ratio */
+        border-radius: 5px;
+    }
+
+    .buttons {
+        text-align: center;
+    }
+
+    .buttons .button {
+        margin-bottom: 20px;
+    }
+
+    .overlay-text{
+        font-size: 14px;
+    }
+
+}
+
+@media screen and (max-width: 462px) {
+
+
+    .image-block img {
+        width: 100%;
+        height: 200px; /* Hauteur fixe pour les images */
+        object-fit: cover; /* Redimensionne les images pour qu'elles couvrent le conteneur tout en conservant leur ratio */
+        border-radius: 5px;
+    }
+
+    .overlay-text{
+        font-size: 20px;
+    }
+
+
+}
+
+@media screen and (max-width: 433px) {
+    
+    .block-text h1{
+        font-size: 35px;
+    }
+
+
+    .buttons-responsive .connexion {
+        background-image: linear-gradient(to right, #007bff, #0056b3); /* Dégradé bleu pour le bouton Connexion */
+    }
+    
+    .buttons-responsive .create {
+        background-image: linear-gradient(to right, #28a745, #218838); /* Dégradé vert pour le bouton Créer un compte */
+    }
+    
+    .buttons-responsive .config {
+        background-image: linear-gradient(to right, #e83c69, #f56dcc); /* Dégradé rose foncé pour le bouton Config */
+    }
+    
+
+}
+
