@@ -36,6 +36,16 @@ document.addEventListener('DOMContentLoaded', function() {
      });
  });
 
+ document.addEventListener("DOMContentLoaded", function() {
+    if (localStorage.getItem("visited")) {
+        document.querySelector(".container-block").classList.add("no-animation");
+    } else {
+        localStorage.setItem("visited", "true");
+    }
+});
+
+
+
  // Fonction pour afficher le contenu
  function showContent() {
      document.querySelector('.blue-overlay').classList.add('show-blue-overlay');

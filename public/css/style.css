@@ -13,6 +13,13 @@ body {
     margin: 0; /* Pour supprimer les marges par défaut du corps */
 }
 
+.no-animation .overlay,
+.no-animation .bonjour-container,
+.no-animation .show-button {
+    display: none;
+}
+
+
 .container-block {
     background: linear-gradient(to bottom right, #ff7f00, #eebb23); /* Dégradé orange */
     border-top-left-radius: 10px;

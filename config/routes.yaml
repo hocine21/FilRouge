@@ -257,3 +257,6 @@ api_produit_fournisseur_get_all:
     path: /api/produit-fournisseur
     controller: App\Controller\api\ProduitFournisseurController::getAllProduitFournisseur
     methods: [GET]
+app_indexbis:
+    path: /accueil-bis
+    controller: 'App\Controller\IndexBisController::index'
