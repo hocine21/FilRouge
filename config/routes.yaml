@@ -72,10 +72,18 @@ panier_vider:
 
 
 # config/routes.yaml
+
 calculate_distance:
-    path: /distance/{postalCode1}/{masseKgPerMeter}/{length}/{quantity}
+    path: /distance/{postalCode1}/{masseKg}
     controller: 'App\Controller\DistanceController::calculateDistance'
-    methods: ['GET']
+    methods: GET
+    requirements:
+        postalCode1: '\d+'
+        masseKg: '[\d,]+(\.\d+)?'
+
+
+
+
 
 
 api_entrepots_index:
@@ -282,3 +290,10 @@ app_logout:
     controller: App\Controller\SecurityController::logout
     methods: ['GET']
 
+app_produit_bis:
+    path: /produit-bis
+    controller: App\Controller\IndexController::produitBis
+    methods: GET
+panier:
+    path: /panier
+    controller: App\Controller\IndexController::panier

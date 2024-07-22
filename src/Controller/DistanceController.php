@@ -5,7 +5,6 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\EntrepotRepository;
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -19,16 +18,23 @@ class DistanceController extends AbstractController
     }
 
     /**
-     * @Route("/distance/{postalCode1}/{masseKgPerMeter}/{length}/{quantity}", name="calculate_distance")
+     * @Route("/distance/{postalCode1}/{masseKg}", name="calculate_distance", requirements={"masseKg"="[\d,]+(\.\d+)?"})
      */
-    public function calculateDistance($postalCode1, $masseKgPerMeter, $length, $quantity): Response
+    public function calculateDistance($postalCode1, $masseKg): Response
     {
+        // Convertir masseKg en nombre décimal
+        $masseKg = str_replace(',', '.', $masseKg);
+        $masseKg = (float) $masseKg;
+
+        // Vérifier si la conversion a réussi
+        if (!is_numeric($masseKg)) {
+            throw new \InvalidArgumentException('Invalid value for masseKg: ' . $masseKg);
+        }
+
         // Construction de la réponse avec les données de l'URL
         $responseDetails = 'Données de l\'URL : <br>';
         $responseDetails .= 'Code postal 1 : ' . $postalCode1 . '<br>';
-        $responseDetails .= 'Masse par kilogramme par mètre : ' . $masseKgPerMeter . '<br>';
-        $responseDetails .= 'Longueur : ' . $length . '<br>';
-        $responseDetails .= 'Quantité : ' . $quantity . '<br>';
+        $responseDetails .= 'Masse (kg) : ' . $masseKg . '<br>';
 
         // Récupérer les coordonnées géographiques du code postal 1
         $coordinates1 = $this->getCoordinates($postalCode1);
@@ -61,7 +67,7 @@ class DistanceController extends AbstractController
         }
 
         // Calculer les frais de livraison
-        $deliveryCost = $this->calculateDeliveryCost($shortestDistance, $masseKgPerMeter, $length, $quantity);
+        $deliveryCost = $this->calculateDeliveryCost($shortestDistance, $masseKg);
 
         // Ajouter les frais de livraison à la réponse
         $responseDetails .= 'Coût de livraison : ' . $deliveryCost . ' € <br>';
@@ -108,21 +114,18 @@ class DistanceController extends AbstractController
     }
 
     // Méthode pour calculer les frais de livraison
-    private function calculateDeliveryCost($distance, $masseKgPerMeter, $length, $quantity)
+    private function calculateDeliveryCost($distance, $masseKg)
     {
         $baseCost = 40; // Coût de base HT en euros
         $costPerKm = 0.3; // Coût par kilomètre en euros
         $additionalCostPer200Kg = 20; // Coût supplémentaire par tranche de 200 kg en euros
 
-        // Calculer le poids total
-        $totalWeight = $masseKgPerMeter * $length * $quantity;
-
         // Calculer le coût de base
         $transportCost = $baseCost + ($distance * $costPerKm);
 
         // Calculer les frais supplémentaires en fonction du poids
-        if ($totalWeight > 200) {
-            $additionalWeightCost = ceil(($totalWeight - 200) / 200) * $additionalCostPer200Kg;
+        if ($masseKg > 200) {
+            $additionalWeightCost = ceil(($masseKg - 200) / 200) * $additionalCostPer200Kg;
             $transportCost += $additionalWeightCost;
         }
 

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier</title>
+    <style>
+        /* Styles CSS */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .cart-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease-in-out;
+        }
+        .cart-item:hover {
+            background-color: #f9f9f9;
+        }
+        .cart-item .item-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        .cart-item .item-info img {
+            max-width: 100px;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+        .cart-item .item-info .item-details {
+            flex: 1;
+        }
+        .cart-item .item-info .item-details .product-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .cart-item .item-info .item-details .product-description {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .cart-item .item-info .item-details .product-price {
+            font-size: 1.2em;
+            color: #333;
+        }
+        .cart-item .item-actions {
+            display: flex;
+            align-items: center;
+        }
+        .cart-item .item-actions button {
+            background-color: transparent;
+            border: none;
+            color: #d9534f;
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
+        }
+        .cart-item .item-actions button:hover {
+            color: #c9302c;
+        }
+        .cart-details {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        .cart-details label {
+            font-weight: bold;
+        }
+        .cart-details input[type="text"] {
+            padding: 8px;
+            width: 200px;
+            margin-right: 10px;
+        }
+        .cart-details button {
+            padding: 8px 20px;
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .cart-details button:hover {
+            background-color: #0056b3;
+        }
+        #shipping-details {
+            margin-top: 20px;
+        }
+        #shipping-details h2 {
+            margin-bottom: 10px;
+        }
+        #shipping-details p {
+            color: #666;
+        }
+        #shipping-details.hidden {
+            display: none;
+        }
+        #total-price {
+            font-size: 1.5em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mon Panier</h1>
+    <div id="cart-container"></div>
+    <div class="cart-details">
+        <label for="postal-code">Code Postal:</label>
+        <input type="text" id="postal-code" placeholder="Entrez votre code postal">
+        <button id="calculate-shipping-btn">Calculer les frais de transport</button>
+        <div id="shipping-details" class="hidden">
+            <h2>Détails des frais de transport</h2>
+            <p id="shipping-info"></p>
+        </div>
+        <h2>Total TTC: <span id="total-price">0.00 €</span></h2>
+        <button id="purchase-btn">Acheter</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cartContainer = document.getElementById('cart-container');
+            const totalPriceContainer = document.getElementById('total-price');
+            const postalCodeInput = document.getElementById('postal-code');
+            const calculateShippingButton = document.getElementById('calculate-shipping-btn');
+            const purchaseButton = document.getElementById('purchase-btn');
+            const shippingDetails = document.getElementById('shipping-details');
+            const shippingInfo = document.getElementById('shipping-info');
+
+            // Fonction pour récupérer le panier depuis le localStorage
+            function getCart() {
+                return JSON.parse(localStorage.getItem('cart')) || [];
+            }
+
+            // Fonction pour enregistrer le panier dans le localStorage
+            function saveCart(cart) {
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+
+            // Fonction pour afficher le panier
+            function displayCart() {
+                const cart = getCart();
+                cartContainer.innerHTML = '';
+                if (cart.length === 0) {
+                    cartContainer.innerHTML = '<p>Votre panier est vide.</p>';
+                    return;
+                }
+
+                const combinedCart = combineCartItems(cart);
+
+                combinedCart.forEach((item, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'cart-item';
+
+                    const itemInfo = document.createElement('div');
+                    itemInfo.className = 'item-info';
+
+                    // Ajout de l'image du produit
+                    const productImage = document.createElement('img');
+                    productImage.src = '/pictures/' + item.image; // Construire le chemin complet de l'image
+                    productImage.alt = item.nomProduit;
+                    itemInfo.appendChild(productImage);
+
+                    const itemDetails = document.createElement('div');
+                    itemDetails.className = 'item-details';
+
+                    // Nom du produit
+                    const productName = document.createElement('div');
+                    productName.className = 'product-name';
+                    productName.textContent = item.nomProduit;
+                    itemDetails.appendChild(productName);
+
+                    // Détails supplémentaires (épaisseur, hauteur, etc.)
+                    const productDetails = document.createElement('div');
+                    productDetails.className = 'product-description';
+                    productDetails.textContent = `Épaisseur: ${item.variante.epaisseurProduit}, Hauteur: ${item.variante.hauteurProduit}, Largeur: ${item.variante.largeurProduit}, Masse: ${item.variante.masseProduit} Kg/m`;
+                    itemDetails.appendChild(productDetails);
+
+                    // Prix unitaire
+                    const productPrice = document.createElement('div');
+                    productPrice.className = 'product-price';
+                    productPrice.textContent = `Prix unitaire: ${item.variante.prixML.toFixed(2)} €/m`;
+                    itemDetails.appendChild(productPrice);
+
+                    // Champs pour la quantité et la longueur
+                    const quantityInput = document.createElement('input');
+                    quantityInput.type = 'number';
+                    quantityInput.value = item.quantite;
+                    quantityInput.min = 1;
+                    quantityInput.addEventListener('change', () => updateItem(index, 'quantite', parseInt(quantityInput.value)));
+
+                    const lengthInput = document.createElement('input');
+                    lengthInput.type = 'number';
+                    lengthInput.value = item.longueur;
+                    lengthInput.min = 1;
+                    lengthInput.addEventListener('change', () => updateItem(index, 'longueur', parseInt(lengthInput.value)));
+
+                    itemDetails.appendChild(document.createElement('br'));
+                    itemDetails.appendChild(document.createTextNode('Quantité: '));
+                    itemDetails.appendChild(quantityInput);
+                    itemDetails.appendChild(document.createTextNode(' Longueur: '));
+                    itemDetails.appendChild(lengthInput);
+
+                    itemInfo.appendChild(itemDetails);
+                    card.appendChild(itemInfo);
+
+                    // Actions (Supprimer uniquement)
+                    const itemActions = document.createElement('div');
+                    itemActions.className = 'item-actions';
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Supprimer';
+                    deleteButton.style.color = '#d9534f'; // Couleur rouge
+                    deleteButton.addEventListener('click', () => deleteItem(index));
+                    itemActions.appendChild(deleteButton);
+
+                    card.appendChild(itemActions);
+
+                    cartContainer.appendChild(card);
+                });
+
+                updateTotalPrice();
+            }
+
+            // Fonction pour combiner les éléments du panier
+            function combineCartItems(cart) {
+                const combined = {};
+
+                cart.forEach(item => {
+                    const key = `${item.nomProduit}_${item.longueur}_${item.quantite}`;
+                    if (!combined[key]) {
+                        combined[key] = { ...item };
+                    } else {
+                        combined[key].quantite += item.quantite;
+                    }
+                });
+
+                return Object.values(combined);
+            }
+
+            // Fonction pour mettre à jour un article dans le panier
+            function updateItem(index, key, value) {
+                const cart = getCart();
+                cart[index][key] = value;
+                saveCart(cart);
+                displayCart();
+            }
+
+            // Fonction pour supprimer un article du panier
+            function deleteItem(index) {
+                const cart = getCart();
+                cart.splice(index, 1);
+                saveCart(cart);
+                displayCart();
+            }
+
+            // Fonction pour mettre à jour le prix total
+            function updateTotalPrice() {
+                const cart = getCart();
+                const totalPrice = cart.reduce((total, item) => {
+                    return total + (item.variante.prixML * item.longueur * item.quantite);
+                }, 0);
+                totalPriceContainer.textContent = `${totalPrice.toFixed(2)} €`;
+            }
+
+            // Fonction pour calculer le poids total du panier
+            function calculateTotalWeight() {
+                const cart = getCart();
+                return cart.reduce((total, item) => {
+                    return total + (item.variante.masseProduit * item.longueur * item.quantite);
+                }, 0);
+            }
+
+            // Fonction pour calculer les frais de livraison
+            function calculateShipping(postalCode) {
+                const totalWeight = calculateTotalWeight();
+                const url = `/distance/${postalCode}/${totalWeight.toFixed(2).replace('.', ',')}`;
+
+                fetch(url)
+                    .then(response => response.text())
+                    .then(data => {
+                        shippingInfo.innerHTML = data;
+                        shippingDetails.classList.remove('hidden');
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors du calcul des frais de transport:', error);
+                        shippingInfo.textContent = 'Erreur lors du calcul des frais de transport.';
+                        shippingDetails.classList.remove('hidden');
+                    });
+            }
+
+            // Événement pour calculer les frais de livraison
+            calculateShippingButton.addEventListener('click', () => {
+                const postalCode = postalCodeInput.value;
+                if (postalCode) {
+                    calculateShipping(postalCode);
+                } else {
+                    alert('Veuillez entrer un code postal valide.');
+                }
+            });
+
+            // Événement pour rediriger vers la page de connexion lors de l'achat
+            purchaseButton.addEventListener('click', () => {
+                const isLoggedIn = false; // Remplacez par la vérification réelle de l'état de connexion
+                if (isLoggedIn) {
+                    alert('Merci pour votre achat !');
+                    localStorage.removeItem('cart'); // Vider le panier après l'achat
+                    displayCart();
+                } else {
+                    window.location.href = '/connexion'; // Rediriger vers la page de connexion
+                }
+            });
+
+            // Afficher le panier au chargement de la page
+            displayCart();
+        });
+    </script>
+</body>
+</html>

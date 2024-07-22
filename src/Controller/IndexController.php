@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,15 +11,6 @@ class IndexController extends AbstractController
     public function index(): Response
     {
         return $this->render('accueil/index.html.twig', [
-            'controller_name' => 'IndexController',
-        ]);
-    }
-
-    #[Route('/super-admin', name: 'app_super_admin')]
-    #[Security("is_granted('ROLE_SUPER_ADMIN')")]
-    public function superAdmin(): Response
-    {
-        return $this->render('super_admin/super_admin.html.twig', [
             'controller_name' => 'IndexController',
         ]);
     }
@@ -41,6 +31,14 @@ class IndexController extends AbstractController
         ]);
     }
 
+    #[Route('/super-admin', name: 'app_super_admin')]
+    public function superAdmin(): Response
+    {
+        return $this->render('super_admin/super_admin.html.twig', [
+            'controller_name' => 'IndexController',
+        ]);
+    }
+
     #[Route('/produit', name: 'app_produits')]
     public function produits(): Response
     {
@@ -49,11 +47,26 @@ class IndexController extends AbstractController
         ]);
     }
 
+    #[Route('/produit-bis', name: 'app_produit_bis')]
+    public function produitBis(): Response
+    {
+        return $this->render('produit/produitBis.html.twig', [
+            'controller_name' => 'IndexController',
+        ]);
+    }
+
     #[Route('/appro', name: 'app_appro')]
-    #[Security("is_granted('ROLE_APPROVISIONNEMENT')")]
     public function appro(): Response
     {
         return $this->render('appro/appro.html.twig', [
+            'controller_name' => 'IndexController',
+        ]);
+    }
+
+    #[Route('/panier', name: 'app_panier')]
+    public function panier(): Response
+    {
+        return $this->render('panier/panier.html.twig', [
             'controller_name' => 'IndexController',
         ]);
     }
