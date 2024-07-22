@@ -104,33 +104,46 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Fonction pour valider le mot de passe
-    function validatePassword(password) {
-        // Vérifier la longueur du mot de passe
-        const isLengthValid = password.length >= 12;
+// Fonction pour mettre à jour les icônes
+function updateIcon(element, isValid) {
+    element.className = isValid ? 'icon-valid' : 'icon-invalid';
+    element.innerHTML = isValid ? '&#10003;' : '&#10005;';
+}
 
-        // Vérifier s'il y a au moins une majuscule
-        const isUpperCaseValid = /[A-Z]/.test(password);
+// Fonction pour valider le mot de passe
+function validatePassword(password) {
+    // Vérifier la longueur du mot de passe
+    const isLengthValid = password.length >= 12;
 
-        // Vérifier s'il y a au moins une minuscule
-        const isLowerCaseValid = /[a-z]/.test(password);
+    // Vérifier s'il y a au moins une majuscule
+    const isUpperCaseValid = /[A-Z]/.test(password);
 
-        // Vérifier s'il y a au moins un chiffre
-        const isNumberValid = /\d/.test(password);
+    // Vérifier s'il y a au moins une minuscule
+    const isLowerCaseValid = /[a-z]/.test(password);
 
-        // Vérifier s'il y a au moins un symbole
-        const isSymbolValid = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+    // Vérifier s'il y a au moins un chiffre
+    const isNumberValid = /\d/.test(password);
 
-        // Mettre à jour les icônes en fonction de la validation
-        iconLength.className = isLengthValid ? 'icon-valid' : 'icon-invalid';
-        iconUpperCase.className = isUpperCaseValid ? 'icon-valid' : 'icon-invalid';
-        iconLowerCase.className = isLowerCaseValid ? 'icon-valid' : 'icon-invalid';
-        iconNumber.className = isNumberValid ? 'icon-valid' : 'icon-invalid';
-        iconSymbol.className = isSymbolValid ? 'icon-valid' : 'icon-invalid';
+    // Vérifier s'il y a au moins un symbole
+    const isSymbolValid = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
 
-        // Vérifier si toutes les conditions sont remplies
-        return isLengthValid && isUpperCaseValid && isLowerCaseValid && isNumberValid && isSymbolValid;
-    }
+    // Obtenir les éléments d'icône par leur ID
+    const iconLength = document.getElementById('iconLength');
+    const iconUpperCase = document.getElementById('iconUpperCase');
+    const iconLowerCase = document.getElementById('iconLowerCase');
+    const iconNumber = document.getElementById('iconNumber');
+    const iconSymbol = document.getElementById('iconSymbol');
+
+    // Mettre à jour les icônes en fonction de la validation
+    updateIcon(iconLength, isLengthValid);
+    updateIcon(iconUpperCase, isUpperCaseValid);
+    updateIcon(iconLowerCase, isLowerCaseValid);
+    updateIcon(iconNumber, isNumberValid);
+    updateIcon(iconSymbol, isSymbolValid);
+
+    // Vérifier si toutes les conditions sont remplies
+    return isLengthValid && isUpperCaseValid && isLowerCaseValid && isNumberValid && isSymbolValid;
+}
 
     // Ajouter un message d'aide pour l'e-mail
     const emailInput = document.getElementById('adresse-email');
