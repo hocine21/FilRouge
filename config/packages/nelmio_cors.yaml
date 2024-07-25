@@ -1,0 +1,12 @@
+nelmio_cors:
+    defaults:
+        origin_regex: false
+        allow_origin: ['https://votre-domaine.com']
+        allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
+        allow_headers: ['Content-Type', 'Authorization']
+        expose_headers: ['Link']
+        max_age: 3600
+    paths:
+        '^/api/': # Applique les règles uniquement aux chemins /api/
+            allow_origin:
+                - 'https://votre-domaine.com'

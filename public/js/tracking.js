@@ -1,42 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style-choix.css') }}">
-
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Inclure Font Awesome via CDN -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap"
-        rel="stylesheet">
-    <title>Page d'Accueil</title>
-</head>
-<body>
-    {% include 'menu.html.twig' %}
-
-<div class="container-block">
-    <div class="block-text">
-        <h1>Quel type de client êtes-vous ?</h1>
-        <section class="buttons">
-       <a href="{{ path('app_inscriptionParticulier') }}"><button class="button particulier">Particulier</button></a>
-        <a href="{{ path('inscription_pro') }}"><button class="button pro">Professionnel</button></a>
-
-
-        </section>
-    </div>
-</div>
-
-{% include 'footer.html.twig' %}
-
-
-</body>
-<script>
     document.addEventListener("DOMContentLoaded", function() {
         console.log("DOM fully loaded and parsed");
 
@@ -79,6 +41,4 @@
 
         logVisit();
     });
-</script>
 
-</html>
