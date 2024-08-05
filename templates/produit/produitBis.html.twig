@@ -13,17 +13,26 @@
 <body>
 
 {% include 'menu.html.twig' %}
-    <div class="card">
-        <div class="product-details" id="product-details">
-            <!-- Insérer ici la structure générée par JavaScript -->
-        </div>
-        <div class="user-inputs">
-            <input type="number" id="quantity-input" placeholder="Quantité">
-            <input type="number" id="length-input" placeholder="Longueur (cm)">
-            <button id="add-to-cart-btn">Ajouter au panier</button>
-            <div id="price-container" class="price-container"></div>
-        </div>
+
+<div class="card">
+    <div class="product-details" id="product-details">
+        <!-- Insérer ici la structure générée par JavaScript -->
     </div>
+    <div class="inputs-container">
+        <input id="quantity-input" placeholder="Quantité">
+        <input id="length-input" placeholder="Longueur (cm)">
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <button id="add-to-cart-btn">Ajouter au panier</button>
+        <button id="add-to-wishlist-btn">Ajouter aux favoris</button>
+    {% else %}
+        <p>Veuillez vous connecter pour ajouter des articles au panier.</p>
+    {% endif %}
+    </div>
+    
+        <div id="price-container" class="price-container"></div>
+    </div>
+</div>
+
 <script src="{{ asset('js/menu.js') }}"></script>
 <script src="{{ asset('js/produit-details.js') }}"></script>
 

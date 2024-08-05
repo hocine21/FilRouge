@@ -1,67 +1,45 @@
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Empêche le formulaire de se soumettre normalement
+// public/js/connexion.js
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('loginForm');
+    
+    if (form) {
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Empêche le comportement par défaut du formulaire
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/api/connexion', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        AdresseEmail: email,
+                        MotDePasse: password
+                    })
+                });
 
-    // Données à envoyer à l'API Symfony
-    const formData = {
-        AdresseEmail: email,
-        MotDePasse: password
-    };
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Enregistrer le token dans le localStorage
+                    localStorage.setItem('authToken', data.token);
 
-    // URL de l'API Symfony
-    const url = 'http://localhost:8080/api/connexion'; // Modifier l'URL selon votre environnement
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Adresse e-mail ou mot de passe incorrect.');
-        }
-        return response.json();
-    })
-    .then(data => {
-        const token = data.token;
-        localStorage.setItem('jwtToken', token); // Stockage du token JWT
-
-        // Envoi du token JWT dans l'en-tête Authorization pour les futures requêtes
-        const headers = {
-            'Authorization': `Bearer ${token}`
-        };
-
-        // Redirection en fonction des rôles
-        const decodedToken = parseJwt(token);
-        const roles = decodedToken.roles;
-        const userId = decodedToken.userId; // Assurez-vous que le payload JWT contient l'ID de l'utilisateur
-
-        if (roles.includes('ROLE_SUPER_ADMIN')) {
-            window.location.href = `http://localhost:8080/super-admin?role=${roles}&id=${userId}`;
-        } else if (roles.includes('ROLE_APPROVISIONNEMENT')) {
-            window.location.href = `http://localhost:8080/appro?role=${roles}&id=${userId}`;
-        } else {
-            console.log('Rôle non géré');
-            // Redirection vers une page par défaut ou affichage d'un message d'erreur
-        }
-    })
-    .catch(error => {
-        console.error('Erreur:', error.message);
-        // Affichage de l'erreur à l'utilisateur (par exemple dans une div)
-    });
+                    // Rediriger l'utilisateur en fonction du rôle
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    }
+                } else {
+                    // Afficher les erreurs
+                    alert(data.error || 'Une erreur est survenue.');
+                }
+            } catch (error) {
+                console.error('Erreur lors de la connexion:', error);
+                alert('Une erreur est survenue lors de la connexion.');
+            }
+        });
+    }
 });
-
-// Fonction pour décoder le token JWT
-function parseJwt(token) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-}

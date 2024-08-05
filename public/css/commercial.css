@@ -1,0 +1,328 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General Styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    margin: 0; /* Pour supprimer les marges par défaut du corps */
+    overflow-y: auto; /* Activer le défilement vertical lorsque nécessaire */
+}
+/* Ajoutez ces styles CSS pour la barre de navigation */
+header {
+    background-color: white; /* Couleur de fond */
+    color: orange; /* Couleur du texte */
+    padding: 20px 0; /* Espacement intérieur */
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Ajoutez un padding sur les côtés */
+
+}
+
+.container h1 {
+    font-size: 24px; /* Taille de la police */
+    color: rgb(38, 109, 223);
+}
+
+
+.search-bar input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid white;
+}
+
+/* Styles pour le bouton de recherche */
+.search-bar button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+}
+
+.search-bar button:hover {
+    background-color: #0056b3;
+}
+
+
+a {
+    text-decoration: none;
+}
+
+.container-block {
+    background-image: linear-gradient(to right, #007bff, #0056b3); /* Dégradé bleu pour les boutons */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    min-height: 1800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.block-text {
+    background-image: url(Bandeau\ Fil\ rouge.jpg);
+    padding: 20px;
+    width: 100%;
+    margin-bottom: 50px;
+    color: white;
+    height: 290px;
+    background-size: cover;
+    border-bottom-left-radius: 35%;
+    border-bottom-right-radius: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Ajoutez ces styles pour moderniser et rendre le formulaire de connexion plus responsive */
+
+
+
+
+
+
+
+footer {
+    position: fixed; /* Rendre le footer fixe */
+    bottom: 0; /* Fixer le footer au bas de la fenêtre */
+    width: 100%; /* Pour étendre le footer sur toute la largeur */
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+
+.fct-commercial{
+    display: flex;
+    width: 90%;
+    gap: 20px;
+}
+
+.container-jauge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 0 20px;
+    background-color: white;
+    width: 480px;
+    border-radius: 20px;
+    height: 220px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre douce */
+    border: 5px solid rgb(234, 223, 223);
+
+}
+
+.container-jauge-historique {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 1060px;
+    margin: 20px auto;
+    padding: 0 20px;
+    background-color: white;
+    width: 480px;
+    border-radius: 20px;
+    text-align: center;
+    height: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre douce */
+    border: 5px solid rgb(234, 223, 223);
+}
+
+.container-jauge-ristourne {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 1060px;
+    margin: 20px auto;
+    padding: 0 20px;
+    background-color: white;
+    width: 500px;
+    height: 300px;
+    border-radius: 20px;
+    text-align: center;
+    overflow: hidden; /* Ensures the scroll doesn't overflow the container */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre douce */
+    border: 5px solid rgb(234, 223, 223);
+}
+
+.demande-historique {
+    overflow-y: auto;
+    height: 100%; /* Make it fill the container height */
+    position: relative; /* Required for the sticky positioning to work */
+}
+
+.demande-historique h2 {
+    position: sticky;
+    top: 0;
+    background-color: white; /* Background to prevent overlap with content */
+    z-index: 1; /* Ensure it stays above other content */
+    padding: 10px 0; /* Optional: to give some spacing */
+}
+
+.demande-devis {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    width: 90%;
+}
+
+.demande-ristourne {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    overflow-y: auto;
+    height: calc(100% - 40px); /* Adjust the height considering the h2 element height */
+    position: relative; /* Required for the sticky positioning to work */
+}
+
+.demande-ristourne h2 {
+    position: sticky;
+    top: 0;
+    background-color: white; /* Background to prevent overlap with content */
+    z-index: 1; /* Ensure it stays above other content */
+    padding: 10px 0; /* Optional: to give some spacing */
+    margin: 0; /* Optional: to remove default margin */
+}
+
+.color-bar {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 5px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre douce */
+
+}
+
+.color-bar-ristourne {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 5px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    gap: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre douce */
+}
+
+.demande-ristourne h2 {
+    margin-top: 10px;
+}
+
+.btn-yes-no{
+    display: flex;
+    gap: 10px;
+    padding: 2px;
+}
+
+.btn-yes-no button{
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.ristourne-block {
+    margin-top: 20px;
+    width: 50%;
+    padding: 20px;
+    border-radius: 15px;
+    visibility: hidden;
+}
+
+/* CSS */
+.visible {
+    visibility: visible;
+}
+
+table {
+    border-radius: 10px;
+    background-color: white;
+    color: red;
+    padding: 10px;
+}
+
+.tab-title{
+    background-color: red;
+    color: white;
+}
+
+tr{
+    border-radius: 10px;
+}
+
+
+td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.btn-ristourne button{
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid white;
+    color: white;
+}
+
+.validate {
+    background-color: green;
+}
+
+.quit{
+    background-color: red;
+}
+
+.apply-ristourne {
+    background-color: orange;
+}
+
+.custom-checkbox {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #eee;
+    border-radius: 3px;
+    vertical-align: middle;
+  }
+  
+  /* Style pour le coche à l'intérieur de la case à cocher */
+  .custom-checkbox:checked:after {
+    content: '\2714'; /* caractère Unicode pour une coche */
+    font-size: 14px;
+    color: #fff;
+    position: absolute;
+    top: 2px;
+    left: 4px;
+  }
+
+  button {
+    cursor: pointer;
+  }

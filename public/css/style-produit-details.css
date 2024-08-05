@@ -5,35 +5,51 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f9f9f9; /* Fond léger pour tout le corps */
 }
 
-.container-block {
-    width: 100%;
+/* Conteneur principal */
+.card {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
+    background-color: #fff; /* Fond blanc pour la carte */
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
 }
 
-.product-details-container {
+/* Détails du produit */
+.product-details {
     display: flex;
+    flex-wrap: wrap; /* Permet le passage à la ligne pour les petits écrans */
     justify-content: space-between;
     align-items: flex-start;
-    margin-top: 20px;
+    margin-bottom: 20px; /* Espace en bas du bloc de détails */
 }
 
 .product-image-container {
     flex: 1;
     text-align: center;
+    max-width: 100%;
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
 }
 
 .product-image {
     max-width: 100%;
-    height: auto;
+    max-height: 100%;
+    border-radius: 8px; /* Coins arrondis pour l'image */
+    object-fit: contain; /* Ajuste l'image pour contenir dans le conteneur sans déformer */
 }
 
 .details-table-container {
-    flex: 2;
+    flex: 1.5; /* Réduit la taille du tableau */
     margin-left: 20px;
+    max-width: 100%;
+    overflow-x: auto; /* Ajoute une barre de défilement horizontale si nécessaire */
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
 }
 
 #details-table {
@@ -43,112 +59,170 @@ body {
 }
 
 #details-table th, #details-table td {
-    padding: 10px;
-    border: 1px solid #ccc;
+    padding: 10px; /* Réduit le padding pour ajuster la taille */
+    border: 1px solid #ddd; /* Bordure plus douce */
     text-align: center;
 }
 
 #details-table th {
-    background-color: #f0f0f0;
+    background-color: #f4f4f4; /* Couleur d'arrière-plan pour les en-têtes */
 }
 
+/* Conteneur des entrées utilisateur */
+.user-inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre les éléments */
+    margin-top: 40px; /* Espace entre le tableau et les inputs/boutons */
+}
+
+/* Styles des champs de saisie */
 .inputs-container {
     display: flex;
-    flex-direction: column; /* Afficher les éléments en colonne */
-    justify-content: flex-start; /* Aligner en haut */
-    align-items: flex-end; /* Aligner à droite */
+    flex-direction: column;
+    align-items: center; /* Centre les éléments */
     margin-top: 20px;
-}
-
-.inputs-container label {
-    margin-bottom: 8px;
 }
 
 .inputs-container input {
-    margin-bottom: 12px; /* Espacement entre les inputs */
-    padding: 12px;
+    margin-bottom: 20px; /* Espace entre les champs de saisie */
+    padding: 12px; /* Ajuste le padding pour correspondre à la taille des boutons */
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Largeur à 100% pour les champs de saisie */
+    max-width: 300px; /* Largeur maximum pour les champs de saisie */
+    text-align: right; /* Aligner le texte à droite */
 }
 
 .inputs-container input:focus {
+    border-color: #ff8c00;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     outline: none;
-    border-color: #ff8c00; /* Couleur de mise au point */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Légère augmentation de l'ombre */
 }
 
-#add-to-cart-btn {
-    padding: 12px 24px;
+/* Styles des boutons */
+button {
+    padding: 12px 20px;
     font-size: 16px;
-    background: linear-gradient(135deg, #ff8c00, #ffaa33); /* Dégradé orange */
-    color: #fff;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-top: 20px;
+    color: #fff;
     transition: background 0.3s ease;
+    margin-bottom: 20px; /* Espacement entre les boutons et les champs */
+    width: 100%; /* Largeur à 100% pour les boutons */
+    max-width: 300px; /* Largeur maximum pour les boutons */
+    text-align: center; /* Centrer le texte sur les boutons */
+}
+
+/* Bouton ajouter au panier */
+#add-to-cart-btn {
+    background: linear-gradient(135deg, #ff8c00, #ffaa33);
 }
 
 #add-to-cart-btn:hover {
-    background: linear-gradient(135deg, #ffaa33, #ffcc66); /* Légère nuance au survol */
+    background: linear-gradient(135deg, #ffaa33, #ffcc66);
 }
 
-/* Style pour les checkboxes rondes */
-.checkbox-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Bouton ajouter aux favoris */
+#add-to-wishlist-btn {
+    background: linear-gradient(135deg, #007bff, #00aaff);
 }
 
-.checkbox-container input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    margin: 0;
-    outline: none;
+#add-to-wishlist-btn:hover {
+    background: linear-gradient(135deg, #00aaff, #66ccff);
 }
 
-.checkbox-container input[type="checkbox"]:checked {
-    background-color: #007bff;
-}
-
-.checkbox-container input[type="checkbox"]:checked::after {
-    content: '\2714';
-    display: block;
+/* Styles du conteneur du prix */
+#price-container {
+    margin-top: 20px;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    background: #e9f5ff; /* Arrière-plan léger */
+    border: 1px solid #b0d6ff; /* Bordure douce */
+    border-radius: 8px; /* Coins arrondis */
+    text-align: center;
     width: 100%;
-    height: 100%;
-    font-size: 14px;
-    color: white;
-    text-align: center;
-    line-height: 20px;
+    max-width: 300px; /* Largeur maximum pour le conteneur du prix */
 }
 
-.checkbox-container input[type="checkbox"]:focus {
-    box-shadow: 0 0 3px #007bff;
+/* Responsive */
+@media (max-width: 1200px) {
+    .product-details {
+        flex-direction: column;
+    }
+
+    .product-image-container,
+    .details-table-container {
+        width: 100%;
+        margin-left: 0;
+    }
 }
 
-/* Styles spécifiques pour la disposition des éléments */
-.product-image-container {
-    display: inline-block;
-    vertical-align: top;
-    width: 50%; /* Ajustez en fonction de votre mise en page */
-    text-align: center;
+@media (max-width: 992px) {
+    .product-details {
+        flex-direction: column;
+    }
+
+    .product-image-container,
+    .details-table-container {
+        width: 100%;
+    }
+
+    .inputs-container,
+    .user-inputs {
+        align-items: center;
+    }
+
+    .user-inputs {
+        margin-top: 20px;
+    }
 }
 
-.product-image {
-    max-width: 100%;
-    height: auto;
+@media (max-width: 768px) {
+    .card {
+        padding: 10px;
+    }
+
+    .product-details {
+        flex-direction: column;
+    }
+
+    .details-table-container {
+        margin-left: 0;
+        overflow-x: auto; /* Ajoute une barre de défilement horizontale si nécessaire */
+    }
+
+    .inputs-container input,
+    button {
+        max-width: 100%;
+        width: auto; /* Ajuste la largeur pour les petits écrans */
+    }
+
+    .user-inputs {
+        align-items: center;
+        margin-top: 20px; /* Réduit l'espace pour les inputs/boutons */
+    }
 }
 
-.details-table-container {
-    display: inline-block;
-    vertical-align: top;
-    width: 45%; /* Ajustez en fonction de votre mise en page */
+@media (max-width: 480px) {
+    .card {
+        padding: 10px;
+    }
+
+    .inputs-container input,
+    button {
+        font-size: 14px; /* Réduit la taille de la police pour les petits écrans */
+        padding: 10px; /* Ajuste le padding pour une meilleure adaptation */
+    }
+
+    #price-container {
+        font-size: 16px; /* Réduit la taille de la police pour les petits écrans */
+        padding: 10px; /* Ajuste le padding pour une meilleure adaptation */
+    }
 }

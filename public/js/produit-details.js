@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
         productDetailsContainer.appendChild(detailsTableContainer);
     }
 
-    // Fonction pour recalculer le prix localement
+    // Fonction pour recalculer le prix en appelant l'API Symfony
     function calculatePrice() {
         if (!selectedVariant) {
             priceContainer.textContent = 'Veuillez sélectionner une variante.';
@@ -120,25 +120,49 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Calcul du prix similaire à celui de votre API Symfony
-        const prixUnitaire = selectedVariant.prixML;
-        const longueurMetres = longueur / 100;
-        const prixTTC = (selectedVariant.masseProduit * 0.3) * (longueurMetres * prixUnitaire) * quantite;
-
-        // Affichage du prix calculé
-        priceContainer.textContent = `Prix TTC: ${prixTTC.toFixed(2)} €`;
-
-        // Stocker les détails du produit sélectionné dans le localStorage
-        const selectedProduct = {
+        const panier = [{
             nomProduit: nomProduit,
             variante: selectedVariant,
             longueur: longueur,
-            quantite: quantite,
-            image: selectedVariant.image // Ajoute l'image sélectionnée
-        };
+            quantite: quantite
+        }];
 
-        // Enregistrement dans le localStorage
-        localStorage.setItem('selectedProduct', JSON.stringify(selectedProduct));
+        // Envoyer une requête POST à l'API Symfony
+        fetch('/panier/calculer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest' // Pour indiquer que c'est une requête AJAX
+            },
+            body: JSON.stringify({ panier: panier })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.total_ttc) {
+                priceContainer.textContent = `Prix TTC: ${data.total_ttc.toFixed(2)} €`;
+                if (data.total_ht) {
+                    priceContainer.textContent += ` (Prix HT: ${data.total_ht.toFixed(2)} €)`;
+                }
+            } else {
+                priceContainer.textContent = 'Erreur lors du calcul du prix.';
+            }
+
+            // Stocker les détails du produit sélectionné dans le localStorage
+            const selectedProduct = {
+                nomProduit: nomProduit,
+                variante: selectedVariant,
+                longueur: longueur,
+                quantite: quantite,
+                image: selectedVariant.image // Ajoute l'image sélectionnée
+            };
+
+            // Enregistrement dans le localStorage
+            localStorage.setItem('selectedProduct', JSON.stringify(selectedProduct));
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            priceContainer.textContent = 'Erreur lors de la communication avec l\'API.';
+        });
     }
 
     // Fonction pour encoder les données
@@ -192,5 +216,47 @@ document.addEventListener('DOMContentLoaded', function() {
         quantityInput.value = '';
         lengthInput.value = '';
         alert('Produit ajouté au panier avec succès !');
+    });
+
+    // Écouteur d'événement pour ajouter à la liste d'envie
+    const addToWishlistButton = document.getElementById('add-to-wishlist-btn');
+    addToWishlistButton.addEventListener('click', () => {
+        calculatePrice(); // Appel de la fonction pour vérifier les données avant d'ajouter à la liste d'envie
+
+        if (!selectedVariant) {
+            alert('Veuillez sélectionner une variante.');
+            return;
+        }
+
+        const longueur = parseFloat(lengthInput.value);
+        const quantite = parseInt(quantityInput.value);
+
+        if (isNaN(longueur) || isNaN(quantite)) {
+            alert('Veuillez entrer une longueur et une quantité valides.');
+            return;
+        }
+
+        // Créer un objet avec les détails du produit
+        const wishlistItem = {
+            nomProduit: encodeForHTML(nomProduit),
+            variante: selectedVariant,
+            longueur: longueur,
+            quantite: quantite,
+            image: selectedVariant.image // Ajoute l'image sélectionnée
+        };
+
+        // Récupérer la liste d'envie actuelle depuis le localStorage
+        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+        // Ajouter le produit à la liste d'envie
+        wishlist.push(wishlistItem);
+
+        // Stocker la liste d'envie mise à jour dans le localStorage
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+
+        // Réinitialisation des inputs après ajout à la liste d'envie (optionnel)
+        quantityInput.value = '';
+        lengthInput.value = '';
+        alert('Produit ajouté à la liste d\'envie avec succès !');
     });
 });

@@ -1,9 +1,12 @@
 <?php
+// src/Controller/IndexController.php
+
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Annotation\IsGranted;
 
 class IndexController extends AbstractController
 {
@@ -23,7 +26,7 @@ class IndexController extends AbstractController
         ]);
     }
 
-    #[Route('/connexion', name: 'app_connexion')]
+    #[Route('/connexion', name: 'app_connexion_web')]
     public function connexion(): Response
     {
         return $this->render('connexion/connexion.html.twig', [
@@ -32,6 +35,7 @@ class IndexController extends AbstractController
     }
 
     #[Route('/super-admin', name: 'app_super_admin')]
+    #[IsGranted('ROLE_SUPER_ADMIN')]
     public function superAdmin(): Response
     {
         return $this->render('super_admin/super_admin.html.twig', [
@@ -56,6 +60,7 @@ class IndexController extends AbstractController
     }
 
     #[Route('/appro', name: 'app_appro')]
+    #[IsGranted('ROLE_APPROVISIONNEMENT')]
     public function appro(): Response
     {
         return $this->render('appro/appro.html.twig', [
@@ -67,6 +72,15 @@ class IndexController extends AbstractController
     public function panier(): Response
     {
         return $this->render('panier/panier.html.twig', [
+            'controller_name' => 'IndexController',
+        ]);
+    }
+
+    #[Route('/commercial', name: 'app_commercial')]
+    #[IsGranted('ROLE_COMMERCIAL')]
+    public function commercial(): Response
+    {
+        return $this->render('commercial/commercial.html.twig', [
             'controller_name' => 'IndexController',
         ]);
     }

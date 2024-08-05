@@ -3,10 +3,14 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+
 connexion:
-  path: /api/connexion
-  controller: 'App\Controller\api\ConnexionController::connexion'
-  methods: ['POST']
+    path: /connexion
+    controller: App\Controller\api\ConnexionController::connexion
+    methods: POST
+
+
   
 api_inscription:
   path: /api/inscription
@@ -32,19 +36,6 @@ api_modifier_employe:
   controller: 'App\Controller\api\InscriptionEmployeController::modifierEmploye'
   methods: ['PUT']
 
-# config/routes.yaml
-
-
-# config/routes/api.yaml
-# config/routes.yaml
-# config/routes.yaml
-
-# config/routes.yaml
-
-
-# config/routes.yaml
-
-# Routes pour le contrôleur PanierController
 panier_ajouter:
     path: /panier/ajouter
     controller: 'App\Controller\PanierController::ajouterProduitAuPanier'
@@ -80,11 +71,6 @@ calculate_distance:
     requirements:
         postalCode1: '\d+'
         masseKg: '[\d,]+(\.\d+)?'
-
-
-
-
-
 
 api_entrepots_index:
   path: /api/entrepots
@@ -177,7 +163,8 @@ app_index:
 app_choix:
     path: /choix
     controller: 'App\Controller\IndexController::choix'
-app_connexion:
+
+app_connexion_web:
     path: /connexion
     controller: App\Controller\IndexController::connexion
     methods: ['GET']
@@ -286,14 +273,57 @@ check_role:
 # config/routes.yaml
 
 app_logout:
-    path: /deconnexion
-    controller: App\Controller\SecurityController::logout
-    methods: ['GET']
+    path: /logout
+    controller: App\Controller\LogoutController::logout
+    methods: [GET]
+
 
 app_produit_bis:
     path: /produit-bis
     controller: App\Controller\IndexController::produitBis
     methods: GET
-panier:
-    path: /panier
-    controller: App\Controller\IndexController::panier
+# config/routes.yaml
+
+panier_calculer:
+    path: /panier/calculer
+    controller: App\Controller\PanierCalculController::calculerPanier
+    methods: [POST]
+
+# config/routes.yaml
+
+api_update_stock:
+    path: /api/mise-a-jour-stock
+    controller: App\Controller\api\StockController::updateStock
+    methods: [POST]
+# config/routes.yaml
+api_commandes_index:
+    path: /api/commandes
+    controller: App\Controller\api\CommandeController::index
+    methods: GET
+
+api_commandes_show:
+    path: /api/commandes/{id}
+    controller: App\Controller\api\CommandeController::show
+    methods: GET
+
+api_commandes_create:
+    path: /api/commandes
+    controller: App\Controller\api\CommandeController::create
+    methods: POST
+
+api_commandes_update:
+    path: /api/commandes/{id}
+    controller: App\Controller\api\CommandeController::update
+    methods: PUT
+
+api_commandes_delete:
+    path: /api/commandes/{id}
+    controller: App\Controller\api\CommandeController::delete
+    methods: DELETE
+commercial:
+    path: /commercial
+    controller: App\Controller\IndexController::commercial
+    requirements:
+        role: ROLE_COMMERCIAL
+
+

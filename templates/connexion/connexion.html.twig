@@ -36,6 +36,7 @@
                         <input type="password" id="password" name="password" required>
                     </div>
                     <button type="submit">Se connecter</button>
+                    <div id="error-message" style="color: red;"></div> <!-- Div pour afficher les messages d'erreur -->
                 </form>
             </div>
 
@@ -48,7 +49,49 @@
 
     {% include 'footer.html.twig' %}
     <script src="{{ asset('js/menu.js') }}"></script>
-    <script src="{{ asset('js/connexion.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('loginForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Empêche l'envoi du formulaire classique
+
+                var email = document.getElementById('email').value;
+                var password = document.getElementById('password').value;
+
+                // Créez l'objet JSON
+                var data = JSON.stringify({
+                    AdresseEmail: email,
+                    MotDePasse: password
+                });
+
+                // Envoie de la requête AJAX
+                fetch('{{ path('connexion') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: data
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.token) {
+                        // Stocker les informations dans le localStorage
+                        localStorage.setItem('authToken', data.token);
+                        localStorage.setItem('userId', data.id);
+                        localStorage.setItem('userRoles', JSON.stringify(data.roles));
+
+                        // Redirection ou autre action après connexion réussie
+                        window.location.href = data.redirect;
+                    } else {
+                        // Affichage des erreurs
+                        document.getElementById('error-message').textContent = data.error || 'Une erreur est survenue.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+            });
+        });
+    </script>
 
 </body>
 

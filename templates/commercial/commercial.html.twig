@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('css/commercial.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Page d'Accueil</title>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a href="{{ path('app_index') }}">
+                <h1>COUP'ACIER</h1>
+            </a>
+            <div>
+                <a href="{{ path('app_super_admin') }}"><h1>ADMINISTRATEURS</h1></a>
+            </div>
+        </div>
+    </header>
+    <div class="container-block">
+        <div class="block-text">
+            <h1>Bienvenue sur la page ADMINISTRATEUR, vous pouvez vous connecter et serez redirigé vers votre plateforme :</h1>
+            <div class="search-bar">
+                <input type="text" placeholder="Rechercher...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+
+        <div class="fct-commercial">
+            <div class="container-jauge">
+                <div class="demande-devis">
+                    <h2>Demande de devis</h2>
+                    <div class="color-bar" style="background-color: #FF5733;">Commande en attente</div>
+                    <div class="color-bar" style="background-color: orange;">Commande en cours</div>
+                    <div class="color-bar" style="background-color: green;">Commande Traités</div>
+                </div>
+            </div>
+            <div class="container-jauge-historique">
+                <div class="demande-historique">
+                    <h2>Historique de commandes</h2>
+                    {% set commandes = [
+                        { id: "PA123456", total: 3456, ristourne: 5 },
+                        { id: "PA378654", total: 2543, ristourne: 0 },
+                        { id: "PR098456", total: 9087, ristourne: 25 },
+                        { id: "PR789876", total: 7604, ristourne: 15 }
+                    ] %}
+                    {% for commande in commandes %}
+                        <div class="color-bar" style="background-color: rgb(26, 125, 217);">Commande #{{ commande.id }} / Total : {{ commande.total }} € / R : {{ commande.ristourne }}%</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="container-jauge-ristourne">
+                <div class="demande-ristourne">
+                    <h2>Accord Ristourne</h2>
+                    {% for commande in commandes %}
+                        <div class="color-bar-ristourne" style="background-color: rgb(26, 125, 217);">Commande #{{ commande.id }} / Total : {{ commande.total }}
+                            <div class="btn-yes-no">
+                                <button class="btn-yes" style="background-color: green;" data-commande="{{ commande.id }}">O</button>
+                                <button class="btn-no" style="background-color: red;">N</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="ristourne-block">
+            <table border="1">
+                <thead>
+                    <tr class="tab-title">
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Prix HT (€)</th>
+                        <th>Prix TTC (€)</th>
+                        <th>Total HT (€)</th>
+                        <th>Total TTC (€)</th>
+                        <th>Ristourne (%)</th>
+                        <td>
+                            Tout
+                            <input type="checkbox" id="check-all">
+                        </td>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Les lignes de produits seront insérées ici par JavaScript -->
+                </tbody>
+            </table>
+            <div class="btn-ristourne">
+                <button class="validate">Valider</button>
+                <button class="quit">Quitter</button>
+                <button class="apply-ristourne">Ristourne Totale</button>
+                <input type="number" id="ristourne-global" placeholder="Ristourne (%)" min="0" max="100" step="1">
+            </div>
+            <div id="results-container"></div>
+        </div>
+    </div>
+    <footer>
+        <p>Ceci est le pied de page.</p>
+    </footer>
+
+    <script>
+        // Données statiques en format JSON
+        const data = [
+            { produit: "Produit 1", quantite: 10, prixHT: 5, prixTTC: 6, totalHT: 50, totalTTC: 60 },
+            { produit: "Produit 2", quantite: 20, prixHT: 3, prixTTC: 3.6, totalHT: 60, totalTTC: 72 }
+        ];
+
+        var tbody = document.getElementById("table-body");
+
+        data.forEach(function (item) {
+            var tr = document.createElement("tr");
+
+            var produitTd = document.createElement("td");
+            produitTd.textContent = item.produit;
+            tr.appendChild(produitTd);
+
+            var quantiteTd = document.createElement("td");
+            quantiteTd.textContent = item.quantite;
+            tr.appendChild(quantiteTd);
+
+            var prixHTTd = document.createElement("td");
+            prixHTTd.textContent = item.prixHT;
+            tr.appendChild(prixHTTd);
+
+            var prixTTCTd = document.createElement("td");
+            prixTTCTd.textContent = item.prixTTC;
+            tr.appendChild(prixTTCTd);
+
+            var totalHTTd = document.createElement("td");
+            totalHTTd.textContent = item.totalHT;
+            tr.appendChild(totalHTTd);
+
+            var totalTTCTd = document.createElement("td");
+            totalTTCTd.textContent = item.totalTTC;
+            tr.appendChild(totalTTCTd);
+
+            var ristourneTd = document.createElement("td");
+            var inputRistourne = document.createElement("input");
+            inputRistourne.type = "number";
+            inputRistourne.min = "0";
+            inputRistourne.max = "100";
+            inputRistourne.step = "1";
+            ristourneTd.appendChild(inputRistourne);
+            tr.appendChild(ristourneTd);
+
+            var checkboxTd = document.createElement("td");
+            var checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkboxTd.appendChild(checkbox);
+            tr.appendChild(checkboxTd);
+
+            tbody.appendChild(tr);
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var ristourneBlock = document.querySelector(".ristourne-block");
+            var p = document.createElement("p");
+
+            document.querySelectorAll(".btn-yes").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    p.textContent = "";
+                    var commande = this.dataset.commande;
+                    p.textContent = "Numéro de commande : " + commande;
+                    p.style.color = "white";
+                    p.style.fontWeight = "bold";
+                    p.style.marginTop = "10px";
+                    p.style.marginBottom = "10px";
+
+                    if (!ristourneBlock.classList.contains("visible")) {
+                        ristourneBlock.classList.toggle("visible");
+                        ristourneBlock.scrollIntoView({ behavior: 'smooth' });
+                    }
+
+                    validateBtn.dataset.commande = commande;
+                });
+            });
+
+            var table = document.querySelector("table");
+            table.parentNode.insertBefore(p, table.nextSibling);
+
+            var quitBtn = document.querySelector(".quit");
+            quitBtn.addEventListener("click", function () {
+                var resultsContainer = document.getElementById("results-container");
+                resultsContainer.innerHTML = ""; // Supprimer les résultats affichés
+
+                var ristourneBlock = document.querySelector(".ristourne-block");
+                ristourneBlock.classList.remove("visible"); // Masquer le bloc ristourne
+
+                // Effacer le texte affiché par le bouton "Ristourne Totale"
+                var totalTTCRistourneText = document.getElementById("total-ttc-ristourne");
+                if (totalTTCRistourneText) {
+                    totalTTCRistourneText.remove();
+                }
+            });
+
+            document.querySelector(".validate").addEventListener("click", function () {
+                var checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
+                var resultsContainer = document.getElementById("results-container");
+
+                resultsContainer.innerHTML = "";
+
+                if (checkboxes.length > 0) {
+                    var totalRistourne = 0;
+                    checkboxes.forEach(function (checkbox) {
+                        var tr = checkbox.closest("tr");
+                        var ristourne = tr.querySelector("input[type=number]").value;
+                        totalRistourne += parseFloat(ristourne) || 0;
+                    });
+
+                    var p = document.createElement("p");
+                    p.id = "total-ttc-ristourne";
+                    p.textContent = "Total Ristourne : " + totalRistourne + "%";
+                    p.style.color = "green";
+                    p.style.fontWeight = "bold";
+                    p.style.marginTop = "10px";
+                    resultsContainer.appendChild(p);
+                } else {
+                    var p = document.createElement("p");
+                    p.textContent = "Veuillez sélectionner des lignes.";
+                    p.style.color = "red";
+                    p.style.fontWeight = "bold";
+                    p.style.marginTop = "10px";
+                    resultsContainer.appendChild(p);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

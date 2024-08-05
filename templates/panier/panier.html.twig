@@ -1,329 +1,394 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panier</title>
+    <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
     <style>
-        /* Styles CSS */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
+        .step {
             margin-bottom: 20px;
         }
-        .cart-item {
-            background-color: #fff;
+
+        h5 {
+            font-size: 1.5em;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cart-container, .order-summary {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            display: flex;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease-in-out;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f9f9f9;
         }
-        .cart-item:hover {
-            background-color: #f9f9f9;
-        }
-        .cart-item .item-info {
-            display: flex;
-            align-items: center;
+
+        .card-img-container {
             flex: 1;
         }
-        .cart-item .item-info img {
-            max-width: 100px;
-            margin-right: 20px;
-            border-radius: 8px;
+
+        .card-img-top {
+            max-width: 100%;
+            border-radius: 5px;
         }
-        .cart-item .item-info .item-details {
-            flex: 1;
+
+        .card-body {
+            flex: 2;
+            padding: 10px;
         }
-        .cart-item .item-info .item-details .product-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .cart-item .item-info .item-details .product-description {
-            color: #666;
-            margin-bottom: 5px;
-        }
-        .cart-item .item-info .item-details .product-price {
-            font-size: 1.2em;
-            color: #333;
-        }
-        .cart-item .item-actions {
-            display: flex;
-            align-items: center;
-        }
-        .cart-item .item-actions button {
-            background-color: transparent;
-            border: none;
-            color: #d9534f;
-            cursor: pointer;
-            transition: color 0.3s ease-in-out;
-        }
-        .cart-item .item-actions button:hover {
-            color: #c9302c;
-        }
-        .cart-details {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-        }
-        .cart-details label {
-            font-weight: bold;
-        }
-        .cart-details input[type="text"] {
-            padding: 8px;
-            width: 200px;
-            margin-right: 10px;
-        }
-        .cart-details button {
-            padding: 8px 20px;
-            background-color: #007bff;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-        }
-        .cart-details button:hover {
-            background-color: #0056b3;
-        }
-        #shipping-details {
-            margin-top: 20px;
-        }
-        #shipping-details h2 {
+
+        .card-title {
+            font-size: 1.25em;
             margin-bottom: 10px;
         }
-        #shipping-details p {
-            color: #666;
-        }
-        #shipping-details.hidden {
-            display: none;
-        }
-        #total-price {
-            font-size: 1.5em;
+
+        .card-text {
+            font-size: 1em;
             color: #333;
+        }
+
+        .totals, .address {
+            margin-bottom: 20px;
+        }
+
+        .totals p, .address p {
+            font-size: 1.1em;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .form-control {
+            width: calc(100% - 22px);
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .card-logo {
+            max-width: 100px;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+        }
+
+        input[placeholder] {
+            color: #999;
         }
     </style>
 </head>
 <body>
-    <h1>Mon Panier</h1>
-    <div id="cart-container"></div>
-    <div class="cart-details">
-        <label for="postal-code">Code Postal:</label>
-        <input type="text" id="postal-code" placeholder="Entrez votre code postal">
-        <button id="calculate-shipping-btn">Calculer les frais de transport</button>
-        <div id="shipping-details" class="hidden">
-            <h2>Détails des frais de transport</h2>
-            <p id="shipping-info"></p>
+    {% include 'menu.html.twig' %}
+    <div class="container">
+        <!-- Étape 1: Panier -->
+        <div id="step-1">
+            <h5>Panier</h5>
+            <div id="cart-container"></div>
+            <p>Total TTC: <span id="total-price-ttc">0,00</span> €</p>
+            {% if is_granted('ROLE_PROFESSIONNEL') %}
+                <p>Total HT: <span id="total-price-ht">0,00</span> €</p>
+            {% endif %}
+            <p>Coût de Livraison: <span id="delivery-cost">0,00</span> €</p>
+            <p>Prix Total: <span id="total-price">0,00</span> €</p>
+            <button type="button" class="btn btn-primary" id="next-step">Suivant</button>
+            <button type="button" class="btn btn-secondary" id="clear-cart">Vider le Panier</button>
         </div>
-        <h2>Total TTC: <span id="total-price">0.00 €</span></h2>
-        <button id="purchase-btn">Acheter</button>
+
+        <!-- Étape 2: Récapitulatif de la Commande -->
+        <div id="step-2" style="display:none;">
+            <h5>Récapitulatif de la Commande</h5>
+            <div id="order-summary"></div>
+            <div>
+                <h5>Adresse de Livraison</h5>
+                <p>
+                    Rue: <input type="text" id="shipping-street" class="form-control" required><br>
+                    Code Postal: <input type="text" id="shipping-postcode" class="form-control" pattern="\d{5}" title="Le code postal doit comporter 5 chiffres" required><br>
+                    Ville: <input type="text" id="shipping-city" class="form-control" required><br>
+                </p>
+                <h5>Coût de Livraison:</h5>
+                <p id="delivery-cost-step-2">0,00 €</p>
+            </div>
+            <button type="button" class="btn btn-primary" id="next-step-2">Suivant</button>
+            <button type="button" class="btn btn-secondary" id="prev-step-2">Retour</button>
+        </div>
+
+        <!-- Étape 3: Paiement -->
+        <div id="step-3" style="display:none;">
+            <h5>Informations de Paiement</h5>
+            <form id="payment-form">
+                <div class="form-group">
+                    <label for="billing-street">Adresse de Facturation</label>
+                    <input type="text" class="form-control" id="billing-street" placeholder="Rue" required>
+                    <input type="text" class="form-control" id="billing-postcode" placeholder="Code Postal" pattern="\d{5}" title="Le code postal doit comporter 5 chiffres" required>
+                    <input type="text" class="form-control" id="billing-city" placeholder="Ville" required>
+                </div>
+                <div class="form-group">
+                    <label for="card-number">Numéro de Carte</label>
+                    <input type="text" class="form-control" id="card-number" placeholder="Numéro de Carte" required>
+                </div>
+                <div class="form-group">
+                    <label for="card-expiry">Date d'Expiration</label>
+                    <input type="text" class="form-control" id="card-expiry" placeholder="MM/AA" required>
+                </div>
+                <div class="form-group">
+                    <label for="card-cvc">Code de Sécurité</label>
+                    <input type="text" class="form-control" id="card-cvc" placeholder="CVC" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Payer</button>
+                <button type="button" class="btn btn-secondary" id="prev-step-3">Retour</button>
+            </form>
+        </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const cartContainer = document.getElementById('cart-container');
-            const totalPriceContainer = document.getElementById('total-price');
-            const postalCodeInput = document.getElementById('postal-code');
-            const calculateShippingButton = document.getElementById('calculate-shipping-btn');
-            const purchaseButton = document.getElementById('purchase-btn');
-            const shippingDetails = document.getElementById('shipping-details');
-            const shippingInfo = document.getElementById('shipping-info');
-
-            // Fonction pour récupérer le panier depuis le localStorage
-            function getCart() {
-                return JSON.parse(localStorage.getItem('cart')) || [];
-            }
-
-            // Fonction pour enregistrer le panier dans le localStorage
-            function saveCart(cart) {
-                localStorage.setItem('cart', JSON.stringify(cart));
-            }
-
-            // Fonction pour afficher le panier
-            function displayCart() {
-                const cart = getCart();
-                cartContainer.innerHTML = '';
-                if (cart.length === 0) {
-                    cartContainer.innerHTML = '<p>Votre panier est vide.</p>';
-                    return;
-                }
-
-                const combinedCart = combineCartItems(cart);
-
-                combinedCart.forEach((item, index) => {
-                    const card = document.createElement('div');
-                    card.className = 'cart-item';
-
-                    const itemInfo = document.createElement('div');
-                    itemInfo.className = 'item-info';
-
-                    // Ajout de l'image du produit
-                    const productImage = document.createElement('img');
-                    productImage.src = '/pictures/' + item.image; // Construire le chemin complet de l'image
-                    productImage.alt = item.nomProduit;
-                    itemInfo.appendChild(productImage);
-
-                    const itemDetails = document.createElement('div');
-                    itemDetails.className = 'item-details';
-
-                    // Nom du produit
-                    const productName = document.createElement('div');
-                    productName.className = 'product-name';
-                    productName.textContent = item.nomProduit;
-                    itemDetails.appendChild(productName);
-
-                    // Détails supplémentaires (épaisseur, hauteur, etc.)
-                    const productDetails = document.createElement('div');
-                    productDetails.className = 'product-description';
-                    productDetails.textContent = `Épaisseur: ${item.variante.epaisseurProduit}, Hauteur: ${item.variante.hauteurProduit}, Largeur: ${item.variante.largeurProduit}, Masse: ${item.variante.masseProduit} Kg/m`;
-                    itemDetails.appendChild(productDetails);
-
-                    // Prix unitaire
-                    const productPrice = document.createElement('div');
-                    productPrice.className = 'product-price';
-                    productPrice.textContent = `Prix unitaire: ${item.variante.prixML.toFixed(2)} €/m`;
-                    itemDetails.appendChild(productPrice);
-
-                    // Champs pour la quantité et la longueur
-                    const quantityInput = document.createElement('input');
-                    quantityInput.type = 'number';
-                    quantityInput.value = item.quantite;
-                    quantityInput.min = 1;
-                    quantityInput.addEventListener('change', () => updateItem(index, 'quantite', parseInt(quantityInput.value)));
-
-                    const lengthInput = document.createElement('input');
-                    lengthInput.type = 'number';
-                    lengthInput.value = item.longueur;
-                    lengthInput.min = 1;
-                    lengthInput.addEventListener('change', () => updateItem(index, 'longueur', parseInt(lengthInput.value)));
-
-                    itemDetails.appendChild(document.createElement('br'));
-                    itemDetails.appendChild(document.createTextNode('Quantité: '));
-                    itemDetails.appendChild(quantityInput);
-                    itemDetails.appendChild(document.createTextNode(' Longueur: '));
-                    itemDetails.appendChild(lengthInput);
-
-                    itemInfo.appendChild(itemDetails);
-                    card.appendChild(itemInfo);
-
-                    // Actions (Supprimer uniquement)
-                    const itemActions = document.createElement('div');
-                    itemActions.className = 'item-actions';
-
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'Supprimer';
-                    deleteButton.style.color = '#d9534f'; // Couleur rouge
-                    deleteButton.addEventListener('click', () => deleteItem(index));
-                    itemActions.appendChild(deleteButton);
-
-                    card.appendChild(itemActions);
-
-                    cartContainer.appendChild(card);
-                });
-
-                updateTotalPrice();
-            }
-
-            // Fonction pour combiner les éléments du panier
-            function combineCartItems(cart) {
-                const combined = {};
-
-                cart.forEach(item => {
-                    const key = `${item.nomProduit}_${item.longueur}_${item.quantite}`;
-                    if (!combined[key]) {
-                        combined[key] = { ...item };
-                    } else {
-                        combined[key].quantite += item.quantite;
-                    }
-                });
-
-                return Object.values(combined);
-            }
-
-            // Fonction pour mettre à jour un article dans le panier
-            function updateItem(index, key, value) {
-                const cart = getCart();
-                cart[index][key] = value;
-                saveCart(cart);
-                displayCart();
-            }
-
-            // Fonction pour supprimer un article du panier
-            function deleteItem(index) {
-                const cart = getCart();
-                cart.splice(index, 1);
-                saveCart(cart);
-                displayCart();
-            }
-
-            // Fonction pour mettre à jour le prix total
-            function updateTotalPrice() {
-                const cart = getCart();
-                const totalPrice = cart.reduce((total, item) => {
-                    return total + (item.variante.prixML * item.longueur * item.quantite);
-                }, 0);
-                totalPriceContainer.textContent = `${totalPrice.toFixed(2)} €`;
-            }
-
-            // Fonction pour calculer le poids total du panier
-            function calculateTotalWeight() {
-                const cart = getCart();
-                return cart.reduce((total, item) => {
-                    return total + (item.variante.masseProduit * item.longueur * item.quantite);
-                }, 0);
-            }
-
-            // Fonction pour calculer les frais de livraison
-            function calculateShipping(postalCode) {
-                const totalWeight = calculateTotalWeight();
-                const url = `/distance/${postalCode}/${totalWeight.toFixed(2).replace('.', ',')}`;
-
-                fetch(url)
-                    .then(response => response.text())
-                    .then(data => {
-                        shippingInfo.innerHTML = data;
-                        shippingDetails.classList.remove('hidden');
-                    })
-                    .catch(error => {
-                        console.error('Erreur lors du calcul des frais de transport:', error);
-                        shippingInfo.textContent = 'Erreur lors du calcul des frais de transport.';
-                        shippingDetails.classList.remove('hidden');
-                    });
-            }
-
-            // Événement pour calculer les frais de livraison
-            calculateShippingButton.addEventListener('click', () => {
-                const postalCode = postalCodeInput.value;
-                if (postalCode) {
-                    calculateShipping(postalCode);
-                } else {
-                    alert('Veuillez entrer un code postal valide.');
-                }
-            });
-
-            // Événement pour rediriger vers la page de connexion lors de l'achat
-            purchaseButton.addEventListener('click', () => {
-                const isLoggedIn = false; // Remplacez par la vérification réelle de l'état de connexion
-                if (isLoggedIn) {
-                    alert('Merci pour votre achat !');
-                    localStorage.removeItem('cart'); // Vider le panier après l'achat
-                    displayCart();
-                } else {
-                    window.location.href = '/connexion'; // Rediriger vers la page de connexion
-                }
-            });
-
-            // Afficher le panier au chargement de la page
-            displayCart();
+    document.addEventListener('DOMContentLoaded', function() {
+    function calculateTotalWeight() {
+        let totalWeight = 0;
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.forEach(item => {
+            totalWeight += item.quantite * item.variante.masseProduit;
         });
+        return totalWeight.toFixed(2);
+    }
+
+    function convertToComma(number) {
+        return number.toString().replace('.', ',');
+    }
+
+    function displayCart() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartContainer = document.getElementById('cart-container');
+        cartContainer.innerHTML = '';
+        let totalTtc = 0;
+        cart.forEach(item => {
+            const longueurM = item.longueur / 100; // Convertir cm en mètres
+            const itemTtc = longueurM * item.quantite * item.variante.prixML;
+            totalTtc += itemTtc;
+            const card = document.createElement('div');
+            card.classList.add('card', 'animate-on-scroll');
+            card.innerHTML = `
+                <div class="card-img-container">
+                    <img src="/pictures/${item.image}" class="card-img-top" alt="${item.nomProduit}">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">${item.nomProduit}</h5>
+                    <p class="card-text">
+                        Longueur: ${longueurM.toFixed(2)} m<br>
+                        Quantité: ${item.quantite}<br>
+                        Prix Unitaire: ${item.variante.prixML.toFixed(2).replace('.', ',')} €/m<br>
+                        Prix TTC: ${itemTtc.toFixed(2).replace('.', ',')} €
+                    </p>
+                </div>
+            `;
+            cartContainer.appendChild(card);
+        });
+
+        fetch('/panier/calculer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ panier: cart })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.total_ttc !== undefined) {
+                document.getElementById('total-price-ttc').textContent = data.total_ttc.toFixed(2).replace('.', ',');
+            } else {
+                console.error('total_ttc manquant dans la réponse');
+            }
+            if (data.total_ht !== undefined) {
+                document.getElementById('total-price-ht').textContent = data.total_ht.toFixed(2).replace('.', ',');
+            } else {
+                document.getElementById('total-price-ht').textContent = 'Non Applicable';
+            }
+            calculateDeliveryCost(); // Calculer le coût de livraison après affichage du panier
+        })
+        .catch(error => console.error('Erreur lors du calcul du panier:', error));
+    }
+
+    function calculateDeliveryCost() {
+        const postcode = document.getElementById('shipping-postcode').value;
+        const masseKg = calculateTotalWeight();
+
+        if (postcode.length !== 5 || isNaN(postcode)) {
+            document.getElementById('delivery-cost').textContent = 'Code postal invalide';
+            document.getElementById('delivery-cost-step-2').textContent = 'Code postal invalide';
+            document.getElementById('total-price').textContent = document.getElementById('total-price-ttc').textContent;
+            return;
+        }
+
+        fetch(`/distance/${postcode}/${convertToComma(masseKg)}`)
+        .then(response => response.text())
+        .then(data => {
+            console.log('Réponse API livraison:', data);
+            const match = data.match(/Coût de livraison : ([\d,\.]+) €/);
+            if (match) {
+                const deliveryCost = match[1];
+                document.getElementById('delivery-cost').textContent = deliveryCost;
+                document.getElementById('delivery-cost-step-2').textContent = deliveryCost;
+                const totalTtc = parseFloat(document.getElementById('total-price-ttc').textContent.replace(',', '.'));
+                const totalWithDelivery = (totalTtc + parseFloat(deliveryCost.replace(',', '.'))).toFixed(2).replace('.', ',');
+                document.getElementById('total-price').textContent = totalWithDelivery;
+            } else {
+                console.error('Le coût de livraison n\'a pas été trouvé dans la réponse');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors du calcul du coût de livraison:', error);
+            document.getElementById('delivery-cost').textContent = '0,00';
+            document.getElementById('total-price').textContent = document.getElementById('total-price-ttc').textContent;
+        });
+    }
+
+    function clearCart() {
+        localStorage.removeItem('cart');
+        document.getElementById('cart-container').innerHTML = '';
+        document.getElementById('total-price-ttc').textContent = '0,00';
+        document.getElementById('total-price-ht').textContent = '0,00';
+        document.getElementById('delivery-cost').textContent = '0,00';
+        document.getElementById('total-price').textContent = '0,00';
+    }
+
+    function fillOrderSummary() {
+        const orderSummary = document.getElementById('order-summary');
+        orderSummary.innerHTML = '';
+        orderSummary.innerHTML += `<h5>Total TTC: ${document.getElementById('total-price-ttc').textContent} €</h5>`;
+        if (document.getElementById('total-price-ht').textContent !== 'Non Applicable') {
+            orderSummary.innerHTML += `<h5>Total HT: ${document.getElementById('total-price-ht').textContent} €</h5>`;
+        }
+        orderSummary.innerHTML += `<h5>Coût de Livraison: ${document.getElementById('delivery-cost-step-2').textContent} €</h5>`;
+        orderSummary.innerHTML += `<h5>Prix Total: ${document.getElementById('total-price').textContent} €</h5>`;
+    }
+
+    function updateStock(cart) {
+        // Préparer les données à envoyer
+        const updatedCart = cart.map(item => ({
+            produit_id: item.variante.id,
+            longueur: item.longueur,
+            quantite: item.quantite
+        }));
+
+        fetch('/api/mise-a-jour-stock', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ cart: updatedCart }) // Envoyer les données au format attendu
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('Stock mis à jour avec succès.');
+                clearCart(); // Vider le panier après mise à jour du stock
+                // Optionnel: rediriger l'utilisateur ou afficher un message de confirmation
+            } else {
+                alert('Une erreur est survenue lors de la mise à jour du stock: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la mise à jour du stock:', error);
+            alert('Une erreur est survenue lors de la mise à jour du stock.');
+        });
+    }
+
+    document.getElementById('clear-cart').addEventListener('click', function() {
+        if (confirm('Êtes-vous sûr de vouloir vider le panier ?')) {
+            clearCart();
+        }
+    });
+
+    document.getElementById('next-step').addEventListener('click', function() {
+        if (document.getElementById('cart-container').children.length === 0) {
+            alert('Le panier est vide. Veuillez ajouter des articles avant de continuer.');
+            return;
+        }
+        document.getElementById('step-1').style.display = 'none';
+        document.getElementById('step-2').style.display = 'block';
+        fillOrderSummary();
+    });
+
+    document.getElementById('prev-step-2').addEventListener('click', function() {
+        document.getElementById('step-2').style.display = 'none';
+        document.getElementById('step-1').style.display = 'block';
+    });
+
+    document.getElementById('next-step-2').addEventListener('click', function() {
+        if (document.getElementById('shipping-street').value === '' || document.getElementById('shipping-postcode').value === '' || document.getElementById('shipping-city').value === '') {
+            alert('Veuillez remplir tous les champs obligatoires.');
+            return;
+        }
+        document.getElementById('step-2').style.display = 'none';
+        document.getElementById('step-3').style.display = 'block';
+    });
+
+    document.getElementById('prev-step-3').addEventListener('click', function() {
+        document.getElementById('step-3').style.display = 'none';
+        document.getElementById('step-2').style.display = 'block';
+    });
+
+    document.getElementById('shipping-postcode').addEventListener('input', calculateDeliveryCost);
+
+    document.getElementById('payment-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const billingAddress = document.getElementById('billing-street').value;
+        const shippingAddress = document.getElementById('shipping-street').value;
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        if (!billingAddress || !shippingAddress || cart.length === 0) {
+            alert('Veuillez compléter toutes les informations avant de procéder.');
+            return;
+        }
+
+        updateStock(cart);
+    });
+
+    // Afficher le panier initialement
+    displayCart();
+});
+
     </script>
+
+   
 </body>
 </html>

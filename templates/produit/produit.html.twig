@@ -6,36 +6,50 @@
     <link rel="stylesheet" href="{{ asset('css/style-produit.css') }}">
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>Page d'Accueil</title>
+    <style>
+        .discount-section {
+            background-color: #f8d7da; /* Rouge clair */
+            color: #721c24; /* Rouge foncé pour le texte */
+            padding: 20px;
+            border: 1px solid #f5c6cb;
+            margin-top: 20px;
+        }
+        .discount-section h3 {
+            margin-top: 0;
+        }
+    </style>
 </head>
 <body>
 
 {% include 'menu.html.twig' %}
-    <main class="container-block">
-        <div class="block-text">
-            <h2>Nos Produits</h2>
-            <p>Sur cette page, vous trouverez une sélection variée de produits métalliques de haute qualité pour
-                répondre à vos besoins en matière de construction et de rénovation. Chaque produit est accompagné d'une
-                description détaillée pour vous aider à choisir celui qui convient le mieux à votre projet. Vous avez la
-                possibilité d'ajouter les produits sélectionnés à votre panier en un seul clic, facilitant ainsi le
-                processus d'achat. De plus, notre fonction de configuration vous permet de personnaliser certains
-                produits selon vos spécifications avant de passer votre commande. Explorez notre gamme de produits et
-                profitez d'une expérience de magasinage pratique et personnalisée.</p>
-        </div>
-        <section id="commande2" class="products-container">
-            <!-- Les produits dynamiques seront insérés ici -->
-        </section>
-    </main>
+
+<main class="container-block">
+    <div class="block-text">
+        <h2>Nos Produits</h2>
+        
+    </div>
     
-</body>
+    {% if is_granted('ROLE_PROFESSIONNEL') %}
+        <section class="discount-section">
+            <h3>Remise Spéciale</h3>
+            <p>En tant que professionnel, vous bénéficiez d'une remise de 10% sur tous les produits. Profitez-en dès maintenant !</p>
+        </section>
+    {% endif %}
+
+    <section id="commande2" class="products-container">
+        <!-- Les produits dynamiques seront insérés ici -->
+    </section>
+</main>
+
 {% include 'footer.html.twig' %}
 <script src="{{ asset('js/menu.js') }}"></script>
 <script src="{{ asset('js/index.js') }}"></script>
 <script src="{{ asset('js/produits.js') }}"></script>
 
+</body>
 </html>

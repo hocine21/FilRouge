@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\EmployeRepository;
@@ -93,13 +92,12 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->AdresseEmail;
     }
 
-    // Implementing UserInterface method
     public function getRoles(): array
     {
-        return [$this->Roles];
+        // Retourne les rôles sous forme de tableau
+        return explode(',', $this->Roles);
     }
 
-    // Implementing UserInterface method
     public function eraseCredentials(): void
     {
         $this->MotDePasse = null;

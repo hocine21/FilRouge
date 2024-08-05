@@ -30,8 +30,8 @@ security:
             stateless: true
             json_login:
                 check_path: /api/connexion
-                username_path: AdresseEmail
-                password_path: MotDePasse
+                username_path: email
+                password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
                 provider: chain_provider
@@ -39,12 +39,28 @@ security:
         api:
             pattern: ^/api
             stateless: true
-            jwt:
-                provider: chain_provider  # Spécifie le fournisseur pour le firewall JWT
+            provider: chain_provider
+            jwt: ~
+
+        main:
+            pattern: ^/
+            stateless: false
+            provider: chain_provider
+            form_login:
+                login_path: app_connexion_web
+                check_path: app_connexion
+                default_target_path: app_connexion_web
+            logout:
+                path: /logout
+                target: /connexion
 
     access_control:
         - { path: ^/api/connexion, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/entrepots, roles: ROLE_APPROVISIONNEMENT  }
+        - { path: ^/api/entrepots, roles: ROLE_SUPER_ADMIN }
         - { path: ^/super-admin, roles: ROLE_SUPER_ADMIN }
         - { path: ^/appro, roles: ROLE_APPROVISIONNEMENT }
-        - { path: ^/api/inscription/employe, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/appro, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/super-admin, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/commercial, roles: ROLE_COMMERCIAL }
+        - { path: ^/commercial, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
