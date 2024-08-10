@@ -325,5 +325,8 @@ commercial:
     controller: App\Controller\IndexController::commercial
     requirements:
         role: ROLE_COMMERCIAL
+app_panier_liste_envie:
+    path: /panier/liste-envie
+    controller: App\Controller\IndexController::listeEnvie
 
 

@@ -35,7 +35,7 @@ class InscriptionEmployeController extends AbstractController
         }
 
         // Vérifier si l'e-mail existe déjà dans la base de données
-        $existingEmploye = $entityManager->getRepository(Employe::class)->findOneBy(['adresseEmail' => $data['AdresseEmail']]);
+        $existingEmploye = $entityManager->getRepository(Employe::class)->findOneBy(['AdresseEmail' => $data['AdresseEmail']]);
         if ($existingEmploye !== null) {
             return new JsonResponse(['error' => 'Cette adresse e-mail est déjà utilisée.'], JsonResponse::HTTP_BAD_REQUEST);
         }
@@ -55,7 +55,14 @@ class InscriptionEmployeController extends AbstractController
         $employe->setNom($data['Nom']);
         $employe->setPrenom($data['Prenom']);
         $employe->setAdresseEmail($data['AdresseEmail']);
-        $employe->setRoles([$data['Roles']]); // Utiliser un tableau pour les rôles
+
+        // Assigner les rôles
+        if (is_string($data['Roles'])) {
+            $roles = explode(',', $data['Roles']);
+        } else {
+            $roles = $data['Roles'];  // Si c'est déjà un tableau
+        }
+        $employe->setRoles($roles);
 
         // Valider l'entité Employe
         $errors = $validator->validate($employe);

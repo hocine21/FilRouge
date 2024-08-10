@@ -64,3 +64,4 @@ security:
         - { path: ^/commercial, roles: ROLE_COMMERCIAL }
         - { path: ^/commercial, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/inscription/employe, roles: ROLE_SUPER_ADMIN }

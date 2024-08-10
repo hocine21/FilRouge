@@ -76,6 +76,14 @@ class IndexController extends AbstractController
         ]);
     }
 
+    #[Route('/panier/liste-envie', name: 'app_panier_liste_envie')]
+    public function listeEnvie(): Response
+    {
+        return $this->render('panier/liste_envie.html.twig', [
+            'controller_name' => 'IndexController',
+        ]);
+    }
+
     #[Route('/commercial', name: 'app_commercial')]
     #[IsGranted('ROLE_COMMERCIAL')]
     public function commercial(): Response

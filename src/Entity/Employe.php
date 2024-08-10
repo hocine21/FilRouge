@@ -42,7 +42,6 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNom(string $Nom): static
     {
         $this->Nom = $Nom;
-
         return $this;
     }
 
@@ -54,7 +53,6 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPrenom(string $Prenom): static
     {
         $this->Prenom = $Prenom;
-
         return $this;
     }
 
@@ -66,7 +64,6 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAdresseEmail(string $AdresseEmail): static
     {
         $this->AdresseEmail = $AdresseEmail;
-
         return $this;
     }
 
@@ -78,7 +75,6 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMotDePasse(string $MotDePasse): static
     {
         $this->MotDePasse = $MotDePasse;
-
         return $this;
     }
 
@@ -94,8 +90,13 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        // Retourne les rôles sous forme de tableau
-        return explode(',', $this->Roles);
+        return $this->Roles ? explode(',', $this->Roles) : [];
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->Roles = implode(',', $roles);
+        return $this;
     }
 
     public function eraseCredentials(): void
