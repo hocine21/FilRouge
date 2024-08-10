@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch('http://localhost:8080/api/connexion', {
+        fetch('http://localhost:8000/api/connexion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
 
             // Envoyer les données à l'API avec fetch
-            fetch('http://localhost:8080/api/inscription', {
+            fetch('http://localhost:8000/api/inscription', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
