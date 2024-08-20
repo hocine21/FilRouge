@@ -13,56 +13,55 @@ body {
     margin: 0; /* Pour supprimer les marges par défaut du corps */
     overflow-y: auto; /* Activer le défilement vertical lorsque nécessaire */
 }
-/* Ajoutez ces styles CSS pour la barre de navigation */
+
 header {
-    background-color: white; /* Couleur de fond */
-    color: orange; /* Couleur du texte */
-    padding: 20px 0; /* Espacement intérieur */
+    background: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
 }
 
 .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    padding: 0 20px; /* Ajoutez un padding sur les côtés */
-
 }
 
-.container h1 {
-    font-size: 24px; /* Taille de la police */
+h1 {
+    font-size: 24px;
     color: rgb(38, 109, 223);
 }
 
-
-.search-bar input {
-    padding: 10px;
-    border-radius: 10px;
-    border: 2px solid white;
+.search-bar {
+    margin: 10px 0;
+    text-align: center;
 }
 
-/* Styles pour le bouton de recherche */
+.search-bar input[type="text"] {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
 .search-bar button {
-    background-color: #007bff;
-    color: #fff;
+    padding: 8px 12px;
     border: none;
-    padding: 8px 16px;
+    background: #007bff;
+    color: #fff;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-left: 10px;
 }
 
 .search-bar button:hover {
-    background-color: #0056b3;
-}
-
-
-a {
-    text-decoration: none;
+    opacity: 0.8;
 }
 
 .container-block {
-    background-image: linear-gradient(to right, #007bff, #0056b3); /* Dégradé bleu pour les boutons */
+    background-image: linear-gradient(to right, #007bff, #0056b3); /* Dégradé bleu */
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     min-height: 1800px;
@@ -88,14 +87,6 @@ a {
     gap: 20px;
 }
 
-/* Ajoutez ces styles pour moderniser et rendre le formulaire de connexion plus responsive */
-
-
-
-
-
-
-
 footer {
     position: fixed; /* Rendre le footer fixe */
     bottom: 0; /* Fixer le footer au bas de la fenêtre */
@@ -106,11 +97,61 @@ footer {
     padding: 20px 0;
 }
 
-
-.fct-commercial{
+.fct-commercial {
     display: flex;
     width: 90%;
     gap: 20px;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espace entre les cartes */
+    justify-content: center; /* Centrer les cartes horizontalement */
+}
+
+/* Style des cartes */
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px); /* Élever la carte au survol */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Ombre plus marquée */
+}
+
+.card-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.card-content {
+    font-size: 14px;
+    color: #333;
+}
+
+.card-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #007bff, #0056b3); /* Dégradé bleu */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.card-button:hover {
+    background: linear-gradient(135deg, #0056b3, #004494); /* Dégradé plus foncé au survol */
 }
 
 .container-jauge {
@@ -126,7 +167,6 @@ footer {
     height: 220px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre douce */
     border: 5px solid rgb(234, 223, 223);
-
 }
 
 .container-jauge-historique {
@@ -211,7 +251,6 @@ footer {
     color: white;
     font-weight: bold;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre douce */
-
 }
 
 .color-bar-ristourne {
@@ -233,20 +272,41 @@ footer {
     margin-top: 10px;
 }
 
-.btn-yes-no{
+.btn-yes-no {
     display: flex;
     gap: 10px;
     padding: 2px;
 }
 
-.btn-yes-no button{
+.btn-yes-no button {
     padding: 10px;
-    border: 1px solid white;
+    border: none;
     border-radius: 5px;
     font-size: 12px;
     font-weight: bold;
-    color: white;
+    color: #fff;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-yes-no .btn-yes {
+    background: linear-gradient(135deg, #007bff, #0056b3); /* Dégradé bleu pour le bouton "O" */
+}
+
+.btn-yes-no .btn-no {
+    background: linear-gradient(135deg, #007bff, #0056b3); /* Dégradé bleu pour le bouton "N" */
+}
+
+.btn-yes-no button:hover {
+    transform: translateY(-2px);
+}
+
+.btn-yes-no .btn-yes:hover {
+    background: linear-gradient(135deg, #0056b3, #003d7a); /* Dégradé plus foncé au survol pour le bouton "O" */
+}
+
+.btn-yes-no .btn-no:hover {
+    background: linear-gradient(135deg, #0056b3, #003d7a); /* Dégradé plus foncé au survol pour le bouton "N" */
 }
 
 .ristourne-block {
@@ -254,75 +314,70 @@ footer {
     width: 50%;
     padding: 20px;
     border-radius: 15px;
+    background: linear-gradient(135deg, #007bff, #0056b3); /* Dégradé bleu pour le bloc */
+    color: #fff;
     visibility: hidden;
 }
 
-/* CSS */
 .visible {
     visibility: visible;
 }
 
 table {
-    border-radius: 10px;
-    background-color: white;
-    color: red;
-    padding: 10px;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre plus marquée */
 }
 
-.tab-title{
-    background-color: red;
-    color: white;
+thead {
+    background-color: #007bff; /* Couleur d'arrière-plan pour les en-têtes */
+    color: #fff;
 }
 
-tr{
-    border-radius: 10px;
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
+th {
+    font-weight: bold;
+    background-color: #0056b3; /* Couleur légèrement différente pour les en-têtes */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Couleur de fond pour les lignes paires */
+}
+
+tr:hover {
+    background-color: #e1e1e1; /* Couleur de fond au survol */
+}
 
 td {
-    text-align: center;
-    vertical-align: middle;
+    border-right: 1px solid #ddd; /* Séparation entre les colonnes */
 }
 
-.btn-ristourne button{
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 10px;
-    border: 2px solid white;
-    color: white;
+td:last-child {
+    border-right: none; /* Pas de bordure à droite pour la dernière colonne */
 }
 
-.validate {
-    background-color: green;
+/* Styles supplémentaires pour le tableau */
+table th, table td {
+    border: 1px solid #ddd; /* Bordure douce pour les cellules */
 }
 
-.quit{
-    background-color: red;
+table thead th {
+    border-bottom: 2px solid #0056b3; /* Bordure plus épaisse pour l'en-tête */
 }
 
-.apply-ristourne {
-    background-color: orange;
+table tbody tr:nth-child(odd) {
+    background-color: #f8f9fa; /* Couleur de fond légèrement différente pour les lignes impaires */
 }
 
-.custom-checkbox {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-color: #eee;
-    border-radius: 3px;
-    vertical-align: middle;
-  }
-  
-  /* Style pour le coche à l'intérieur de la case à cocher */
-  .custom-checkbox:checked:after {
-    content: '\2714'; /* caractère Unicode pour une coche */
-    font-size: 14px;
-    color: #fff;
-    position: absolute;
-    top: 2px;
-    left: 4px;
-  }
-
-  button {
-    cursor: pointer;
-  }
+table tbody tr:hover {
+    background-color: #e9ecef; /* Couleur de fond légèrement différente au survol */
+}

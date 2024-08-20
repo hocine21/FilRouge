@@ -37,15 +37,9 @@ class PanierCalculController extends AbstractController
             $longueurMetres = $longueurCentimetres / 100; // Convertir en mètres
             $quantite = $item['quantite'];
             $masseProduit = $item['variante']['masseProduit']; // Masse produit de la variante
-            $estChute = $item['estChute'] ?? false; // Vérifier si c'est une chute (ajouter cette propriété dans votre panier)
 
             // Calculer le prix TTC
             $prixTTC = ($masseProduit * 0.3) * ($longueurMetres * $prixUnitaire) * $quantite;
-
-            // Si c'est une chute, appliquer une réduction spécifique
-            if ($estChute) {
-                $prixTTC *= 0.5; // Appliquer une réduction de 50% pour les chutes (ajuster selon besoin)
-            }
 
             // Calculer le prix HT
             $prixHT = $prixTTC / 1.20; // Supposons une TVA de 20%
@@ -73,7 +67,7 @@ class PanierCalculController extends AbstractController
                     'longueur_cm' => $longueurCentimetres,
                     'longueur_m' => $longueurMetres,
                     'quantite' => $quantite,
-                    'est_chute' => $estChute
+                    'est_chute' => $item['estChute'] ?? false // Inclure l'information de chute si disponible
                 ]
             ];
 

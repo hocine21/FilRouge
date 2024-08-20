@@ -18,7 +18,6 @@ class InscriptionEmployeController extends AbstractController
     #[Route('/api/inscription/employe', name: 'api_inscription_employe', methods: ['POST'])]
     public function inscription(Request $request, ValidatorInterface $validator, EntityManagerInterface $entityManager, MailerInterface $mailer): JsonResponse
     {
-        // Récupérer les données de la requête JSON
         $data = json_decode($request->getContent(), true);
 
         // Vérifier si toutes les données nécessaires sont présentes
@@ -56,13 +55,12 @@ class InscriptionEmployeController extends AbstractController
         $employe->setPrenom($data['Prenom']);
         $employe->setAdresseEmail($data['AdresseEmail']);
 
-        // Assigner les rôles
-        if (is_string($data['Roles'])) {
-            $roles = explode(',', $data['Roles']);
+        // Assigner les rôles en tant que chaîne de caractères séparée par des virgules
+        if (is_array($data['Roles'])) {
+            $employe->setRoles($data['Roles']);
         } else {
-            $roles = $data['Roles'];  // Si c'est déjà un tableau
+            $employe->setRoles([$data['Roles']]);
         }
-        $employe->setRoles($roles);
 
         // Valider l'entité Employe
         $errors = $validator->validate($employe);

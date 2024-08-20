@@ -50,6 +50,10 @@ security:
                 login_path: app_connexion_web
                 check_path: app_connexion
                 default_target_path: app_connexion_web
+                enable_csrf: true                 # Enable CSRF protection
+                csrf_token_id: authenticate       # Specify the CSRF token ID
+                csrf_parameter: _csrf_token       # Optional: Customize the CSRF parameter name
+                
             logout:
                 path: /logout
                 target: /connexion

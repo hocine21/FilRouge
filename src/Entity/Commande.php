@@ -17,33 +17,33 @@ class Commande
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $DateCommande = null;
+    private ?\DateTimeInterface $dateCommande = null;
 
-    #[ORM\Column(type: Types::BLOB)]
-    private $CodeQrCommande;
-
-    #[ORM\Column(length: 255)]
-    private ?string $Etat = null;
-
-    #[ORM\Column]
-    private ?bool $DemandeDevis = null;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $codeQrCommande = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $EtatDevis = null;
+    private ?string $etat = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $Ristourne = null;
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private ?bool $demandeDevis = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $etatDevis = null;
+
+    #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    private ?float $ristourne = null;
 
     #[ORM\ManyToOne(inversedBy: 'commandes')]
-    private ?Client $Client = null;
+    private ?Client $client = null;
 
-    #[ORM\OneToMany(targetEntity: Detail::class, mappedBy: 'Commande')]
+    #[ORM\OneToMany(targetEntity: Detail::class, mappedBy: 'commande')]
     private Collection $details;
 
-    #[ORM\OneToMany(targetEntity: Facture::class, mappedBy: 'Commande')]
+    #[ORM\OneToMany(targetEntity: Facture::class, mappedBy: 'commande')]
     private Collection $factures;
 
-    #[ORM\OneToMany(targetEntity: CommandeLivraison::class, mappedBy: 'Commande')]
+    #[ORM\OneToMany(targetEntity: CommandeLivraison::class, mappedBy: 'commande')]
     private Collection $commandeLivraisons;
 
     public function __construct()
@@ -60,84 +60,84 @@ class Commande
 
     public function getDateCommande(): ?\DateTimeInterface
     {
-        return $this->DateCommande;
+        return $this->dateCommande;
     }
 
-    public function setDateCommande(\DateTimeInterface $DateCommande): static
+    public function setDateCommande(\DateTimeInterface $dateCommande): self
     {
-        $this->DateCommande = $DateCommande;
+        $this->dateCommande = $dateCommande;
 
         return $this;
     }
 
-    public function getCodeQrCommande()
+    public function getCodeQrCommande(): ?string
     {
-        return $this->CodeQrCommande;
+        return $this->codeQrCommande;
     }
 
-    public function setCodeQrCommande($CodeQrCommande): static
+    public function setCodeQrCommande(?string $codeQrCommande): self
     {
-        $this->CodeQrCommande = $CodeQrCommande;
+        $this->codeQrCommande = $codeQrCommande;
 
         return $this;
     }
 
     public function getEtat(): ?string
     {
-        return $this->Etat;
+        return $this->etat;
     }
 
-    public function setEtat(string $Etat): static
+    public function setEtat(string $etat): self
     {
-        $this->Etat = $Etat;
+        $this->etat = $etat;
 
         return $this;
     }
 
     public function isDemandeDevis(): ?bool
     {
-        return $this->DemandeDevis;
+        return $this->demandeDevis;
     }
 
-    public function setDemandeDevis(bool $DemandeDevis): static
+    public function setDemandeDevis(bool $demandeDevis): self
     {
-        $this->DemandeDevis = $DemandeDevis;
+        $this->demandeDevis = $demandeDevis;
 
         return $this;
     }
 
     public function getEtatDevis(): ?string
     {
-        return $this->EtatDevis;
+        return $this->etatDevis;
     }
 
-    public function setEtatDevis(string $EtatDevis): static
+    public function setEtatDevis(?string $etatDevis): self
     {
-        $this->EtatDevis = $EtatDevis;
+        $this->etatDevis = $etatDevis;
 
         return $this;
     }
 
     public function getRistourne(): ?float
     {
-        return $this->Ristourne;
+        return $this->ristourne;
     }
 
-    public function setRistourne(?float $Ristourne): static
+    public function setRistourne(?float $ristourne): self
     {
-        $this->Ristourne = $Ristourne;
+        $this->ristourne = $ristourne;
 
         return $this;
     }
 
     public function getClient(): ?Client
     {
-        return $this->Client;
+        return $this->client;
     }
 
-    public function setClient(?Client $Client): static
+    public function setClient(?Client $client): self
     {
-        $this->Client = $Client;
+        $this->client = $client;
 
         return $this;
     }
@@ -150,7 +150,7 @@ class Commande
         return $this->details;
     }
 
-    public function addDetail(Detail $detail): static
+    public function addDetail(Detail $detail): self
     {
         if (!$this->details->contains($detail)) {
             $this->details->add($detail);
@@ -160,10 +160,9 @@ class Commande
         return $this;
     }
 
-    public function removeDetail(Detail $detail): static
+    public function removeDetail(Detail $detail): self
     {
         if ($this->details->removeElement($detail)) {
-            // set the owning side to null (unless already changed)
             if ($detail->getCommande() === $this) {
                 $detail->setCommande(null);
             }
@@ -180,7 +179,7 @@ class Commande
         return $this->factures;
     }
 
-    public function addFacture(Facture $facture): static
+    public function addFacture(Facture $facture): self
     {
         if (!$this->factures->contains($facture)) {
             $this->factures->add($facture);
@@ -190,10 +189,9 @@ class Commande
         return $this;
     }
 
-    public function removeFacture(Facture $facture): static
+    public function removeFacture(Facture $facture): self
     {
         if ($this->factures->removeElement($facture)) {
-            // set the owning side to null (unless already changed)
             if ($facture->getCommande() === $this) {
                 $facture->setCommande(null);
             }
@@ -210,7 +208,7 @@ class Commande
         return $this->commandeLivraisons;
     }
 
-    public function addCommandeLivraison(CommandeLivraison $commandeLivraison): static
+    public function addCommandeLivraison(CommandeLivraison $commandeLivraison): self
     {
         if (!$this->commandeLivraisons->contains($commandeLivraison)) {
             $this->commandeLivraisons->add($commandeLivraison);
@@ -220,10 +218,9 @@ class Commande
         return $this;
     }
 
-    public function removeCommandeLivraison(CommandeLivraison $commandeLivraison): static
+    public function removeCommandeLivraison(CommandeLivraison $commandeLivraison): self
     {
         if ($this->commandeLivraisons->removeElement($commandeLivraison)) {
-            // set the owning side to null (unless already changed)
             if ($commandeLivraison->getCommande() === $this) {
                 $commandeLivraison->setCommande(null);
             }

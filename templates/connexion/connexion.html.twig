@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +7,11 @@
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Inclure Font Awesome via CDN -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap"
-          rel="stylesheet">
-    <title>Page d'Accueil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Connexion</title>
 </head>
-
 <body>
     {% include 'menu.html.twig' %}
 
@@ -24,75 +20,74 @@
             <h1>Bienvenue chez COUP'ACIER, vous pouvez vous connecter :</h1>
         </div>
         <div class="block co-cre">
-
             <div class="login-form">
-                <form id="loginForm" method="POST">
+                {{ form_start(form, {'attr': {'id': 'loginForm'}}) }}
                     <div class="form-group">
-                        <label for="email">Adresse Email:</label>
-                        <input type="email" id="email" name="email" required>
+                        {{ form_label(form.AdresseEmail, 'Adresse Email:', {'attr': {'for': 'email'}}) }}
+                        {{ form_widget(form.AdresseEmail, {'attr': {'id': 'email'}}) }}
                     </div>
                     <div class="form-group">
-                        <label for="password">Mot de Passe:</label>
-                        <input type="password" id="password" name="password" required>
+                        {{ form_label(form.MotDePasse, 'Mot de Passe:', {'attr': {'for': 'password'}}) }}
+                        {{ form_widget(form.MotDePasse, {'attr': {'id': 'password'}}) }}
                     </div>
-                    <button type="submit">Se connecter</button>
-                    <div id="error-message" style="color: red;"></div> <!-- Div pour afficher les messages d'erreur -->
-                </form>
+                    {{ form_widget(form._csrf_token, {'attr': {'id': 'csrf_token'}}) }}
+                    {{ form_widget(form.submit, {'attr': {'id': 'submit'}}) }}
+                {{ form_end(form) }}
+
+                <div id="error-message" style="color: red; display: none;"></div>
             </div>
 
             <div class="create-account">
                 <p>Vous n'avez pas encore de compte ? Créez votre compte :</p>
-                <a href="{{ path('app_choix') }}"><button class="button create">Créer un compte</button></a>
+                <a href="{{ path('app_choix') }}">
+                    <button class="button create">Créer un compte</button>
+                </a>
             </div>
         </div>
     </div>
 
     {% include 'footer.html.twig' %}
+
     <script src="{{ asset('js/menu.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('loginForm').addEventListener('submit', function(event) {
-                event.preventDefault(); // Empêche l'envoi du formulaire classique
+            const form = document.getElementById('loginForm');
+            const errorMessageDiv = document.getElementById('error-message');
 
-                var email = document.getElementById('email').value;
-                var password = document.getElementById('password').value;
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Empêche l'envoi du formulaire
 
-                // Créez l'objet JSON
-                var data = JSON.stringify({
-                    AdresseEmail: email,
-                    MotDePasse: password
-                });
+                const formData = new FormData(form);
 
-                // Envoie de la requête AJAX
-                fetch('{{ path('connexion') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: data
+                fetch(form.action, {
+                    method: form.method,
+                    body: formData
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.token) {
-                        // Stocker les informations dans le localStorage
-                        localStorage.setItem('authToken', data.token);
-                        localStorage.setItem('userId', data.id);
-                        localStorage.setItem('userRoles', JSON.stringify(data.roles));
+                    if (data.success) {
+                        // Stocker les données dans localStorage
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('id', data.id);
+                        localStorage.setItem('roles', JSON.stringify(data.roles));
 
-                        // Redirection ou autre action après connexion réussie
+                        // Redirection vers la page spécifiée
                         window.location.href = data.redirect;
                     } else {
-                        // Affichage des erreurs
-                        document.getElementById('error-message').textContent = data.error || 'Une erreur est survenue.';
+                        // Afficher un message d'erreur lorsque le token est incorrect
+                        if (data.error) {
+                            errorMessageDiv.textContent = data.error;
+                            errorMessageDiv.style.display = 'block';
+                        } else {
+                            console.error('Erreur inconnue', data);
+                        }
                     }
                 })
                 .catch(error => {
-                    console.error('Erreur:', error);
+                    console.error('Erreur lors de la connexion', error);
                 });
             });
         });
     </script>
-
 </body>
-
 </html>

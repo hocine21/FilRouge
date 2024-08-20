@@ -10,6 +10,359 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>Page d'Accueil</title>
+    <style>
+   
+   body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.container-block {
+    margin: 20px 0;
+    width: 100%;
+}
+
+.block-text {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-bar {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.search-bar input[type="text"] {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-bar button {
+    padding: 8px 12px;
+    border: none;
+    background: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    opacity: 0.8;
+}
+
+.card-container {
+    display: flex; /* Align cards side by side */
+    flex-wrap: wrap; /* Allow wrapping if necessary */
+    gap: 20px; /* Space between cards */
+    justify-content: center; /* Center cards horizontally */
+    margin: 20px 0; /* Margin around the card container */
+}
+
+.main-card {
+    flex: 1 1 calc(50% - 20px); /* Each card takes about 50% width minus the gap */
+    max-width: 500px; /* Maximum width of cards */
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.devis-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #007bff;
+}
+
+.card-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.color-bar {
+    width: 100%;
+    max-width: 300px;
+    padding: 15px;
+    margin-bottom: 10px;
+    color: #fff;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.color-bar:hover {
+    opacity: 0.8;
+}
+
+.circle-number {
+    width: 30px;
+    height: 30px;
+    background-color: inherit;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.details-container {
+    display: none;
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.details-container.visible {
+    display: block;
+}
+
+.details-container h3 {
+    margin-top: 0;
+}
+
+.scroll-container {
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.scroll-container div {
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #f1f1f1;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.scroll-container div:hover {
+    background-color: #e1e1e1;
+}
+
+.scroll-container div.selected {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-back {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: none;
+    background: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-back:hover {
+    opacity: 0.8;
+}
+
+.btn-oui,
+.btn-non {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.btn-oui {
+    background-color: green;
+}
+
+.btn-non {
+    background-color: red;
+}
+
+.btn-oui:hover,
+.btn-non:hover {
+    opacity: 0.8;
+}
+
+/* Styles du tableau */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+    background-color: #007bff;
+    color: #fff;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Style des entrées de ristourne */
+.input-ristourne {
+    width: 120px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    margin: 10px 0;
+    display: block;
+    margin: 20px auto;
+}
+
+/* Style du bouton d'accord de ristourne */
+.btn-accord-ristourne {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    border: none;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-accord-ristourne:hover {
+    background-color: #218838;
+}
+
+.table-container {
+    margin: 20px 0;
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.table-container thead {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.table-container th, .table-container td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-container th {
+    font-weight: bold;
+}
+
+.table-container tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table-container tr:hover {
+    background-color: #f1f1f1;
+}
+
+.ristourne-input {
+    width: 80px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.btn-accord-ristourne {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    border: none;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-accord-ristourne:hover {
+    background-color: #218838;
+}
+
+.btn-action {
+    margin: 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-oui {
+    background-color: green;
+    color: white;
+}
+
+.btn-non {
+    background-color: red;
+    color: white;
+}
+
+    </style>
 </head>
 
 <body>
@@ -19,7 +372,9 @@
                 <h1>COUP'ACIER</h1>
             </a>
             <div>
-                <a href="{{ path('app_super_admin') }}"><h1>ADMINISTRATEURS</h1></a>
+                <a href="{{ path('app_super_admin') }}">
+                    <h1>ADMINISTRATEURS</h1>
+                </a>
             </div>
         </div>
     </header>
@@ -32,203 +387,251 @@
             </div>
         </div>
 
-        <div class="fct-commercial">
-            <div class="container-jauge">
-                <div class="demande-devis">
-                    <h2>Demande de devis</h2>
-                    <div class="color-bar" style="background-color: #FF5733;">Commande en attente</div>
-                    <div class="color-bar" style="background-color: orange;">Commande en cours</div>
-                    <div class="color-bar" style="background-color: green;">Commande Traités</div>
+        <div class="card-container">
+            <div class="main-card">
+                <h1 class="devis-title">Demande de devis</h1>
+                <div class="card-section">
+                    <div id="commande-en-attente" class="color-bar" style="background-color: #FF5733;">
+                        Commande en attente
+                        <div id="count-en-attente" class="circle-number">0</div>
+                    </div>
+                    <div id="commande-en-cours" class="color-bar" style="background-color: orange;">
+                        Commande en cours
+                        <div id="count-en-cours" class="circle-number">0</div>
+                    </div>
+                    <div id="commande-traitees" class="color-bar" style="background-color: green;">
+                        Commande Traitées
+                        <div id="count-traitees" class="circle-number">0</div>
+                    </div>
+                    <div id="commande-en-attente-container"></div>
+                    <div id="commande-en-cours-container"></div>
+                    <div id="commande-traitees-container"></div>
                 </div>
             </div>
-            <div class="container-jauge-historique">
-                <div class="demande-historique">
-                    <h2>Historique de commandes</h2>
-                    {% set commandes = [
-                        { id: "PA123456", total: 3456, ristourne: 5 },
-                        { id: "PA378654", total: 2543, ristourne: 0 },
-                        { id: "PR098456", total: 9087, ristourne: 25 },
-                        { id: "PR789876", total: 7604, ristourne: 15 }
-                    ] %}
-                    {% for commande in commandes %}
-                        <div class="color-bar" style="background-color: rgb(26, 125, 217);">Commande #{{ commande.id }} / Total : {{ commande.total }} € / R : {{ commande.ristourne }}%</div>
-                    {% endfor %}
+        
+            <div class="main-card">
+                <h1 class="devis-title">Accord Devis</h1>
+                <div id="commande-demande-de-devis" class="color-bar" style="background-color: #007bff; cursor: pointer;">
+                    Demande de devis
+                   
                 </div>
-            </div>
-            <div class="container-jauge-ristourne">
-                <div class="demande-ristourne">
-                    <h2>Accord Ristourne</h2>
-                    {% for commande in commandes %}
-                        <div class="color-bar-ristourne" style="background-color: rgb(26, 125, 217);">Commande #{{ commande.id }} / Total : {{ commande.total }}
-                            <div class="btn-yes-no">
-                                <button class="btn-yes" style="background-color: green;" data-commande="{{ commande.id }}">O</button>
-                                <button class="btn-no" style="background-color: red;">N</button>
-                            </div>
-                        </div>
-                    {% endfor %}
+                <div id="accord-devis-container" class="details-container">
+                    <button class="btn-back" id="btn-back-accord-de-vis">Retour</button>
+                    <div id="details-content-accord-de-vis" class="scroll-container">
+                        <!-- Les demandes de devis seront affichées ici -->
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="ristourne-block">
-            <table border="1">
-                <thead>
-                    <tr class="tab-title">
-                        <th>Produit</th>
-                        <th>Quantité</th>
-                        <th>Prix HT (€)</th>
-                        <th>Prix TTC (€)</th>
-                        <th>Total HT (€)</th>
-                        <th>Total TTC (€)</th>
-                        <th>Ristourne (%)</th>
-                        <td>
-                            Tout
-                            <input type="checkbox" id="check-all">
-                        </td>
-                    </tr>
-                </thead>
-                <tbody id="table-body">
-                    <!-- Les lignes de produits seront insérées ici par JavaScript -->
-                </tbody>
-            </table>
-            <div class="btn-ristourne">
-                <button class="validate">Valider</button>
-                <button class="quit">Quitter</button>
-                <button class="apply-ristourne">Ristourne Totale</button>
-                <input type="number" id="ristourne-global" placeholder="Ristourne (%)" min="0" max="100" step="1">
-            </div>
-            <div id="results-container"></div>
-        </div>
+        
+
+ <div id="tableau-container" class="container hidden"></div>
     </div>
     <footer>
         <p>Ceci est le pied de page.</p>
     </footer>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Fonction pour récupérer les commandes en fonction de l'état
+    function fetchCommandes(etats, callback) {
+        fetch(`http://localhost:8080/api/filtreCommande?etats=${encodeURIComponent(etats)}`)
+            .then(response => response.json())
+            .then(data => callback(data))
+            .catch(error => console.error('Erreur:', error));
+    }
 
-    <script>
-        // Données statiques en format JSON
-        const data = [
-            { produit: "Produit 1", quantite: 10, prixHT: 5, prixTTC: 6, totalHT: 50, totalTTC: 60 },
-            { produit: "Produit 2", quantite: 20, prixHT: 3, prixTTC: 3.6, totalHT: 60, totalTTC: 72 }
-        ];
+    // Fonction pour récupérer les demandes de devis
+    function fetchDemandesDevis(callback) {
+        fetch('http://localhost:8080/api/commandes/demande-devis')
+            .then(response => response.json())
+            .then(data => callback(data))
+            .catch(error => console.error('Erreur:', error));
+    }
 
-        var tbody = document.getElementById("table-body");
-
-        data.forEach(function (item) {
-            var tr = document.createElement("tr");
-
-            var produitTd = document.createElement("td");
-            produitTd.textContent = item.produit;
-            tr.appendChild(produitTd);
-
-            var quantiteTd = document.createElement("td");
-            quantiteTd.textContent = item.quantite;
-            tr.appendChild(quantiteTd);
-
-            var prixHTTd = document.createElement("td");
-            prixHTTd.textContent = item.prixHT;
-            tr.appendChild(prixHTTd);
-
-            var prixTTCTd = document.createElement("td");
-            prixTTCTd.textContent = item.prixTTC;
-            tr.appendChild(prixTTCTd);
-
-            var totalHTTd = document.createElement("td");
-            totalHTTd.textContent = item.totalHT;
-            tr.appendChild(totalHTTd);
-
-            var totalTTCTd = document.createElement("td");
-            totalTTCTd.textContent = item.totalTTC;
-            tr.appendChild(totalTTCTd);
-
-            var ristourneTd = document.createElement("td");
-            var inputRistourne = document.createElement("input");
-            inputRistourne.type = "number";
-            inputRistourne.min = "0";
-            inputRistourne.max = "100";
-            inputRistourne.step = "1";
-            ristourneTd.appendChild(inputRistourne);
-            tr.appendChild(ristourneTd);
-
-            var checkboxTd = document.createElement("td");
-            var checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkboxTd.appendChild(checkbox);
-            tr.appendChild(checkboxTd);
-
-            tbody.appendChild(tr);
+    // Fonction pour mettre à jour les nombres de commandes pour chaque état
+    function updateCounts() {
+        fetchCommandes('en attente', function (data) {
+            document.getElementById('count-en-attente').textContent = data.length;
         });
+        fetchCommandes('en cours', function (data) {
+            document.getElementById('count-en-cours').textContent = data.length;
+        });
+        fetchCommandes('confirmé', function (data) {
+            document.getElementById('count-traitees').textContent = data.length;
+        });
+    }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            var ristourneBlock = document.querySelector(".ristourne-block");
-            var p = document.createElement("p");
+    // Fonction pour afficher les commandes en fonction de l'état dans un conteneur spécifique
+    function displayCommandes(etats, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) {
+            console.error(`Container with id "${containerId}" not found.`);
+            return;
+        }
 
-            document.querySelectorAll(".btn-yes").forEach(function (btn) {
-                btn.addEventListener("click", function () {
-                    p.textContent = "";
-                    var commande = this.dataset.commande;
-                    p.textContent = "Numéro de commande : " + commande;
-                    p.style.color = "white";
-                    p.style.fontWeight = "bold";
-                    p.style.marginTop = "10px";
-                    p.style.marginBottom = "10px";
+        fetchCommandes(etats, function (data) {
+            container.innerHTML = ''; // Vider le conteneur
 
-                    if (!ristourneBlock.classList.contains("visible")) {
-                        ristourneBlock.classList.toggle("visible");
-                        ristourneBlock.scrollIntoView({ behavior: 'smooth' });
-                    }
+            if (data.length > 0) {
+                data.forEach(commande => {
+                    const div = document.createElement('div');
+                    div.className = 'commande-card';
+                    div.setAttribute('data-id', commande.id);
+                    div.innerHTML = `
+                        <strong>Commande #${commande.id}</strong><br>
+                        Client: ${commande.client} <br>
+                        Date: ${commande.date_commande} <br>
+                        Etat: ${commande.etat}
+                    `;
+                    container.appendChild(div);
 
-                    validateBtn.dataset.commande = commande;
+                    // Ajouter un écouteur d'événement pour afficher les détails de la commande
+                    div.addEventListener('click', function () {
+                        fetchCommandeDetails(commande.id);
+                    });
                 });
-            });
+            } else {
+                container.textContent = 'Aucune commande trouvée.';
+            }
+        });
+    }
 
-            var table = document.querySelector("table");
-            table.parentNode.insertBefore(p, table.nextSibling);
+    // Fonction pour afficher les détails d'une commande
+    function fetchCommandeDetails(id) {
+        fetch(`http://localhost:8080/api/commande/${id}/details`)
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('tableau-container');
+                container.innerHTML = ''; // Vider le conteneur
 
-            var quitBtn = document.querySelector(".quit");
-            quitBtn.addEventListener("click", function () {
-                var resultsContainer = document.getElementById("results-container");
-                resultsContainer.innerHTML = ""; // Supprimer les résultats affichés
+                if (data.details.length > 0) {
+                    const tableContainer = document.createElement('div');
+                    tableContainer.className = 'table-container';
 
-                var ristourneBlock = document.querySelector(".ristourne-block");
-                ristourneBlock.classList.remove("visible"); // Masquer le bloc ristourne
+                    const table = document.createElement('table');
+                    table.innerHTML = `
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th>Quantité</th>
+                                <th>Prix Unitaire</th>
+                                <th>Total</th>
+                                <th>Ristourne (%)</th>
+                                <th>Total après Ristourne</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.details.map(detail => `
+                                <tr>
+                                    <td>${detail.produit}</td>
+                                    <td>${detail.quantite}</td>
+                                    <td>${detail.prix_unitaire}</td>
+                                    <td class="total">${detail.total}</td>
+                                    <td>
+                                        <input type="number" class="ristourne-input" min="0" max="100" value="0">
+                                    </td>
+                                    <td class="total-apres-ristourne">${detail.total}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    `;
 
-                // Effacer le texte affiché par le bouton "Ristourne Totale"
-                var totalTTCRistourneText = document.getElementById("total-ttc-ristourne");
-                if (totalTTCRistourneText) {
-                    totalTTCRistourneText.remove();
-                }
-            });
+                    tableContainer.appendChild(table);
+                    container.appendChild(tableContainer);
 
-            document.querySelector(".validate").addEventListener("click", function () {
-                var checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
-                var resultsContainer = document.getElementById("results-container");
+                    // Bouton pour accorder la ristourne
+                    const btnAccordRistourne = document.createElement('button');
+                    btnAccordRistourne.className = 'btn-accord-ristourne';
+                    btnAccordRistourne.textContent = 'Accorder Ristourne';
+                    container.appendChild(btnAccordRistourne);
 
-                resultsContainer.innerHTML = "";
-
-                if (checkboxes.length > 0) {
-                    var totalRistourne = 0;
-                    checkboxes.forEach(function (checkbox) {
-                        var tr = checkbox.closest("tr");
-                        var ristourne = tr.querySelector("input[type=number]").value;
-                        totalRistourne += parseFloat(ristourne) || 0;
+                    // Ajouter un écouteur d'événement pour chaque entrée de ristourne
+                    const ristourneInputs = document.querySelectorAll('.ristourne-input');
+                    ristourneInputs.forEach((input, index) => {
+                        input.addEventListener('input', function () {
+                            const totalCell = table.querySelectorAll('.total')[index];
+                            const totalApresRistourneCell = table.querySelectorAll('.total-apres-ristourne')[index];
+                            const total = parseFloat(totalCell.textContent);
+                            const ristourne = parseFloat(input.value) / 100;
+                            const totalApresRistourne = total - (total * ristourne);
+                            totalApresRistourneCell.textContent = totalApresRistourne.toFixed(2);
+                        });
                     });
 
-                    var p = document.createElement("p");
-                    p.id = "total-ttc-ristourne";
-                    p.textContent = "Total Ristourne : " + totalRistourne + "%";
-                    p.style.color = "green";
-                    p.style.fontWeight = "bold";
-                    p.style.marginTop = "10px";
-                    resultsContainer.appendChild(p);
+                    // Action du bouton "Accorder Ristourne"
+                    btnAccordRistourne.addEventListener('click', function () {
+                        alert('Ristourne accordée pour toutes les lignes du tableau.');
+                        // Ici, vous pouvez envoyer les données mises à jour au serveur si nécessaire.
+                    });
                 } else {
-                    var p = document.createElement("p");
-                    p.textContent = "Veuillez sélectionner des lignes.";
-                    p.style.color = "red";
-                    p.style.fontWeight = "bold";
-                    p.style.marginTop = "10px";
-                    resultsContainer.appendChild(p);
+                    container.textContent = 'Aucun détail trouvé pour cette commande.';
                 }
-            });
+
+                // Afficher les détails de la commande
+                const commandeDetails = `
+                    <h3>Détails de la commande #${data.commande.id}</h3>
+                    <p>Client: ${data.commande.client}</p>
+                    <p>Date: ${data.commande.date_commande}</p>
+                    <p>État: ${data.commande.etat}</p>
+                    <p>Ristourne: ${data.commande.ristourne}</p>
+                `;
+
+                container.insertAdjacentHTML('afterbegin', commandeDetails);
+            })
+            .catch(error => console.error('Erreur:', error));
+    }
+
+    // Gestionnaire d'événement pour le bouton "Demande de devis"
+    document.getElementById('commande-demande-de-devis').addEventListener('click', function () {
+        const accordDevisContainer = document.getElementById('accord-devis-container');
+        const detailsContent = document.getElementById('details-content-accord-de-vis');
+
+        // Afficher les demandes de devis dans le conteneur
+        fetchDemandesDevis(function (data) {
+            detailsContent.innerHTML = ''; // Vider le conteneur
+            if (data.length > 0) {
+                data.forEach(commande => {
+                    const div = document.createElement('div');
+                    div.className = 'commande-card';
+                    div.setAttribute('data-id', commande.id);
+                    div.innerHTML = `
+                        <strong>Commande #${commande.id}</strong><br>
+                        Client: ${commande.client} <br>
+                        Date: ${commande.date_commande} <br>
+                        État: ${commande.etat}
+                    `;
+                    detailsContent.appendChild(div);
+
+                    // Ajouter un écouteur d'événement pour afficher les détails de la commande
+                    div.addEventListener('click', function () {
+                        fetchCommandeDetails(commande.id);
+                    });
+                });
+            } else {
+                detailsContent.textContent = 'Aucune demande de devis trouvée.';
+            }
         });
+
+        // Afficher la section des devis
+        accordDevisContainer.classList.add('visible');
+    });
+
+    // Gestionnaire d'événement pour le bouton "Retour" dans la section "Accord Devis"
+    document.getElementById('btn-back-accord-de-vis').addEventListener('click', function () {
+        const accordDevisContainer = document.getElementById('accord-devis-container');
+        accordDevisContainer.classList.remove('visible');
+    });
+
+    // Mise à jour initiale des compteurs de commandes
+    updateCounts();
+
+    // Afficher les commandes en attente, en cours, et traitées
+    displayCommandes('en attente', 'commande-en-attente-container');
+    displayCommandes('en cours', 'commande-en-cours-container');
+    displayCommandes('confirmé', 'commande-traitees-container');
+});
+
+
     </script>
 </body>
 

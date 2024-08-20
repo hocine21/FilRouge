@@ -29,8 +29,9 @@ class IndexController extends AbstractController
     #[Route('/connexion', name: 'app_connexion_web')]
     public function connexion(): Response
     {
+        $form = $this->createForm(\App\Form\ConnexionType::class);
         return $this->render('connexion/connexion.html.twig', [
-            'controller_name' => 'IndexController',
+            'form' => $form->createView(),
         ]);
     }
 

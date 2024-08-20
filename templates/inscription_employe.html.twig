@@ -1,0 +1,16 @@
+{# templates/inscription_employe.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription Employé{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Inscription Employé</h1>
+
+        {{ form_start(form, {'attr': {'class': 'form'}}) }}
+            {{ form_widget(form) }}
+            <button type="submit" class="btn btn-primary">S'inscrire</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,19 +35,18 @@
         </div>
         <div id="formContainer" class="form-container" style="visibility: hidden;">
             <h2>Ajouter un utilisateur</h2>
-            <form id="inscriptionForm"> <!-- Ajout d'un ID au formulaire -->
+            <form id="inscriptionForm">
                 <div class="form-group">
                     <label for="nom">Nom</label>
-                    <input type="text" id="nom" name="nom" required>
+                    <input type="text" id="nom" name="Nom" required>
                 </div>
                 <div class="form-group">
                     <label for="prenom">Prénom</label>
-                    <input type="text" id="prenom" name="prenom" required>
+                    <input type="text" id="prenom" name="Prenom" required>
                 </div>
-               
                 <div class="form-group">
                     <label for="service">Service</label>
-                    <select id="service" name="service" class="custom-select" required>
+                    <select id="service" name="Roles" class="custom-select" required>
                         <option value="">Sélectionnez un service</option>
                         <option value="ROLE_COMMERCIAL">Commercial</option>
                         <option value="ROLE_APPROVISIONNEMENT">Approvisionnement</option>
@@ -56,11 +56,11 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Adresse email</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="AdresseEmail" required>
                 </div>
                 <div class="form-group">
                     <label for="mot-de-passe">Mot de passe provisoire</label>
-                    <input type="password" id="mot-de-passe" name="mot-de-passe" required>
+                    <input type="password" id="mot-de-passe" name="MotDePasse" required>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="S'inscrire">
@@ -166,7 +166,9 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Erreur lors de la requête au serveur');
+                return response.json().then(error => {
+                    throw new Error(error.message || 'Erreur lors de la requête au serveur');
+                });
             }
             return response.json();
         })

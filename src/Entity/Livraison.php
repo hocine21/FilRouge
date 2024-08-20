@@ -26,7 +26,13 @@ class Livraison
     private $QrCodeLivraison;
 
     #[ORM\Column(length: 255)]
-    private ?string $AdresseLivraison = null;
+    private ?string $Rue = null;
+
+    #[ORM\Column(length: 10)]
+    private ?string $CodePostal = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Ville = null;
 
     #[ORM\OneToMany(targetEntity: CommandeLivraison::class, mappedBy: 'Livraison')]
     private Collection $commandeLivraisons;
@@ -77,14 +83,38 @@ class Livraison
         return $this;
     }
 
-    public function getAdresseLivraison(): ?string
+    public function getRue(): ?string
     {
-        return $this->AdresseLivraison;
+        return $this->Rue;
     }
 
-    public function setAdresseLivraison(string $AdresseLivraison): static
+    public function setRue(string $Rue): static
     {
-        $this->AdresseLivraison = $AdresseLivraison;
+        $this->Rue = $Rue;
+
+        return $this;
+    }
+
+    public function getCodePostal(): ?string
+    {
+        return $this->CodePostal;
+    }
+
+    public function setCodePostal(string $CodePostal): static
+    {
+        $this->CodePostal = $CodePostal;
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->Ville;
+    }
+
+    public function setVille(string $Ville): static
+    {
+        $this->Ville = $Ville;
 
         return $this;
     }

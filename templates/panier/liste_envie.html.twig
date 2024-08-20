@@ -1,218 +1,313 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste d'envies</title>
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
     <style>
+        /* Style général */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background-color: #f0f0f0;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s;
         }
+
+        /* En-tête */
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 30px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            border-bottom: 4px solid #444;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Conteneur principal */
         .container {
-            max-width: 1200px;
-            margin: 20px auto;
+            margin-top: 120px; /* Compense la hauteur de l'en-tête fixe */
             padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        h5 {
-            font-size: 1.5em;
-            border-bottom: 2px solid #ff6600; /* Orange color */
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        .card {
-            display: flex;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: linear-gradient(145deg, #f8f8f8, #e0e0e0);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .card-img-container {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-radius: 8px;
-            background: #ddd;
-            border: 2px solid #ccc;
-        }
-        .card-img-top {
-            max-width: 100%;
-            border-radius: 8px;
-            transition: transform 0.3s;
-        }
-        .card-img-top:hover {
-            transform: scale(1.05);
-        }
-        .card-body {
-            flex: 2;
-            padding: 15px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            align-items: center;
         }
-        .card-title {
-            font-size: 1.25em;
-            margin-bottom: 10px;
-            color: #ff6600; /* Orange color */
+
+        /* Section de la liste d'envies */
+        #wishlist {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            max-width: 1200px;
+            width: 100%;
+            position: relative;
+            margin-bottom: 100px; /* Ajuste l'espace pour le bouton */
+            border: 1px solid #ddd;
         }
-        .card-text {
-            font-size: 1em;
-            color: #333;
-            margin-bottom: 20px;
+
+        /* Titre de la liste d'envies */
+        #wishlist h5 {
+            margin-top: 0;
+            font-size: 28px;
+            color: #222;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            transition: color 0.3s;
         }
-        .card button {
-            align-self: flex-start;
-            margin-bottom: 10px;
+
+        #wishlist h5::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: #007bff;
+            margin: 10px auto;
+            transition: width 0.3s, background-color 0.3s;
         }
-        .btn {
-            padding: 10px 20px;
-            font-size: 1em;
+
+        #wishlist h5:hover::after {
+            width: 100px;
+            background-color: #0056b3;
+        }
+
+        /* Bouton de demande de réduction */
+        #global-discount {
+            display: block;
+            width: 180px; /* Largeur fixe du bouton */
+            background-color: #007bff;
+            color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            margin-right: 10px;
             transition: background-color 0.3s, transform 0.3s;
+            position: absolute;
+            bottom: -40px; /* Ajuste la position du bouton en dessous du tableau */
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Ajoute une ombre au bouton */
+        }
+
+        #global-discount:hover {
+            background-color: #0056b3;
+            transform: translateX(-50%) scale(1.05);
+        }
+
+        /* Tableau pour les articles de la liste d'envies */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
             color: white;
         }
-        .btn-primary {
-            background: linear-gradient(45deg, #ff6600, #ff8533); /* Orange gradient */
+
+        tr:hover {
+            background-color: #f1f1f1;
         }
-        .btn-primary:hover {
-            background: linear-gradient(45deg, #ff8533, #ff6600);
-            transform: scale(1.05);
-        }
-        .btn-secondary {
-            background: linear-gradient(45deg, #6c757d, #5a6268); /* Grey gradient */
-        }
-        .btn-secondary:hover {
-            background: linear-gradient(45deg, #5a6268, #6c757d);
-            transform: scale(1.05);
-        }
-        .btn-success {
-            background: linear-gradient(45deg, #28a745, #218838); /* Green gradient */
-        }
-        .btn-success:hover {
-            background: linear-gradient(45deg, #218838, #28a745);
-            transform: scale(1.05);
-        }
+
         .quote-status {
-            font-size: 1em;
-            font-weight: bold;
-            color: #ff6600; /* Orange color */
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 8px;
+            text-align: center;
         }
-        .card-body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 50px;
-            height: 50px;
-            background: url('fer.jpg') no-repeat center center;
-            background-size: contain;
-            opacity: 0.1;
+
+        .quote-status.pending {
+            background-color: #ffc107;
+            color: #fff;
+        }
+
+        .quote-status.accepted {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .quote-status.rejected {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            #wishlist {
+                padding: 20px;
+                margin-bottom: 60px; /* Ajuste l'espace pour le bouton sur petits écrans */
+            }
+
+            th, td {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+
+            #global-discount {
+                width: 160px;
+                padding: 10px;
+                font-size: 14px;
+                bottom: -30px; /* Ajuste la position du bouton */
+            }
+        }
+
+        @media (max-width: 480px) {
+            #wishlist {
+                padding: 15px;
+                margin-bottom: 50px; /* Ajuste l'espace pour le bouton sur très petits écrans */
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 6px 8px;
+            }
+
+            #global-discount {
+                width: 140px;
+                padding: 8px;
+                font-size: 12px;
+                bottom: -20px; /* Ajuste la position du bouton */
+            }
         }
     </style>
 </head>
+
 <body>
-    {% include 'menu.html.twig' %}
+    <header>
+        Liste d'envies
+    </header>
+
     <div class="container">
         <!-- Liste d'envies -->
         <div id="wishlist">
             <h5>Liste d'envies</h5>
-            <div id="wishlist-container"></div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Produit</th>
+                        <th>Longueur</th>
+                        <th>Quantité</th>
+                        <th>Prix Unitaire</th>
+                        <th>Prix Total</th>
+                        <th>Statut Devis</th>
+                    </tr>
+                </thead>
+                <tbody id="wishlist-container">
+                    <!-- Contenu dynamique -->
+                </tbody>
+            </table>
+            <button id="global-discount">Demander réduction</button>
         </div>
     </div>
+
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function displayWishlist() {
-            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-            const wishlistContainer = document.getElementById('wishlist-container');
-            wishlistContainer.innerHTML = '';
-            wishlist.forEach(item => {
-                const card = document.createElement('div');
-                card.classList.add('card');
-                card.innerHTML = `
-                    <div class="card-img-container">
-                        <img src="/pictures/${item.image}" class="card-img-top" alt="${item.nomProduit}">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">${item.nomProduit}</h5>
-                        <p class="card-text">
-                            Longueur: ${(item.longueur / 100).toFixed(2)} m<br>
-                            Quantité: ${item.quantite}<br>
-                            Prix Unitaire: ${item.variante.prixML.toFixed(2).replace('.', ',')} €/m<br>
-                            Prix Total: ${(item.longueur / 100 * item.quantite * item.variante.prixML).toFixed(2).replace('.', ',')} €
-                        </p>
-                        <button type="button" class="btn btn-primary request-discount" data-id="${item.variante.id}">Demander une remise</button>
-                        <button type="button" class="btn btn-secondary remove-from-wishlist" data-id="${item.variante.id}">Supprimer</button>
-                        <button type="button" class="btn btn-success transfer-to-cart" data-id="${item.variante.id}">Transférer au panier</button>
-                        <p class="quote-status" id="quote-status-${item.variante.id}">Devis: En attente</p>
-                    </div>
-                `;
-                wishlistContainer.appendChild(card);
-            });
+       document.addEventListener('DOMContentLoaded', function () {
+    function displayWishlist() {
+        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
 
-            document.querySelectorAll('.remove-from-wishlist').forEach(button => {
-                button.addEventListener('click', function() {
-                    const variantId = this.getAttribute('data-id');
-                    removeFromWishlist(variantId);
-                });
-            });
-
-            document.querySelectorAll('.request-discount').forEach(button => {
-                button.addEventListener('click', function() {
-                    const variantId = this.getAttribute('data-id');
-                    requestDiscount(variantId);
-                });
-            });
-
-            document.querySelectorAll('.transfer-to-cart').forEach(button => {
-                button.addEventListener('click', function() {
-                    const variantId = this.getAttribute('data-id');
-                    transferToCart(variantId);
-                });
-            });
-        }
-
-        function removeFromWishlist(id) {
-            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-            wishlist = wishlist.filter(item => item.variante.id !== id);
-            localStorage.setItem('wishlist', JSON.stringify(wishlist));
-            displayWishlist();
-        }
-
-        function requestDiscount(id) {
-            // Simulate a discount request
-            setTimeout(() => {
-                document.getElementById(`quote-status-${id}`).textContent = 'Devis: Accepté';
-            }, 2000); // Simulate a delay for the discount request
-        }
-
-        function transferToCart(id) {
-            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const item = wishlist.find(item => item.variante.id === id);
-            if (item) {
-                cart.push(item);
-                localStorage.setItem('cart', JSON.stringify(cart));
-                removeFromWishlist(id);
-                alert('Article transféré au panier');
+        // Grouper les produits similaires par ID et longueur
+        let groupedWishlist = [];
+        wishlist.forEach(item => {
+            let existingItem = groupedWishlist.find(i => i.variante.id === item.variante.id && i.longueur === item.longueur);
+            if (existingItem) {
+                existingItem.quantite += item.quantite;
+                existingItem.prixTTC = existingItem.quantite * existingItem.variante.prixML * (existingItem.longueur / 100);
+            } else {
+                groupedWishlist.push({ ...item });
             }
-        }
+        });
 
-        displayWishlist();
+        const wishlistContainer = document.getElementById('wishlist-container');
+        wishlistContainer.innerHTML = '';
+        groupedWishlist.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><img src="/pictures/${item.image}" alt="${item.nomProduit}" width="100"></td>
+                <td>${item.nomProduit}</td>
+                <td>${(item.longueur / 100).toFixed(2)} m</td>
+                <td>${item.quantite}</td>
+                <td>${item.variante.prixML.toFixed(2).replace('.', ',')} €/m</td>
+                <td>${item.prixTTC ? item.prixTTC.toFixed(2).replace('.', ',') + ' €' : 'Calcul en cours...'}</td>
+                <td class="quote-status pending" id="quote-status-${item.variante.id}">Devis: En attente</td>
+            `;
+            wishlistContainer.appendChild(row);
+        });
+    }
+
+    async function requestDiscount() {
+        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+        // Formater les données à envoyer à l'API
+        let commandeData = wishlist.map(item => ({
+            produitId: item.variante.id,
+            longueur: item.longueur,
+            quantite: item.quantite
+        }));
+
+        try {
+            // Envoyer la requête POST à l'API
+            let response = await fetch('/api/commande', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ commande: commandeData })
+            });
+
+            if (response.ok) {
+                let jsonResponse = await response.json();
+                alert('Demande de réduction envoyée avec succès !');
+                // Traitez la réponse de l'API si nécessaire
+                console.log(jsonResponse);
+            } else {
+                alert('Une erreur est survenue lors de l\'envoi de la demande.');
+                console.error('Erreur de la réponse:', response.statusText);
+            }
+        } catch (error) {
+            alert('Erreur de réseau : Impossible d\'envoyer la demande.');
+            console.error('Erreur de la requête:', error);
+        }
+    }
+
+    document.getElementById('global-discount').addEventListener('click', function () {
+        requestDiscount();
     });
+
+    displayWishlist();
+});
+
     </script>
 </body>
+
 </html>

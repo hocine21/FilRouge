@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function calculatePrice() {
         if (!selectedVariant) {
             priceContainer.textContent = 'Veuillez sélectionner une variante.';
-            return;
+            return Promise.resolve(null);
         }
 
         const longueur = parseFloat(lengthInput.value);
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (isNaN(longueur) || isNaN(quantite)) {
             priceContainer.textContent = 'Veuillez entrer une longueur et une quantité valides.';
-            return;
+            return Promise.resolve(null);
         }
 
         const panier = [{
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }];
 
         // Envoyer une requête POST à l'API Symfony
-        fetch('/panier/calculer', {
+        return fetch('/panier/calculer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -143,25 +143,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.total_ht) {
                     priceContainer.textContent += ` (Prix HT: ${data.total_ht.toFixed(2)} €)`;
                 }
+                return data.total_ttc; // Retourne le prix TTC
             } else {
                 priceContainer.textContent = 'Erreur lors du calcul du prix.';
+                return null;
             }
-
-            // Stocker les détails du produit sélectionné dans le localStorage
-            const selectedProduct = {
-                nomProduit: nomProduit,
-                variante: selectedVariant,
-                longueur: longueur,
-                quantite: quantite,
-                image: selectedVariant.image // Ajoute l'image sélectionnée
-            };
-
-            // Enregistrement dans le localStorage
-            localStorage.setItem('selectedProduct', JSON.stringify(selectedProduct));
         })
         .catch(error => {
             console.error('Erreur:', error);
             priceContainer.textContent = 'Erreur lors de la communication avec l\'API.';
+            return null;
         });
     }
 
@@ -179,84 +170,85 @@ document.addEventListener('DOMContentLoaded', function() {
     // Écouteur d'événement pour ajouter au panier
     const addToCartButton = document.getElementById('add-to-cart-btn');
     addToCartButton.addEventListener('click', () => {
-        calculatePrice(); // Appel de la fonction pour vérifier les données avant d'ajouter au panier
+        calculatePrice().then(priceTTC => {
+            if (!selectedVariant) {
+                alert('Veuillez sélectionner une variante.');
+                return;
+            }
 
-        if (!selectedVariant) {
-            alert('Veuillez sélectionner une variante.');
-            return;
-        }
+            const longueur = parseFloat(lengthInput.value);
+            const quantite = parseInt(quantityInput.value);
 
-        const longueur = parseFloat(lengthInput.value);
-        const quantite = parseInt(quantityInput.value);
+            if (isNaN(longueur) || isNaN(quantite)) {
+                alert('Veuillez entrer une longueur et une quantité valides.');
+                return;
+            }
 
-        if (isNaN(longueur) || isNaN(quantite)) {
-            alert('Veuillez entrer une longueur et une quantité valides.');
-            return;
-        }
+            // Créer un objet avec les détails du produit
+            const productDetails = {
+                nomProduit: encodeForHTML(nomProduit),
+                variante: selectedVariant,
+                longueur: longueur,
+                quantite: quantite,
+                image: selectedVariant.image // Ajoute l'image sélectionnée
+            };
 
-        // Créer un objet avec les détails du produit
-        const productDetails = {
-            nomProduit: encodeForHTML(nomProduit),
-            variante: selectedVariant,
-            longueur: longueur,
-            quantite: quantite,
-            image: selectedVariant.image // Ajoute l'image sélectionnée
-        };
+            // Récupérer le panier actuel depuis le localStorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-        // Récupérer le panier actuel depuis le localStorage
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            // Ajouter le produit au panier
+            cart.push(productDetails);
 
-        // Ajouter le produit au panier
-        cart.push(productDetails);
+            // Stocker le panier mis à jour dans le localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
 
-        // Stocker le panier mis à jour dans le localStorage
-        localStorage.setItem('cart', JSON.stringify(cart));
-
-        // Réinitialisation des inputs après ajout au panier (optionnel)
-        quantityInput.value = '';
-        lengthInput.value = '';
-        alert('Produit ajouté au panier avec succès !');
+            // Réinitialisation des inputs après ajout au panier (optionnel)
+            quantityInput.value = '';
+            lengthInput.value = '';
+            alert('Produit ajouté au panier avec succès !');
+        });
     });
 
     // Écouteur d'événement pour ajouter à la liste d'envie
     const addToWishlistButton = document.getElementById('add-to-wishlist-btn');
     addToWishlistButton.addEventListener('click', () => {
-        calculatePrice(); // Appel de la fonction pour vérifier les données avant d'ajouter à la liste d'envie
+        calculatePrice().then(priceTTC => {
+            if (!selectedVariant) {
+                alert('Veuillez sélectionner une variante.');
+                return;
+            }
 
-        if (!selectedVariant) {
-            alert('Veuillez sélectionner une variante.');
-            return;
-        }
+            const longueur = parseFloat(lengthInput.value);
+            const quantite = parseInt(quantityInput.value);
 
-        const longueur = parseFloat(lengthInput.value);
-        const quantite = parseInt(quantityInput.value);
+            if (isNaN(longueur) || isNaN(quantite)) {
+                alert('Veuillez entrer une longueur et une quantité valides.');
+                return;
+            }
 
-        if (isNaN(longueur) || isNaN(quantite)) {
-            alert('Veuillez entrer une longueur et une quantité valides.');
-            return;
-        }
+            // Créer un objet avec les détails du produit
+            const wishlistItem = {
+                nomProduit: encodeForHTML(nomProduit),
+                variante: selectedVariant,
+                longueur: longueur,
+                quantite: quantite,
+                image: selectedVariant.image, // Ajoute l'image sélectionnée
+                prixTTC: priceTTC // Ajoute le prix TTC
+            };
 
-        // Créer un objet avec les détails du produit
-        const wishlistItem = {
-            nomProduit: encodeForHTML(nomProduit),
-            variante: selectedVariant,
-            longueur: longueur,
-            quantite: quantite,
-            image: selectedVariant.image // Ajoute l'image sélectionnée
-        };
+            // Récupérer la liste d'envie actuelle depuis le localStorage
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
 
-        // Récupérer la liste d'envie actuelle depuis le localStorage
-        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            // Ajouter le produit à la liste d'envie
+            wishlist.push(wishlistItem);
 
-        // Ajouter le produit à la liste d'envie
-        wishlist.push(wishlistItem);
+            // Stocker la liste d'envie mise à jour dans le localStorage
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
 
-        // Stocker la liste d'envie mise à jour dans le localStorage
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-
-        // Réinitialisation des inputs après ajout à la liste d'envie (optionnel)
-        quantityInput.value = '';
-        lengthInput.value = '';
-        alert('Produit ajouté à la liste d\'envie avec succès !');
+            // Réinitialisation des inputs après ajout à la liste d'envie (optionnel)
+            quantityInput.value = '';
+            lengthInput.value = '';
+            alert('Produit ajouté à la liste d\'envie avec succès !');
+        });
     });
 });

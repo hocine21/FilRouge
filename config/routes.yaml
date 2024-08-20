@@ -328,5 +328,29 @@ commercial:
 app_panier_liste_envie:
     path: /panier/liste-envie
     controller: App\Controller\IndexController::listeEnvie
+    # config/routes.yaml
 
+api_create_commande:
+    path: /api/commande
+    controller: App\Controller\api\CommandeController::createCommande
+    methods: [POST]
 
+api_get_all_commandes:
+    path: /api/commandes
+    controller: App\Controller\api\CommandeController::getAllCommandes
+    methods: [GET]
+
+api_filtre_commande:
+    path: /api/filtreCommande
+    controller: App\Controller\api\CommandeController::filtreCommande
+    methods: [GET]
+
+api_get_commandes_demande_devis:
+    path: /api/commandes/demande-devis
+    controller: App\Controller\api\CommandeController::show
+    methods: [GET]
+
+api_get_commande_details:
+    path: /api/commande/{id}/details
+    controller: App\Controller\api\CommandeController::getCommandeDetails
+    methods: [GET]

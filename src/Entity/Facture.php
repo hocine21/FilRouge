@@ -17,9 +17,6 @@ class Facture
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $Date = null;
 
-    #[ORM\Column(length: 255, name: "montant_livraison")]
-    private ?string $MontantLivraison = null;
-
     #[ORM\ManyToOne(inversedBy: 'factures')]
     private ?Commande $Commande = null;
 
@@ -36,18 +33,6 @@ class Facture
     public function setDate(\DateTimeInterface $Date): static
     {
         $this->Date = $Date;
-
-        return $this;
-    }
-
-    public function getMontantLivraison(): ?string
-    {
-        return $this->MontantLivraison;
-    }
-
-    public function setMontantLivraison(string $MontantLivraison): static
-    {
-        $this->MontantLivraison = $MontantLivraison;
 
         return $this;
     }

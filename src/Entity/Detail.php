@@ -14,22 +14,22 @@ class Detail
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $Quantite = null;
+    private ?int $quantite = null;
 
     #[ORM\Column]
-    private ?int $Longueur = null;
+    private ?int $longueur = null;
 
     #[ORM\Column(type: 'float', nullable: true)]
-    private ?float $prix_unitaire = null;
+    private ?float $prixUnitaire = null;
 
-    #[ORM\Column(name: "montant_total", type: 'float', nullable: true)]
-    private ?float $montant_total = null;
+    #[ORM\Column(name: 'montant_total', type: 'float', nullable: true)]
+    private ?float $montantTotal = null;
 
-    #[ORM\ManyToOne(inversedBy: 'details')]
-    private ?Produit $Produit = null;
+    #[ORM\ManyToOne(targetEntity: Produit::class, inversedBy: 'details')]
+    private ?Produit $produit = null;
 
-    #[ORM\ManyToOne(inversedBy: 'details')]
-    private ?Commande $Commande = null;
+    #[ORM\ManyToOne(targetEntity: Commande::class, inversedBy: 'details')]
+    private ?Commande $commande = null;
 
     public function getId(): ?int
     {
@@ -38,67 +38,67 @@ class Detail
 
     public function getQuantite(): ?int
     {
-        return $this->Quantite;
+        return $this->quantite;
     }
 
-    public function setQuantite(int $Quantite): static
+    public function setQuantite(int $quantite): static
     {
-        $this->Quantite = $Quantite;
+        $this->quantite = $quantite;
         return $this;
     }
 
     public function getLongueur(): ?int
     {
-        return $this->Longueur;
+        return $this->longueur;
     }
 
-    public function setLongueur(int $Longueur): static
+    public function setLongueur(int $longueur): static
     {
-        $this->Longueur = $Longueur;
+        $this->longueur = $longueur;
         return $this;
     }
 
     public function getPrixUnitaire(): ?float
     {
-        return $this->prix_unitaire;
+        return $this->prixUnitaire;
     }
 
-    public function setPrixUnitaire(?float $prix_unitaire): static
+    public function setPrixUnitaire(?float $prixUnitaire): static
     {
-        $this->prix_unitaire = $prix_unitaire;
+        $this->prixUnitaire = $prixUnitaire;
         return $this;
     }
 
     public function getMontantTotal(): ?float
     {
-        return $this->montant_total;
+        return $this->montantTotal;
     }
 
-    public function setMontantTotal(?float $montant_total): static
+    public function setMontantTotal(?float $montantTotal): static
     {
-        $this->montant_total = $montant_total;
+        $this->montantTotal = $montantTotal;
         return $this;
     }
 
     public function getProduit(): ?Produit
     {
-        return $this->Produit;
+        return $this->produit;
     }
 
-    public function setProduit(?Produit $Produit): static
+    public function setProduit(?Produit $produit): static
     {
-        $this->Produit = $Produit;
+        $this->produit = $produit;
         return $this;
     }
 
     public function getCommande(): ?Commande
     {
-        return $this->Commande;
+        return $this->commande;
     }
 
-    public function setCommande(?Commande $Commande): static
+    public function setCommande(?Commande $commande): static
     {
-        $this->Commande = $Commande;
+        $this->commande = $commande;
         return $this;
     }
 }
