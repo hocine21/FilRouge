@@ -5,20 +5,20 @@
     box-sizing: border-box;
 }
 
-/* General Styles */
 body {
     font-family: 'Montserrat', sans-serif;
-    background-color: #f8f9fa;
     color: #212529;
-    margin: 0; /* Pour supprimer les marges par défaut du corps */
+    background-color: #ff6600;
+    margin: 0;
 }
 
 .container-block {
-    background: linear-gradient(to bottom right, #ff7f00, #eebb23); /* Dégradé orange */
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    min-height: 00px;
+    min-height: 100vh; /* Ajoute une hauteur minimale pour garantir que le contenu remplisse toute la hauteur de la page */
+    /* background: linear-gradient(to bottom right, #ff7f00, #eebb23); Supprimez cette ligne */
 }
+
 
 
 .container {
@@ -142,30 +142,50 @@ h2{
     border-radius: 5px;
     border: 5px solid white;
 }
-
 .overlay-text {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #fff;
-    font-size: 28px;
+    color: white;
+    font-size: 28px; /* Taille de police réduite pour mieux voir l'image */
     font-weight: bold;
+    padding: 10px 20px; /* Moins de padding pour réduire l'impact du texte */
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.5); /* Réduction de l'opacité pour voir davantage l'image */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Ombre moins prononcée */
+    text-align: center;
+    letter-spacing: 0.5px; /* Espacement réduit pour moins de domination visuelle */
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.15); /* Bordure encore plus subtile */
+    backdrop-filter: blur(3px); /* Réduction du flou pour laisser transparaître l'image */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease; /* Animation également sur le fond */
 }
 
+.overlay-text:hover {
+    transform: translate(-50%, -50%) scale(1.03); /* Légère réduction du zoom au survol */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Ombre moins prononcée au survol */
+    background: rgba(0, 0, 0, 0.6); /* Augmentation de l'opacité au survol pour le focus */
+}
+
+
 .block-text {
-    background-image: url(Bandeau\ Fil\ rouge.jpg);
+    background-image: url(acceuil.jpg);
     padding: 20px;
     margin-bottom: 50px;
     color: white;
     height: 290px;
-    background-size: cover;
-    border-bottom-left-radius: 35%;
-    border-bottom-right-radius: 35%;
+    background-size: cover; /* Garde cette propriété pour que l'image prenne toute la largeur */
+    background-position: center; /* Centre l'image dans le bloc */
+    background-repeat: no-repeat; /* Empêche la répétition de l'image de fond */
+    border-bottom-left-radius: 0; /* Supprime les bordures arrondies */
+    border-bottom-right-radius: 0; /* Supprime les bordures arrondies */
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
+
+
 
 .block-text h1{
     margin-left: 30px;

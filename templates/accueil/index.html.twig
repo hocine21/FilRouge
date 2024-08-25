@@ -6,12 +6,699 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Inclure Font Awesome via CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
     <title>Page d'Accueil</title>
+    <style>
+        /* Style général pour la section de présentation */
+        .presentation-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 40px;
+            background-color: #ff6600;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            color: #fff;
+        }
+
+        /* Style pour le contenu texte */
+        .presentation-content {
+            width: 55%;
+            text-align: left;
+            padding-right: 30px;
+        }
+
+        .presentation-content h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .presentation-content h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 60px;
+            height: 4px;
+            background-color: #ffd700;
+        }
+
+        .presentation-content p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .presentation-content h3 {
+            font-size: 26px;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .presentation-content ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .presentation-content ul li {
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .presentation-content ul li::before {
+            content: '\f058';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: #ffd700;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Style pour l'image de présentation */
+        .presentation-image {
+            width: 40%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .presentation-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .presentation-image:hover {
+            transform: scale(1.05);
+        }
+
+        /* Style pour la section des produits */
+        .products-section {
+            padding: 40px;
+            background-color: #ff6600;
+            border-radius: 12px;
+            color: #fff;
+            margin-bottom: 40px;
+        }
+
+        /* Style pour le titre des produits */
+        .products-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* Style pour le conteneur des cartes de produits */
+        .product-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* Style pour chaque carte de produit */
+        .product-card {
+            background-color: #fff;
+            color: #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: calc(33% - 20px);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Style pour les informations du produit */
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-info h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .product-info p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Style pour la section de contenu général */
+        .content {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #007bff, #00c6ff);
+            color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+        }
+
+        .content h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Responsivité pour petits écrans */
+        @media (max-width: 768px) {
+            .presentation-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .presentation-content {
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 30px;
+            }
+
+            .presentation-image {
+                width: 80%;
+            }
+
+            .content {
+                padding: 20px;
+                font-size: 24px;
+            }
+
+            .product-card {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-card {
+                width: 100%;
+            }
+        }
+   /* Style pour le carrousel */
+.carousel {
+    position: relative;
+    overflow: hidden;
+    background-color: #ff6600;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.carousel-wrapper {
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.image-block {
+    min-width: 33.333%;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+.image-block img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+/* Style pour les boutons du carrousel */
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    background-color: #ffffff;
+    border: none;
+    color: #ff6600;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 24px;
+    z-index: 1;
+    transform: translateY(-50%);
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-button:hover {
+    background-color: #ff6600;
+    color: #ffffff;
+}
+
+.carousel-button.prev {
+    left: 15px;
+}
+
+.carousel-button.next {
+    right: 15px;
+}
+
+/* Style pour les icônes des boutons */
+.carousel-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Responsivité pour petits écrans */
+@media (max-width: 768px) {
+    .image-block {
+        min-width: 50%;
+    }
+}
+
+@media (max-width: 480px) {
+    .image-block {
+        min-width: 100%;
+    }
+}
+/* Style pour le conteneur du bouton Voir les détails */
+.details-button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Style pour le bouton Voir les détails */
+.details-button {
+    display: inline-block;
+    background-color: #ffffff;
+    color: #ff6600;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 12px 24px;
+    border: 2px solid #ff6600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.details-button:hover {
+    background-color: #ff6600;
+    color: #ffffff;
+    border-color: #ff6600;
+}
+/* Style pour la section de promotion */
+.promotion-section {
+    padding: 40px;
+    background: linear-gradient(135deg, #ff6600, #ff9e00); /* Dégradé orange */
+    border-radius: 12px;
+    color: #fff;
+    margin-top: 40px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.promotion-content h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.promotion-content h2 i {
+    margin-right: 10px;
+}
+
+.promotion-content p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.promotion-button {
+    display: inline-block;
+    background-color: #ffffff;
+    color: #ff6600;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 12px 24px;
+    border: 2px solid #ff6600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.promotion-button:hover {
+    background-color: #ff6600;
+    color: #ffffff;
+    border-color: #ff6600;
+}
+
+.promotion-button i {
+    margin-right: 10px;
+}
+
+/* Style général pour le footer */
+.footer {
+            background-color: #fff;
+            color: #333;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border-top: 2px solid #ff6600; /* Ligne en haut pour accentuer le footer */
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo a {
+            color: #ff6600;
+            text-decoration: none;
+        }
+
+        .footer-logo a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-nav {
+            margin-bottom: 20px;
+        }
+
+        .footer-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-nav ul li {
+            margin: 0;
+        }
+
+        .footer-nav ul li a {
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-nav ul li a:hover {
+            color: #ff6600;
+        }
+
+        .footer-contact {
+            margin-bottom: 20px;
+        }
+
+        .footer-contact p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .footer-contact a {
+            color: #ff6600;
+            text-decoration: none;
+        }
+
+        .footer-contact a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-social {
+            margin-top: 20px;
+        }
+
+        .footer-social a {
+            color: #333;
+            font-size: 24px;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            color: #ff6600;
+        }
+
+        .footer-bottom {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        /* Responsivité pour petits écrans */
+        @media (max-width: 768px) {
+            .footer-nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+          /* Style général du footer */
+          .footer {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            padding: 40px 20px;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .footer-logo {
+            margin-bottom: 20px;
+        }
+
+        .footer-logo a {
+            color: #ff6600;
+            font-size: 28px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-logo a:hover {
+            color: #e0e0e0;
+        }
+
+        .footer-nav {
+            margin-bottom: 20px;
+        }
+
+        .footer-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .footer-nav ul li {
+            margin: 0;
+        }
+
+        .footer-nav ul li a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-nav ul li a:hover {
+            color: #ff6600;
+        }
+
+        .footer-contact {
+            margin-bottom: 20px;
+        }
+
+        .footer-contact p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .footer-contact i {
+            color: #ff6600;
+            margin-right: 8px;
+        }
+
+        .footer-contact a {
+            color: #ff6600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-contact a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            font-size: 14px;
+        }
+
+        /* Style pour les icônes sociales */
+        .footer-social {
+            margin: 20px 0;
+        }
+
+        .footer-social a {
+            color: #e0e0e0;
+            font-size: 24px;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            color: #ff6600;
+        }
+
+        /* Responsivité pour petits écrans */
+        @media (max-width: 768px) {
+            .footer-nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .footer-social a {
+                font-size: 20px;
+                margin: 0 10px;
+            }
+        }
+        /* Style pour la section des avis clients */
+.reviews-section {
+    padding: 40px;
+    background-color: #ff6600;
+    border-radius: 12px;
+    color: #fff;
+    margin-top: 40px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.reviews-section h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.large-card {
+    background-color: #fff;
+    color: #ff6600;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    display: inline-block;
+    max-width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.large-card h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.large-card p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.reviews-cards {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Style pour chaque carte d'avis */
+.review-card {
+    background-color: #fff;
+    color: #000;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 300px;
+    transition: transform 0.3s ease;
+    text-align: left;
+}
+
+.review-card:hover {
+    transform: scale(1.05);
+}
+
+.review-image {
+    height: 100px; /* Hauteur fixe pour les images */
+    width: 100px; /* Largeur fixe pour les images */
+    border-radius: 50%; /* Bordure ronde pour les images */
+    overflow: hidden;
+    border-bottom: 2px solid #ff6600;
+    display: flex;
+    align-items: center; /* Centre l'image verticalement */
+    justify-content: center; /* Centre l'image horizontalement */
+}
+
+.review-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Assure que l'image remplit la zone sans déformation */
+}
+
+/* Style pour les informations de l'avis */
+.review-info {
+    padding: 15px;
+}
+
+.review-info h4 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.review-rating {
+    font-size: 18px;
+    color: #ff6600;
+    margin-bottom: 10px;
+}
+
+.review-text {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* Responsivité pour petits écrans */
+@media (max-width: 768px) {
+    .review-card {
+        width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .review-card {
+        width: 100%;
+    }
+}
+
+
+    </style>
 </head>
 <body>
 
@@ -36,52 +723,207 @@
     </div>
     <div class="block-text">
         <h1>Faites découper des pièces de métal sur mesure !</h1>
-        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-            <section class="buttons">
-                <a href="{{ path('connexion') }}"><button class="button connexion">CONNEXION</button></a>
-                <a href="{{ path('app_choix') }}"><button class="button create">CRÉER UN COMPTE</button></a>
-                <a href="config.html"><button class="button config">CONFIGURATEUR</button></a>
-                <a href="{{ path('app_super_admin') }}"><button class="button admin">ADMINISTRATEUR</button></a>
-            </section>
-        {% endif %}
     </div>
 
-    <section class="buttons-responsive">
-        <a href="{{ path('connexion') }}"><button class="button connexion">CONNEXION</button></a>
-        <a href="{{ path('app_choix') }}"><button class="button create">CRÉER UN COMPTE</button></a>
-        <a href="config.html"><button class="button config">CONFIGURATEUR</button></a>
-    </section>
+    
 
-    <div class="content">
-        <h2>Bienvenue chez COUP'ACIER</h2>
+    <!-- Section de présentation de l'entreprise -->
+    <div class="presentation-section" data-aos="fade-up">
+        <div class="presentation-content">
+            <h2>À propos de Coup'Acier</h2>
+            <p>
+                La société Coup’Acier a été créée en 2015 et permet à ses clients la vente de métaux.
+                Les clients sont des entreprises et des particuliers. La société dispose de plusieurs
+                entrepôts pour le stockage des métaux, leur découpe si besoin, et s’occupe de l’expédition.
+            </p>
+            <h3>Nos Valeurs</h3>
+            <ul>
+                <li>Qualité et Précision</li>
+                <li>Engagement envers nos clients</li>
+                <li>Innovation et Excellence</li>
+            </ul>
+        </div>
+        <div class="presentation-image" data-aos="fade-left">
+            <img src="{{ asset('pictures/entreprise.jpg') }}" alt="Photo de l'entreprise">
+        </div>
+        
     </div>
-    <div class="block">
-        <div class="image-block">
-            <img src="{{ asset('pictures/Acier.jpg') }}" alt="Image 1">
-            <div class="overlay-text">ACIER</div>
+
+  <!-- Section de présentation des produits -->
+<div class="products-section" data-aos="fade-up">
+    <h2>Nos Produits</h2>
+    <div class="carousel">
+        <div class="carousel-wrapper">
+            <div class="carousel-track">
+                <div class="image-block">
+                    <img src="{{ asset('pictures/ferEnT.png') }}" alt="Image 1">
+                    <div class="overlay-text">FerEnT </div>
+                </div>
+                <div class="image-block">
+                    <img src="{{ asset('pictures/poutrelleIpeNormale.jpeg') }}" alt="Image 2">
+                    <div class="overlay-text">poutrelle Ipe Normale</div>
+                </div>
+                <div class="image-block">
+                    <img src="{{ asset('pictures/poutrelleUpe.jpeg') }}" alt="Image 3">
+                    <div class="overlay-text">poutrelle Upe</div>
+                </div>
+                <div class="image-block">
+                    <img src="{{ asset('pictures/barreCarreplein.jpeg') }}" alt="Image 4">
+                    <div class="overlay-text">barre Carre plein</div>
+                </div>
+                <div class="image-block">
+                    <img src="{{ asset('pictures/tubeRond.jpeg') }}" alt="Image 5">
+                    <div class="overlay-text">tube Rond</div>
+                </div>
+            </div>
         </div>
-        <div class="image-block">
-            <img src="{{ asset('pictures/alu.jpg') }}" alt="Image 2">
-            <div class="overlay-text">ALU</div>
+        <button class="carousel-button prev" onclick="scrollCarousel(-1)">
+            <!-- Icône flèche gauche -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.29 16.29L9.71 11.71C9.32 11.32 9.32 10.68 9.71 10.29L14.29 5.71C14.68 5.32 15.32 5.32 15.71 5.71C16.1 6.1 16.1 6.74 15.71 7.13L11.83 11L15.71 14.88C16.1 15.27 16.1 15.91 15.71 16.3C15.32 16.69 14.68 16.69 14.29 16.29Z"/></svg>
+        </button>
+        <button class="carousel-button next" onclick="scrollCarousel(1)">
+            <!-- Icône flèche droite -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.71 16.29L14.29 11.71C14.68 11.32 14.68 10.68 14.29 10.29L9.71 5.71C9.32 5.32 8.68 5.32 8.29 5.71C7.9 6.1 7.9 6.74 8.29 7.13L12.17 11L8.29 14.88C7.9 15.27 7.9 15.91 8.29 16.3C8.68 16.69 9.32 16.69 9.71 16.29Z"/></svg>
+        </button>
+    </div>
+    <!-- Bouton Voir les détails -->
+    <div class="details-button-container">
+        <a href="{{ path('app_produits') }}" class="details-button">Voir les détails</a>
+    </div>
+    <!-- Section Promotion Professionnels -->
+<div class="promotion-section" data-aos="fade-up">
+    <div class="promotion-content">
+        <h2><i class="fas fa-briefcase"></i> Offres Spéciales pour Professionnels</h2>
+        <p>
+            Si vous êtes un professionnel, nous avons une offre exclusive pour vous ! Profitez de 10% de remise sur toutes vos commandes. 
+            <strong>Demandez une réduction dès maintenant</strong> et bénéficiez de cette offre exceptionnelle.
+        </p>
+        <a href="contact.html" class="promotion-button">
+            <i class="fas fa-handshake"></i> Demander une Réduction
+        </a>
+    </div>
+</div>
+<!-- Section des Avis Clients -->
+<div class="reviews-section" data-aos="fade-up">
+    <h2>Avis de Nos Clients</h2>
+    <div class="reviews-content">
+        <!-- Grande carte orange -->
+        <div class="large-card">
+            <h3>Ce que disent nos clients</h3>
+            <p>
+                Découvrez les témoignages de nos clients satisfaits. Leur retour est essentiel pour nous et nous sommes ravis de partager leurs expériences.
+            </p>
         </div>
-        <div class="image-block">
-            <img src="{{ asset('pictures/corten.webp') }}" alt="Image 3">
-            <div class="overlay-text">CORTEN</div>
-        </div>
-        <div class="image-block">
-            <img src="{{ asset('pictures/fer.jpg') }}" alt="Image 4">
-            <div class="overlay-text">GALVA</div>
-        </div>
-        <div class="image-block">
-            <img src="{{ asset('pictures/inox.jpg') }}" alt="Image 5">
-            <div class="overlay-text">INOX</div>
+
+        <!-- Conteneur pour les cartes d'avis -->
+        <div class="reviews-cards">
+            <!-- Carte d'avis 1 -->
+            <div class="review-card">
+                <div class="review-image">
+                    <img src="{{ asset('pictures/hocine.png') }}" alt="Client 1">
+                </div>
+                <div class="review-info">
+                    <h4>Lamamri Hocine</h4>
+                    <p class="review-rating">⭐⭐⭐⭐⭐</p>
+                    <p class="review-text">
+                        "Très satisfait des services de Coup'Acier. La qualité des produits est au rendez-vous et la livraison rapide !"
+                    </p>
+                </div>
+            </div>
+            <!-- Carte d'avis 2 -->
+            <div class="review-card">
+                <div class="review-image">
+                    <img src="{{ asset('pictures/massin.jpg') }}" alt="Client 2">
+                </div>
+                <div class="review-info">
+                    <h4>Massin Hebouche</h4>
+                    <p class="review-rating">⭐⭐⭐⭐</p>
+                    <p class="review-text">
+                        "Un service impeccable et des produits conformes à la description. Je recommande vivement."
+                    </p>
+                </div>
+            </div>
+            <!-- Carte d'avis 3 -->
+            <div class="review-card">
+                <div class="review-image">
+                    <img src="{{ asset('pictures/nipuna.jpg') }}" alt="Client 3">
+                </div>
+                <div class="review-info">
+                    <h4>Nipuna Payagalage
+                        </h4>
+                    <p class="review-rating">⭐⭐⭐⭐⭐</p>
+                    <p class="review-text">
+                        "Un excellent rapport qualité/prix et un service client à l'écoute. Je suis très content de mon achat."
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-{% include 'footer.html.twig' %}
+</div>
+
+<!-- Contenu de la page -->
+<footer class="footer">
+    <div class="footer-logo">
+        <a href="#">CoupAcier</a>
+    </div>
+    <nav class="footer-nav">
+        <ul>
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">Produits</a></li>
+            <li><a href="#">À Propos</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+    <div class="footer-contact">
+        <p><i class="fas fa-map-marker-alt"></i> 123 Rue Exemple, Ville, Pays</p>
+        <p><i class="fas fa-phone-alt"></i> <a href="tel:+123456789">+123 456 789</a></p>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:contact@exemple.com">contact@exemple.com</a></p>
+    </div>
+   
+    <div class="footer-bottom">
+        <p>&copy; 2024 CoupAcier. Tous droits réservés.</p>
+    </div>
+</footer>
+
+
+    
 <script src="{{ asset('js/menu.js') }}"></script>
 <script src="{{ asset('js/index.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1200,
+    });
+    const track = document.querySelector('.carousel-track');
+    const images = Array.from(track.children);
+    const nextButton = document.querySelector('.carousel-button.next');
+    const prevButton = document.querySelector('.carousel-button.prev');
+
+    const imageWidth = images[0].getBoundingClientRect().width;
+    let index = 0;
+
+    function updateCarousel() {
+        const offset = -index * imageWidth;
+        track.style.transform = `translateX(${offset}px)`;
+    }
+
+    function scrollCarousel(direction) {
+        const totalImages = images.length;
+        index += direction;
+
+        if (index < 0) index = totalImages - 3; // Change as per your view count
+        if (index >= totalImages - 2) index = 0;
+
+        updateCarousel();
+    }
+
+    nextButton.addEventListener('click', () => scrollCarousel(1));
+    prevButton.addEventListener('click', () => scrollCarousel(-1));
+
+  
+</script>
 
 </body>
 </html>

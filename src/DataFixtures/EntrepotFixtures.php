@@ -1,5 +1,5 @@
 <?php
-
+// src/DataFixtures/EntrepotFixtures.php
 namespace App\DataFixtures;
 
 use App\Entity\Entrepot;
@@ -10,18 +10,31 @@ class EntrepotFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // Créer 10 entrepôts avec des données fictives
-        for ($i = 1; $i <= 10; $i++) {
-            $entrepot = new Entrepot();
-            $entrepot->setNom('Entrepot ' . $i)
-                ->setVille('Ville ' . $i)
-                ->setCodePostale(10000 + $i)
-                ->setRue('Rue ' . $i);
+        // Créer plusieurs instances d'Entrepot avec des données fictives
+        $entrepot1 = new Entrepot();
+        $entrepot1->setNom('Entrepot A');
+        $entrepot1->setVille('Paris');
+        $entrepot1->setCodePostale(75001);
+        $entrepot1->setRue('1 Rue de Paris');
 
-            $manager->persist($entrepot);
-        }
+        $entrepot2 = new Entrepot();
+        $entrepot2->setNom('Entrepot B');
+        $entrepot2->setVille('Lyon');
+        $entrepot2->setCodePostale(69001);
+        $entrepot2->setRue('2 Rue de Lyon');
 
-        // Enregistrer tous les objets créés dans la base de données
+        $entrepot3 = new Entrepot();
+        $entrepot3->setNom('Entrepot C');
+        $entrepot3->setVille('Marseille');
+        $entrepot3->setCodePostale(13001);
+        $entrepot3->setRue('3 Rue de Marseille');
+
+        // Persister les entités
+        $manager->persist($entrepot1);
+        $manager->persist($entrepot2);
+        $manager->persist($entrepot3);
+
+        // Enregistrer les changements dans la base de données
         $manager->flush();
     }
 }
