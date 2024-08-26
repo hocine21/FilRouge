@@ -354,3 +354,7 @@ api_get_commande_details:
     path: /api/commande/{id}/details
     controller: App\Controller\api\CommandeController::getCommandeDetails
     methods: [GET]
+visit_stat_log:
+    path: /api/log-visit
+    controller: App\Controller\VisitStatController::logVisit
+    methods: POST
