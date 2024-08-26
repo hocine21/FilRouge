@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         console.log("Sending visit data:", visitData);
 
-        fetch('http://localhost:8000/api/log-visit', { // Assurez-vous que cette URL est correcte
+        fetch('http://localhost:8080/api/log-visit', { // Assurez-vous que cette URL est correcte
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

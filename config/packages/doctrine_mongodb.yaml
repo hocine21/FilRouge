@@ -15,7 +15,7 @@ doctrine_mongodb:
                     prefix: 'App\Document'
 
 when@prod:
-    doctrine_mongéodb:
+    doctrine_mongodb: # Corrigé ici
         auto_generate_proxy_classes: false
         auto_generate_hydrator_classes: false
         document_managers:
